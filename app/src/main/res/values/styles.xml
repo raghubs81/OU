@@ -1,0 +1,244 @@
+<resources>
+
+   <!-- Base application theme. -->
+   <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+      <item name="colorPrimary">@color/colorPrimary</item>
+      <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+      <item name="colorAccent">@color/colorAccent</item>
+      <item name="android:textColor">@color/textDarkPrimary</item>
+      <item name="android:spinnerDropDownItemStyle">@style/OU.SpinnerItem.Basic</item>
+      <item name="android:popupMenuStyle">@style/OU.PopupMenu</item>
+      <item name="android:buttonStyle">@style/OU.Button.Blue</item>
+   </style>
+
+   <style name="OU">
+   </style>
+
+   <!--
+     ___________________________________________________________________________________________________
+
+                                                Text Size Styles
+     ___________________________________________________________________________________________________
+    -->
+   <style name="OU.TextStyle" parent="android:Widget.TextView">
+      <item name="android:textColor">@color/textDarkPrimary</item>
+      <item name="android:fontFamily">sans-serif-condensed</item>
+   </style>
+
+   <style name="OU.TextStyle.Smaller" parent="android:Widget.TextView">
+      <item name="android:textSize">14sp</item>
+   </style>
+
+   <style name="OU.TextStyle.Small" parent="android:Widget.TextView">
+      <item name="android:textSize">16sp</item>
+   </style>
+
+   <style name="OU.TextStyle.Medium" parent="android:Widget.TextView">
+      <item name="android:textSize">20sp</item>
+   </style>
+
+   <style name="OU.TextStyle.Large" parent="android:Widget.TextView">
+      <item name="android:textSize">24sp</item>
+   </style>
+
+   <style name="OU.TextStyle.XLarge" parent="android:Widget.TextView">
+      <item name="android:textSize">28sp</item>
+   </style>
+
+   <style name="OU.TextStyle.Help" parent="OU.TextStyle.Small">
+      <item name="android:textColor">@color/textDarkHelp</item>
+   </style>
+
+   <!--
+     ___________________________________________________________________________________________________
+
+                                                  Heading
+     ___________________________________________________________________________________________________
+    -->
+
+   <style name="OU.Heading" parent="OU.TextStyle.Small">
+      <item name="android:textColor">@color/textDarkPrimary</item>
+      <item name="android:textStyle">bold</item>
+      <item name="android:layout_marginTop">5dp</item>
+      <item name="android:layout_marginBottom">5dp</item>
+   </style>
+
+   <!--
+     ___________________________________________________________________________________________________
+
+                                                  Separator
+     ___________________________________________________________________________________________________
+    -->
+
+   <style name="OU.Separator.H1">
+      <item name="android:layout_height">3dp</item>
+      <item name="android:background">@color/colorPrimary</item>
+      <item name="android:layout_marginBottom">5dp</item>
+   </style>
+
+   <style name="OU.Separator.H2">
+      <item name="android:layout_height">2dp</item>
+      <item name="android:background">#1E9500</item>
+   </style>
+
+   <style name="OU.Separator.H3">
+      <item name="android:layout_height">1dp</item>
+      <item name="android:background">#808080</item>
+   </style>
+
+   <!--
+     ______ _____________________________________________________________________________________________
+
+                                                  Trip
+     ___________________________________________________________________________________________________
+    -->
+
+   <style name="OU.Trip_Title" parent="OU.TextStyle.XLarge">
+      <item name="android:textColor">#673AB7</item>
+      <item name="android:textColorHint">@color/textHint</item>
+   </style>
+
+   <style name="OU.Trip_Detail" parent="OU.TextStyle.Medium">
+      <item name="android:textColor">#009688</item>
+      <item name="android:textColorHint">@color/textHint</item>
+      <item name="android:textStyle">italic</item>
+   </style>
+
+
+   <!--
+     ___________________________________________________________________________________________________
+
+                                            Title, Detail & Amount
+     ___________________________________________________________________________________________________
+    -->
+
+   <style name="OU.Dark_Title1" parent="OU.TextStyle.XLarge">
+      <item name="android:textColor">@color/textDarkTitle</item>
+      <item name="android:textColorHint">@color/textHint</item>
+   </style>
+
+   <style name="OU.Dark_Title2" parent="OU.TextStyle.Medium">
+      <item name="android:textColor">@color/textDarkTitle</item>
+      <item name="android:textColorHint">@color/textHint</item>
+   </style>
+
+   <style name="OU.Dark_Detail1" parent="OU.TextStyle.Small">
+      <item name="android:textColor">@color/textDarkDetail</item>
+      <item name="android:textColorHint">@color/textHint</item>
+   </style>
+
+   <style name="OU.Dark_Amount1" parent="OU.TextStyle.XLarge">
+      <item name="android:textColor">@color/textDarkAmount</item>
+      <item name="android:textColorHint">@color/textHint</item>
+   </style>
+
+   <style name="OU.Dark_Amount2" parent="OU.TextStyle.Medium">
+      <item name="android:textColor">@color/textDarkAmount</item>
+      <item name="android:textStyle">bold</item>
+   </style>
+
+   <!--
+     ___________________________________________________________________________________________________
+
+                                                   Button
+     ___________________________________________________________________________________________________
+    -->
+
+   <style name="OU.Button" parent="@android:style/Widget.Button">
+      <item name="android:gravity">center</item>
+      <item name="android:textColor">#FFFFFF</item>
+      <item name="android:shadowColor">#000000</item>
+      <item name="android:shadowDx">0</item>
+      <item name="android:shadowDy">-1</item>
+      <item name="android:shadowRadius">0.2</item>
+      <item name="android:textSize">16sp</item>
+      <item name="android:textStyle">bold</item>
+      <item name="android:background">@drawable/button_blue</item>
+      <item name="android:focusable">true</item>
+      <item name="android:clickable">true</item>
+      <item name="android:minHeight">30dp</item>
+   </style>
+
+   <style name="OU.Button.Blue">
+      <item name="android:background">@drawable/button_blue</item>
+   </style>
+
+   <style name="OU.Button.Green">
+      <item name="android:background">@drawable/button_green</item>
+   </style>
+
+   <style name="OU.Button.Purple">
+      <item name="android:background">@drawable/button_purple</item>
+   </style>
+
+   <!-- Operational button -->
+   <style name="OU.Button.Op">
+      <item name="android:textAllCaps">true</item>
+      <item name="android:textSize">16sp</item>
+      <item name="android:textStyle">bold</item>
+      <item name="android:background">@drawable/button_blue</item>
+   </style>
+
+   <style name="OU.Button.Op.Positive">
+      <item name="android:background">@drawable/button_positive</item>
+      <item name="android:textColor">@color/textDarkPositive</item>
+   </style>
+
+   <style name="OU.Button.Op.Negative">
+      <item name="android:background">@drawable/button_negative</item>
+      <item name="android:textColor">@color/textDarkNegative</item>
+   </style>
+
+   <style name="OU.BorderBlue">
+      <item name="android:drawable">@drawable/border_blue</item>
+   </style>
+
+   <!--
+     ___________________________________________________________________________________________________
+
+                                                 Components
+     ___________________________________________________________________________________________________
+    -->
+
+   <style name="OU.SpinnerItem.Basic" parent="@android:style/Widget.TextView" >
+      <item name="android:textSize">20sp</item>
+      <item name="android:gravity">center_vertical</item>
+      <item name="android:textColor">@color/textDarkTitle</item>
+   </style>
+
+   <style name="OU.Separator">
+      <item name="android:layout_width">match_parent</item>
+   </style>
+
+   <style name="OU.PopupMenu" parent="@android:style/Widget.PopupMenu">
+      <item name="android:popupBackground">@android:color/white</item>
+   </style>
+
+   <!-- Loading Modal Dialog -->
+   <style name="OU.DialogLoading">
+      <item name="android:windowFrame">@null</item>
+      <item name="android:windowBackground">@android:color/transparent</item>
+      <item name="android:windowIsFloating">true</item>
+      <item name="android:backgroundDimEnabled">true</item>
+      <item name="android:background">@android:color/transparent</item>
+   </style>
+
+   <!--
+     ___________________________________________________________________________________________________
+
+                                           Item Details Styles
+     ___________________________________________________________________________________________________
+    -->
+
+   <!-- Paid-By Style -->
+   <style name="OU.PaidBy_User" parent="OU.TextStyle.Medium">
+      <item name="android:textColor">@color/textDarkTitle</item>
+   </style>
+
+
+   <!-- Shared-By Styles  -->
+   <style name="OU.SharedBy_User" parent="OU.TextStyle.Medium">
+      <item name="android:textColor">@color/textLightPrimary</item>
+   </style>
+
+</resources>

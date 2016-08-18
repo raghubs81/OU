@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#009688</color>
+
+    <color name="textDarkPrimary">#000000</color>
+    <color name="textLightPrimary">#FFFFFF</color>
+
+    <color name="textDarkTitle">#004080</color>
+    <color name="textDarkDetail">#006393</color>
+    <color name="textDarkAmount">#1D9641</color>
+    <color name="textDarkHelp">#804000</color>
+
+    <color name="textDarkPositive">#008000</color>
+    <color name="textDarkNegative">#800000</color>
+
+    <color name="bgLightPrimary">#FFFFFF</color>
+
+    <color name="borderLight">#FFFFFF</color>
+    <color name="borderDark">#004000</color>
+    <color name="borderGray">#CCCCCC</color>
+
+    <color name="textHint">#502800</color>
+
+    <array name="bgDarkRainbow">
+        <item>#689F38</item>
+        <item>#673AB7</item>
+        <item>#009688</item>
+        <item>#EF6C00</item>
+        <item>#4285F4</item>
+        <item>#B97A57</item>
+        <item>#408080</item>
+        <item>#B83852</item>
+        <item>#3838B8</item>
+    </array>
+
+</resources>

@@ -1,0 +1,15 @@
+<LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:id="@+id/fragment_who_owes_whom">
+
+   <ExpandableListView
+      android:id="@+id/who_owes_whom__accordian"
+      android:layout_height="match_parent"
+      android:layout_width="match_parent"
+      android:divider="@drawable/divider"
+      android:dividerHeight="1dp"
+      />
+
+</LinearLayout>

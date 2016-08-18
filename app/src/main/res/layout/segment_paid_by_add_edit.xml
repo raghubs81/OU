@@ -1,0 +1,41 @@
+<LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:orientation="horizontal"
+   android:paddingTop="2dp"
+   android:paddingBottom="2dp"
+   android:background="@color/bgLightPrimary">
+
+   <Spinner
+      android:id="@+id/segment_paid_by_add_edit__user"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1.5"
+      android:layout_gravity="center"
+      android:gravity="center_vertical"
+      style="@style/OU.PaidBy_User"
+      />
+
+   <EditText
+      android:id="@+id/segment_paid_by_add_edit__amount"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:inputType="numberDecimal"
+      android:layout_weight="1"
+      android:layout_gravity="center"
+      android:gravity="right"
+      style="@style/OU.Dark_Amount2"
+      />
+
+   <ImageButton
+      android:id="@+id/segment_paid_by_add_edit__delete"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/delete_small_dark"
+      android:background="@drawable/transparent_background"
+      android:layout_gravity="center"
+      android:contentDescription="@string/segment_payment_delete_description"
+      />
+
+</LinearLayout>

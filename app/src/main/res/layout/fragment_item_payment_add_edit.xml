@@ -1,0 +1,173 @@
+<LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   tools:context=".ItemPaymentAddEditFragment"
+   android:id="@+id/fragment_item_payment_add"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:orientation="vertical"
+   android:background="@color/bgLightPrimary">
+
+   <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:orientation="vertical"
+      android:layout_weight="1"
+      android:fillViewport="true"
+      android:paddingLeft="@dimen/activity_horizontal_margin"
+      android:paddingRight="@dimen/activity_horizontal_margin"
+      android:paddingTop="@dimen/activity_vertical_margin"
+      android:paddingBottom="@dimen/activity_vertical_margin"
+      >
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical">
+
+         <EditText
+            android:id="@+id/item_payment_add_edit__summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="20"
+            android:hint="@string/item_summary"
+            style="@style/OU.Dark_Title1"/>
+
+         <EditText
+            android:id="@+id/item_payment_add_edit__detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/item_detail"
+            android:minLines="1"
+            android:maxLines="2"
+            style="@style/OU.Dark_Detail1"
+            />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+             style="@style/OU.Heading"
+            android:text="@string/item_paid_by"/>
+
+         <LinearLayout
+            android:id="@+id/item_payment_add_edit__paid_by_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Layouts from segment_paid_by_add_add.xml have to be dynamically added here -->
+            <!--
+            <include layout="@layout/segment_paid_by_add_edit" />
+
+            <include layout="@layout/segment_paid_by_add_edit" />
+
+            <include layout="@layout/segment_paid_by_add_edit" />
+             -->
+
+         </LinearLayout>
+
+         <Button
+            android:id="@+id/item_payment_add_edit__paid_by_add"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="end"
+            android:text="@string/add"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:drawableStart="@drawable/add_light"
+            android:drawablePadding="2dp"
+            style="@style/OU.Button.Green"/>
+
+         <View
+            style="@style/OU.Separator.H2"
+            android:layout_marginTop="10dp"/>
+
+         <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1.5"
+               android:layout_gravity="center"
+               android:gravity="center"
+               style="@style/OU.PaidBy_User"
+               android:text="Total"
+               />
+
+            <TextView
+               android:id="@+id/item_payment_add_edit__total_amount"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:layout_gravity="center"
+               android:gravity="right"
+               style="@style/OU.Dark_Amount2"
+               android:text="0.00"
+               />
+         </LinearLayout>
+
+
+         <Button
+            android:id="@+id/item_payment_add_edit__shared_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/users"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:textSize="16sp"
+            android:text="@string/item_shared_by"
+            style="@style/OU.Button.Purple"/>
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/help_shared_by"
+            android:gravity="center"
+            style="@style/OU.TextStyle.Help"/>
+
+      </LinearLayout>
+
+   </ScrollView>
+
+   <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:orientation="horizontal"
+      android:weightSum="2">
+
+      <Button
+         android:id="@+id/item_payment_add_edit__cancel"
+         android:layout_width="0dp"
+         android:layout_height="match_parent"
+         android:layout_weight="1"
+         android:text="@string/cancel"
+         android:drawableStart="@drawable/clear_dark"
+         android:paddingLeft="20dp"
+         android:paddingRight="20dp"
+         style="@style/OU.Button.Op.Negative"
+         />
+
+      <Button
+         android:id="@+id/item_payment_add_edit__save"
+         android:layout_width="0dp"
+         android:layout_height="match_parent"
+         android:layout_weight="1"
+         android:text="@string/save"
+         android:drawableStart="@drawable/done_dark"
+         android:paddingLeft="20dp"
+         android:paddingRight="20dp"
+         style="@style/OU.Button.Op.Positive"
+         />
+
+   </LinearLayout>
+
+</LinearLayout>

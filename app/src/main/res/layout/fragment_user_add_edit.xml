@@ -1,0 +1,104 @@
+<LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   tools:context="com.maga.ou.UserAddEditFragment"
+   android:id="@+id/fragment_user_add_edit"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:background="@color/bgLightPrimary"
+   android:orientation="vertical">
+
+   <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1">
+
+      <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:paddingLeft="@dimen/activity_horizontal_margin"
+         android:paddingRight="@dimen/activity_horizontal_margin"
+         android:paddingTop="@dimen/activity_vertical_margin"
+         android:paddingBottom="@dimen/activity_vertical_margin"
+         android:orientation="vertical">
+
+         <EditText
+            android:id="@+id/user_add_edit__nick_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/user_nick_name"
+            android:maxLength="10"
+            style="@style/OU.Dark_Title1"
+            />
+
+         <EditText
+            android:id="@+id/user_add_edit__first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/user_first_name"
+            style="@style/OU.Dark_Title2"
+            />
+
+         <EditText
+            android:id="@+id/user_add_edit__last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/user_last_name"
+            style="@style/OU.Dark_Title2"
+            />
+
+         <EditText
+            android:id="@+id/user_add_edit__mobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/user_mobile"
+            android:inputType="phone"
+            style="@style/OU.Dark_Title2"
+            />
+
+         <EditText
+            android:id="@+id/user_add_edit__email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/user_email"
+            android:inputType="textEmailAddress"
+            style="@style/OU.Dark_Title2"
+            />
+      </LinearLayout>
+
+   </ScrollView>
+
+   <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:orientation="horizontal"
+      android:weightSum="2">
+
+      <Button
+         android:id="@+id/user_add_edit__cancel"
+         android:layout_width="0dp"
+         android:layout_height="match_parent"
+         android:layout_weight="1"
+         android:text="@string/cancel"
+         android:drawableStart="@drawable/clear_dark"
+         android:paddingLeft="20dp"
+         android:paddingRight="20dp"
+         style="@style/OU.Button.Op.Negative"
+         />
+
+      <Button
+         android:id="@+id/user_add_edit__save"
+         android:layout_width="0dp"
+         android:layout_height="match_parent"
+         android:layout_weight="1"
+         android:text="@string/save"
+         android:drawableStart="@drawable/done_dark"
+         android:paddingLeft="20dp"
+         android:paddingRight="20dp"
+         style="@style/OU.Button.Op.Positive"
+         />
+
+   </LinearLayout>
+
+
+</LinearLayout>

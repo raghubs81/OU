@@ -1,0 +1,39 @@
+<LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:orientation="vertical">
+
+   <View
+      style="@style/OU.Separator.H3"/>
+
+   <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:background="@color/bgLightPrimary"
+      android:paddingTop="8dp"
+      android:paddingBottom="8dp">
+
+      <TextView
+         android:id="@+id/segment_paid_by_detail__user"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_weight="1.5"
+         style="@style/OU.PaidBy_User"
+         android:text="User"
+      />
+
+      <TextView
+         android:id="@+id/segment_paid_by_detail__amount"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_weight="1"
+         android:layout_gravity="center"
+         android:gravity="end"
+         style="@style/OU.Dark_Amount2"
+         android:text="4000.00"
+      />
+   </LinearLayout>
+
+</LinearLayout>

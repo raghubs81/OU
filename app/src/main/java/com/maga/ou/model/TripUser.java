@@ -1,0 +1,224 @@
+package com.maga.ou.model;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
+import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.maga.ou.model.util.*;
+import com.maga.ou.model.OUDatabaseHelper.*;
+
+import java.util.List;
+
+/**
+ * Created by rbseshad on 24-Jun-16.
+ */
+public class TripUser
+{
+   private static final String TAG = "ou." + TripUser.class.getSimpleName();
+
+   public enum Column implements AbstractColumn
+   {
+      _id, NickName, FirstName, LastName, Mobile, Email, TripId;
+
+      @Override
+      public String toString ()
+      {
+         return Table.TripUser.name() + "." + this.name ();
+      }
+   }
+
+   private int id, tripId;
+
+   private String nickName, firstName, lastName, mobile, email;
+
+   public static TripUser getLiteInstance (SQLiteDatabase db, int id)
+   {
+      Cursor cursor = new DBQueryBuilder(db)
+         .select(Column._id, Column.NickName, Column.TripId)
+         .from(Table.TripUser)
+         .where(Column._id + "=" + id)
+         .query();
+
+      if (!cursor.moveToFirst())
+         DBUtil.die("Query empty. Id=" + id + " Table=" + Table.TripUser);
+
+      TripUser user = new TripUser();
+      user.id = Integer.valueOf(DBUtil.getCell(cursor, Column._id));
+      user.setNickName(DBUtil.getCell(cursor, Column.NickName));
+      user.setTripId(Integer.valueOf(DBUtil.getCell(cursor, Column.TripId)));
+
+      return user;
+   }
+
+   public static TripUser getInstance (SQLiteDatabase db, int id)
+   {
+      Cursor cursor = new DBQueryBuilder(db)
+            .from(Table.TripUser)
+            .where(Column._id + "=?").whereValue(String.valueOf(id))
+            .query();
+
+      if (!cursor.moveToFirst())
+         DBUtil.die("Could not get first row of TripUser cursor");
+
+      TripUser user = new TripUser();
+      user.id = Integer.valueOf(DBUtil.getCell(cursor, Column._id));
+      user.setNickName (DBUtil.getCell(cursor, Column.NickName));
+      user.setFirstName(DBUtil.getCell(cursor, Column.FirstName));
+      user.setLastName(DBUtil.getCell(cursor, Column.LastName));
+      user.setMobile(DBUtil.getCell(cursor, Column.Mobile));
+      user.setEmail(DBUtil.getCell(cursor, Column.Email));
+      user.setTripId(Integer.valueOf(DBUtil.getCell(cursor, Column.TripId)));
+
+      return user;
+   }
+
+   public int add (SQLiteDatabase db)
+   {
+      DBUtil.assertUnsetId(id);
+      DBUtil.assertSetId(tripId);
+      validate();
+
+      ContentValues values = getPopulatedContentValues ();
+      Log.d(TAG, "INSERT " + Table.TripUser + " " + values + " VALUES " + values);
+      int result = (int) db.insert(Table.TripUser.name(), null, values);
+      DBUtil.assertNotEquals(result, -1, "Table=TripUser, Addition failed");
+
+      this.id = result;
+      return result;
+   }
+
+   /**
+    * Delete all users in <b>listUserId</b> if they do not owe OR are owed by for any items.
+    * <br><b>NOTE :</b> The table schema syntax 'on delete cascade' takes care of auto removing the users from all groups.
+    *
+    * @return The number of rows affected, 0 if deletion failed.
+    */
+   public static int delete (SQLiteDatabase db, int tripId, List<Integer> listUserId)
+   {
+      try
+      {
+         String whereClause =  Column.TripId + " = "   + tripId + " AND " +
+                               Column._id    + " IN (" + TextUtils.join(",", listUserId) + ")";
+         return db.delete(Table.TripUser.name(), whereClause, null);
+      }
+      catch (SQLiteConstraintException e)
+      {
+         Log.d (TAG, "Constraint Violated - " + e.getMessage());
+         return 0;
+      }
+   }
+
+   /**
+    * Return a cursor of all trip users for this trip <b>tripId</b>.
+    */
+   public static Cursor getTripUsers (SQLiteDatabase db, int tripId)
+   {
+      return new DBQueryBuilder(db)
+         .from (Table.TripUser)
+         .where(Column.TripId + " = " + tripId)
+         .orderBy(TripUser.Column.NickName)
+         .query();
+   }
+
+   public int update (SQLiteDatabase db)
+   {
+      DBUtil.assertSetId(id);
+      DBUtil.assertSetId(tripId);
+      validate();
+
+      ContentValues values = getPopulatedContentValues ();
+      return DBUtil.updateRowById(db, Table.TripUser, id, values);
+   }
+
+   private ContentValues getPopulatedContentValues ()
+   {
+      ContentValues values = new ContentValues ();
+      values.put(Column.NickName.name() , nickName);
+      values.put(Column.FirstName.name(), firstName);
+      values.put(Column.LastName.name() , lastName);
+      values.put(Column.Mobile.name(), mobile);
+      values.put(Column.Email.name(), email);
+      values.put(Column.TripId.name(), tripId);
+      return values;
+   }
+
+   private void validate ()
+   {
+      DBUtil.assertNonEmpty(nickName, "Table=TripUser, NickName is mandatory.");
+      DBUtil.assertNonEmpty(mobile, "Table=TripUser, Mobile is mandatory.");
+   }
+
+   public int getId ()
+   {
+      return id;
+   }
+
+   public String getFirstName()
+   {
+      return firstName;
+   }
+
+   public void setNickName(String nickName)
+   {
+      this.nickName = nickName;
+   }
+
+   public String getNickName()
+   {
+      return nickName;
+   }
+
+   public void setFirstName(String firstName)
+   {
+      this.firstName = firstName;
+   }
+
+   public String getLastName()
+   {
+      return lastName;
+   }
+
+   public void setLastName(String lastName)
+   {
+      this.lastName = lastName;
+   }
+
+   public String getMobile()
+   {
+      return mobile;
+   }
+
+   public void setMobile(String mobile)
+   {
+      this.mobile = mobile;
+   }
+
+   public String getEmail()
+   {
+      return email;
+   }
+
+   public void setEmail(String email)
+   {
+      this.email = email;
+   }
+
+   public int getTripId()
+   {
+      return tripId;
+   }
+
+   public void setTripId(int tripId)
+   {
+      this.tripId = tripId;
+   }
+
+   @Override
+   public String toString ()
+   {
+      return getNickName();
+   }
+}

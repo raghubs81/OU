@@ -1,0 +1,14 @@
+<menu
+   xmlns:tools="http://schemas.android.com/tools"
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto">
+
+   <!-- Delete button -->
+   <item
+      android:id="@+id/appbar_detail_edit"
+      android:icon="@drawable/edit_light"
+      android:title="@string/edit"
+      app:showAsAction="always"
+      tools:ignore="AlwaysShowAction" />
+
+</menu>
