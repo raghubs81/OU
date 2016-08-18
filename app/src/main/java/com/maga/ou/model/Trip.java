@@ -3,12 +3,16 @@ package com.maga.ou.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.maga.ou.model.util.AbstractColumn;
 import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.model.OUDatabaseHelper.Table;
+
+import java.util.List;
+
 /**
  * Created by rbseshad on 27-Jun-16.
  */
@@ -30,6 +34,11 @@ public class Trip
    private int id;
 
    private String name, detail;
+
+   /*
+    * Get Instance
+    * ___________________________________________________________________________________________________
+    */
 
    public static Trip getLiteInstance (SQLiteDatabase db, int id)
    {
@@ -66,32 +75,10 @@ public class Trip
       return trip;
    }
 
-   /**
-    * Returns a cursor of all the trips.
+   /*
+    * CURD Operations
+    * ___________________________________________________________________________________________________
     */
-   public static Cursor getTrips (SQLiteDatabase db)
-   {
-      return new DBQueryBuilder(db)
-         .from (Table.Trip)
-         .orderByDesc(Column._id)
-         .query();
-   }
-
-   /**
-    * Add <b>item</b> to the current trip (in context).
-    */
-   public void addItem (SQLiteDatabase db, Item item)
-   {
-      DBUtil.assertSetId(this.id);
-      DBUtil.assertSetId(item.getId());
-
-      ContentValues values = new ContentValues ();
-      values.put(TripItem.Column.TripId.name(), this.id);
-      values.put(TripItem.Column.ItemId.name(), item.getId());
-
-      int newId = (int)db.insert(Table.TripItem.name(), null, values);
-      DBUtil.assertNotEquals (newId, -1, "Table=Item, Addition failed");
-   }
 
    public int add (SQLiteDatabase db)
    {
@@ -115,12 +102,22 @@ public class Trip
       return DBUtil.updateRowById(db, Table.Trip, id, values);
    }
 
+   /**
+    * Delete all users in <b>listUserId</b> if they do not owe OR are owed by for any items.
+    * <br><b>NOTE :</b> The table schema syntax 'on delete cascade' takes care of auto removing the users from all groups.
+    *
+    * @return The number of rows affected, 0 if deletion failed.
+    */
+   public static int delete (SQLiteDatabase db, List<Integer> listTripId)
+   {
+      return DBUtil.deleteRowById(db, Table.Trip, listTripId);
+   }
 
    private ContentValues getPopulatedContentValues ()
    {
       ContentValues values = new ContentValues();
       values.put(Column.Name.name() , name);
-      values.put(Column.Detail.name() , detail);
+      values.put(Column.Detail.name(), detail);
       return values;
    }
 
@@ -129,7 +126,48 @@ public class Trip
       DBUtil.assertNonEmpty(name, "Table=Trip, Name is mandatory.");
    }
 
-   // Setters and Getters
+   /*
+    * CURD Operations - Sub elements
+    * ___________________________________________________________________________________________________
+    */
+
+   /**
+    * Add <b>item</b> to the current trip (in context).
+    */
+   public void addItem (SQLiteDatabase db, Item item)
+   {
+      DBUtil.assertSetId(this.id);
+      DBUtil.assertSetId(item.getId());
+
+      ContentValues values = new ContentValues ();
+      values.put(TripItem.Column.TripId.name(), this.id);
+      values.put(TripItem.Column.ItemId.name(), item.getId());
+
+      int newId = (int)db.insert(Table.TripItem.name(), null, values);
+      DBUtil.assertNotEquals(newId, -1, "Table=Item, Addition failed");
+   }
+
+   /*
+    * Static Methods
+    * ___________________________________________________________________________________________________
+    */
+
+   /**
+    * Returns a cursor of all the trips.
+    */
+   public static Cursor getTrips (SQLiteDatabase db)
+   {
+      return new DBQueryBuilder(db)
+            .from (Table.Trip)
+            .orderByDesc(Column._id)
+            .query();
+   }
+
+
+   /*
+    * Instance variable setters and getters
+    * ___________________________________________________________________________________________________
+    */
 
    public void setName(String name)
    {
@@ -152,7 +190,6 @@ public class Trip
    {
       return name;
    }
-
 
    public String getDetail()
    {

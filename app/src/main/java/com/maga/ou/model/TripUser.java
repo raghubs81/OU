@@ -34,6 +34,11 @@ public class TripUser
 
    private String nickName, firstName, lastName, mobile, email;
 
+   /*
+    * Get Instance
+    * ___________________________________________________________________________________________________
+    */
+
    public static TripUser getLiteInstance (SQLiteDatabase db, int id)
    {
       Cursor cursor = new DBQueryBuilder(db)
@@ -75,19 +80,29 @@ public class TripUser
       return user;
    }
 
+   /*
+    * CURD Operations
+    * ___________________________________________________________________________________________________
+    */
+
    public int add (SQLiteDatabase db)
    {
       DBUtil.assertUnsetId(id);
       DBUtil.assertSetId(tripId);
       validate();
 
-      ContentValues values = getPopulatedContentValues ();
-      Log.d(TAG, "INSERT " + Table.TripUser + " " + values + " VALUES " + values);
-      int result = (int) db.insert(Table.TripUser.name(), null, values);
-      DBUtil.assertNotEquals(result, -1, "Table=TripUser, Addition failed");
+      this.id = DBUtil.addRow (db, Table.TripUser, getPopulatedContentValues());
+      return this.id;
+   }
 
-      this.id = result;
-      return result;
+   public int update (SQLiteDatabase db)
+   {
+      DBUtil.assertSetId(id);
+      DBUtil.assertSetId(tripId);
+      validate();
+
+      ContentValues values = getPopulatedContentValues ();
+      return DBUtil.updateRowById(db, Table.TripUser, id, values);
    }
 
    /**
@@ -123,16 +138,6 @@ public class TripUser
          .query();
    }
 
-   public int update (SQLiteDatabase db)
-   {
-      DBUtil.assertSetId(id);
-      DBUtil.assertSetId(tripId);
-      validate();
-
-      ContentValues values = getPopulatedContentValues ();
-      return DBUtil.updateRowById(db, Table.TripUser, id, values);
-   }
-
    private ContentValues getPopulatedContentValues ()
    {
       ContentValues values = new ContentValues ();
@@ -150,6 +155,11 @@ public class TripUser
       DBUtil.assertNonEmpty(nickName, "Table=TripUser, NickName is mandatory.");
       DBUtil.assertNonEmpty(mobile, "Table=TripUser, Mobile is mandatory.");
    }
+
+   /*
+    * Instance variable setters and getters
+    * ___________________________________________________________________________________________________
+    */
 
    public int getId ()
    {

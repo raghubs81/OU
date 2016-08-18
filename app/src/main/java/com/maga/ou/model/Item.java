@@ -38,6 +38,11 @@ public class Item
 
    private String summary, detail;
 
+   /*
+    * Get Instance
+    * ___________________________________________________________________________________________________
+    */
+
    public static Item getLiteInstance(SQLiteDatabase db, int id)
    {
       Cursor cursor = new DBQueryBuilder(db)
@@ -68,36 +73,51 @@ public class Item
       return createItemFromCursor(cursor);
    }
 
-   /**
-    * Get the list of Items for this trip <b>tripId</b>.
+   /*
+    * CURD Operations
+    * ___________________________________________________________________________________________________
     */
-   public static List<Item> getItems(SQLiteDatabase db, int tripId)
+
+   public int add(SQLiteDatabase db)
    {
-      Cursor cursor = new DBQueryBuilder(db)
-            .from(Table.TripItem, Table.Item)
-            .whereAND
-                  (
-                        TripItem.Column.ItemId + " = " + Column._id,
-                        TripItem.Column.TripId + " = " + tripId
-                  )
-            .query();
+      DBUtil.assertUnsetId(id);
+      validate();
 
-      List<Item> listItem = new ArrayList<>();
-      boolean isDone = false;
-      for (isDone = cursor.moveToFirst(); isDone; isDone = cursor.moveToNext())
-         listItem.add(createItemFromCursor(cursor));
-
-      return listItem;
+      this.id = DBUtil.addRow (db, Table.Item, getPopulatedContentValues());
+      return this.id;
    }
 
-   private static Item createItemFromCursor(Cursor cursor)
+   public int update(SQLiteDatabase db)
    {
-      Item item = new Item();
-      item.setId(DBUtil.getCell(cursor, Column._id));
-      item.setSummary(DBUtil.getCell(cursor, Column.Summary));
-      item.setDetail(DBUtil.getCell(cursor, Column.Detail));
-      return item;
+      DBUtil.assertSetId(id);
+      validate();
+
+      ContentValues values = getPopulatedContentValues ();
+      return DBUtil.updateRowById(db, Table.Item, id, values);
    }
+
+   public static int delete (SQLiteDatabase db, List<Integer> listItemId)
+   {
+      return DBUtil.deleteRowById(db, Table.Item, listItemId);
+   }
+
+   private void validate()
+   {
+      DBUtil.assertNonEmpty(summary, "Table=Item, Summary is mandatory.");
+   }
+
+   private ContentValues getPopulatedContentValues ()
+   {
+      ContentValues values = new ContentValues();
+      values.put(Column.Summary.name(), summary);
+      values.put(Column.Detail.name(), detail);
+      return values;
+   }
+
+   /*
+    * CURD Operations - Sub elements
+    * ___________________________________________________________________________________________________
+    */
 
    public Map<TripUser, Integer> getPaidByUsers(SQLiteDatabase db)
    {
@@ -140,56 +160,7 @@ public class Item
       return listUser;
    }
 
-   public static Cursor getItemPaymentSummary(SQLiteDatabase db, int tripId)
-   {
-      String whereJoin_Item_TripItem = Column._id + " = " + TripItem.Column.ItemId;
-      String whereJoin_Item_PaidBy = Column._id + " = " + ItemPaidBy.Column.ItemId;
-      String where_CurrentTripRows = TripItem.Column.TripId + " = " + tripId;
-
-      return new DBQueryBuilder(db)
-            .select(Column._id, Column.Summary, Column.Detail).selectRaw("SUM(Amount) as Amount")
-            .from(Table.Item, Table.TripItem, Table.ItemPaidBy)
-            .whereAND(whereJoin_Item_TripItem, whereJoin_Item_PaidBy, where_CurrentTripRows)
-            .groupBy(ItemPaidBy.Column.ItemId)
-            .query();
-   }
-
-   public int add(SQLiteDatabase db)
-   {
-      DBUtil.assertUnsetId(id);
-      validate();
-
-      ContentValues values = getPopulatedContentValues ();
-      int result = (int) db.insert(Table.Item.name(), null, values);
-
-      DBUtil.assertNotEquals(result, -1, "Table=Item, Addition failed");
-      this.id = result;
-      return result;
-   }
-
-   public int update(SQLiteDatabase db)
-   {
-      DBUtil.assertSetId(id);
-      validate();
-
-      ContentValues values = getPopulatedContentValues ();
-      return DBUtil.updateRowById(db, Table.Item, id, values);
-   }
-
-   private void validate()
-   {
-      DBUtil.assertNonEmpty(summary, "Table=Item, Summary is mandatory.");
-   }
-
-   private ContentValues getPopulatedContentValues ()
-   {
-      ContentValues values = new ContentValues();
-      values.put(Column.Summary.name(), summary);
-      values.put(Column.Detail.name(), detail);
-      return values;
-   }
-
-   public void setPaidBy(SQLiteDatabase db, Map<Integer, Integer> mapUserIdAmount)
+   public void setPaidBy (SQLiteDatabase db, Map<Integer, Integer> mapUserIdAmount)
    {
       for (Map.Entry<Integer, Integer> entry : mapUserIdAmount.entrySet())
       {
@@ -206,18 +177,12 @@ public class Item
       }
    }
 
-   public int deletePaidBy(SQLiteDatabase db)
+   public int deletePaidBy (SQLiteDatabase db)
    {
       return DBUtil.deleteRowById(db, Table.ItemPaidBy, ItemPaidBy.Column.ItemId, id);
    }
 
-   public static int delete(SQLiteDatabase db, List<Integer> listItemId)
-   {
-      String whereClause = Column._id + " IN (" + TextUtils.join(",", listItemId) + ")";
-      return db.delete(Table.Item.name(), whereClause, null);
-   }
-
-   public void setSharedBy(SQLiteDatabase db, Collection<Integer> setUserId)
+   public void setSharedBy (SQLiteDatabase db, Collection<Integer> setUserId)
    {
       for (Integer userId : setUserId)
       {
@@ -230,10 +195,65 @@ public class Item
       }
    }
 
-   public int deleteSharedBy(SQLiteDatabase db)
+   public int deleteSharedBy (SQLiteDatabase db)
    {
       return DBUtil.deleteRowById(db, Table.ItemSharedBy, ItemSharedBy.Column.ItemId, id);
    }
+
+   /*
+    * Static Methods
+    * ___________________________________________________________________________________________________
+    */
+
+   /**
+    * Get the list of Items for this trip <b>tripId</b>.
+    */
+   public static List<Item> getItems(SQLiteDatabase db, int tripId)
+   {
+      Cursor cursor = new DBQueryBuilder(db)
+            .from(Table.TripItem, Table.Item)
+            .whereAND
+                  (
+                        TripItem.Column.ItemId + " = " + Column._id,
+                        TripItem.Column.TripId + " = " + tripId
+                  )
+            .query();
+
+      List<Item> listItem = new ArrayList<>();
+      boolean isDone = false;
+      for (isDone = cursor.moveToFirst(); isDone; isDone = cursor.moveToNext())
+         listItem.add(createItemFromCursor(cursor));
+
+      return listItem;
+   }
+
+   private static Item createItemFromCursor(Cursor cursor)
+   {
+      Item item = new Item();
+      item.setId(DBUtil.getCell(cursor, Column._id));
+      item.setSummary(DBUtil.getCell(cursor, Column.Summary));
+      item.setDetail(DBUtil.getCell(cursor, Column.Detail));
+      return item;
+   }
+
+   public static Cursor getItemPaymentSummary(SQLiteDatabase db, int tripId)
+   {
+      String whereJoin_Item_TripItem = Column._id + " = " + TripItem.Column.ItemId;
+      String whereJoin_Item_PaidBy = Column._id + " = " + ItemPaidBy.Column.ItemId;
+      String where_CurrentTripRows = TripItem.Column.TripId + " = " + tripId;
+
+      return new DBQueryBuilder(db)
+            .select(Column._id, Column.Summary, Column.Detail).selectRaw("SUM(Amount) as Amount")
+            .from(Table.Item, Table.TripItem, Table.ItemPaidBy)
+            .whereAND(whereJoin_Item_TripItem, whereJoin_Item_PaidBy, where_CurrentTripRows)
+            .groupBy(ItemPaidBy.Column.ItemId)
+            .query();
+   }
+
+   /*
+    * Instance variable setters and getters
+    * ___________________________________________________________________________________________________
+    */
 
    public String getSummary()
    {

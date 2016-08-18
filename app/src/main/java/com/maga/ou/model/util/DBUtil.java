@@ -6,11 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.maga.ou.model.OUDatabaseHelper;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class DBUtil
@@ -183,6 +180,14 @@ public class DBUtil
       throw new IllegalStateException(mesg, e);
    }
 
+   public static int addRow (SQLiteDatabase db, AbstractTable table, ContentValues values)
+   {
+      Log.d(TAG, "INSERT " + table + " " + values + " VALUES " + values);
+      int result = (int) db.insert(table.name(), null, values);
+      DBUtil.assertNotEquals(result, -1, "Table=" + table.name() + ", Addition failed");
+      return result;
+   }
+
    public static int updateRowById(SQLiteDatabase db, AbstractTable table, int id, ContentValues values)
    {
       String whereClause = "_id = ?";
@@ -190,6 +195,14 @@ public class DBUtil
       Log.d(TAG, "UPDATE " + table + " " + values + " WHERE " + whereClause + " WHERE-VALUE " + TextUtils.join(", ", whereValues));
       int result = db.update(table.name(), values, whereClause, whereValues);
       DBUtil.assertNotEquals(result, 0, "Table=Item, No row updated");
+      return result;
+   }
+
+   public static int deleteRowById (SQLiteDatabase db, AbstractTable table, List<Integer> listId)
+   {
+      String whereClause = "_id IN (" + TextUtils.join(",", listId) + ")";
+      int result = db.delete(table.name(), whereClause, null);
+      DBUtil.assertNotEquals(result, 0, "Table=Item, No row deleted");
       return result;
    }
 

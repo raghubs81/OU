@@ -15,7 +15,7 @@ create table TripUser
    Email      text,
    TripId     integer not null,
 
-   foreign key (TripId) references Trip (_id)
+   foreign key (TripId) references Trip (_id) on delete cascade
 );
 
 create table TripGroup
@@ -25,7 +25,7 @@ create table TripGroup
    Detail   text,
    TripId   integer not null,
 
-   foreign key (TripId) references Trip (_id)
+   foreign key (TripId) references Trip (_id) on delete cascade
 );
 
 create table TripUserGroup
@@ -51,7 +51,7 @@ create table ItemSharedBy
    ItemId    integer not null,
    UserId    integer not null,
 
-   foreign key (ItemId) references Item (_id),
+   foreign key (ItemId) references Item (_id) on delete cascade,
    foreign key (UserId) references TripUser (_id)
 );
 
@@ -62,8 +62,8 @@ create table ItemPaidBy
    ItemId   integer not null,
    UserId   integer not null,
 
-   foreign key (UserId) references TripUser (_id),
-   foreign key (ItemId) references Item (_id)
+   foreign key (ItemId) references Item (_id)  on delete cascade,
+   foreign key (UserId) references TripUser (_id)
 );
 
 create table TripItem
@@ -72,8 +72,8 @@ create table TripItem
    TripId        integer not null,
    ItemId        integer not null,
 
-   foreign key (TripId) references Trip (_id),
-   foreign key (ItemId) references Item (_id)
+   foreign key (TripId) references Trip (_id) on delete cascade,
+   foreign key (ItemId) references Item (_id) on delete cascade
 );
 
 # ----------------------------------------------------------------------------------------------------

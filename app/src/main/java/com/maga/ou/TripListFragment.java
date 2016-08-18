@@ -19,9 +19,15 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.maga.ou.model.Trip;
+import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
+import com.maga.ou.util.OUMultiChoiceListener;
 import com.maga.ou.util.UIUtil;
+
+import java.util.List;
 
 
 /**
@@ -156,6 +162,10 @@ public class TripListFragment extends ListFragment
       Cursor cursor = Trip.getTrips(db);
       CursorAdapter cursorAdapter = new TripCursorAdapter(cursor);
       setListAdapter(cursorAdapter);
+
+      // Register for long click
+      getListView().setMultiChoiceModeListener(new TripMultiChoiceListener());
+
    }
 
    /**
@@ -187,6 +197,42 @@ public class TripListFragment extends ListFragment
 
          textName.setText(DBUtil.getCell(cursor, Trip.Column.Name));
          textDetail.setText(DBUtil.getCell(cursor, Trip.Column.Detail));
+      }
+   }
+
+   private class TripMultiChoiceListener extends OUMultiChoiceListener<Integer>
+   {
+      private List<Integer> listId;
+
+      private SQLiteDatabase db = DBUtil.getDB(activity);
+
+      public TripMultiChoiceListener()
+      {
+         super(activity, getListView());
+         this.listId = getListId();
+      }
+
+      @Override
+      protected Integer doBackgroundTask()
+      {
+         return listId.isEmpty() ? 0 : Trip.delete(db, listId);
+      }
+
+      @Override
+      protected void doAfterTaskCompletionBeforeRestoration(Integer result)
+      {
+         if (result <= 0)
+            return;
+
+         CursorAdapter cursorAdapter = (CursorAdapter)getListView().getAdapter();
+         cursorAdapter.changeCursor(Trip.getTrips(db));
+      }
+
+      @Override
+      protected void doAfterRestoration(Integer result)
+      {
+         String mesg = ((result == 0) ? "No" : String.valueOf(result)) + " trips deleted";
+         Toast.makeText(context, mesg, Toast.LENGTH_SHORT).show();
       }
    }
 }

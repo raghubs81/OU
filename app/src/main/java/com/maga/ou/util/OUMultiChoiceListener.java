@@ -65,7 +65,7 @@ public abstract class OUMultiChoiceListener<Result> implements AbsListView.Multi
    @Override
    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked)
    {
-      int itemId = (int)id;
+      Integer itemId = (int)id;
       if (checked)
          listId.add(itemId);
       else

@@ -40,6 +40,11 @@ public class TripGroup
 
    private String name, detail;
 
+   /*
+    * Get Instance
+    * ___________________________________________________________________________________________________
+    */
+
    private static TripGroup getLiteInstance (SQLiteDatabase db, int id)
    {
       Cursor cursor = new DBQueryBuilder(db)
@@ -59,18 +64,19 @@ public class TripGroup
       return group;
    }
 
+   /*
+    * CURD Operations
+    * ___________________________________________________________________________________________________
+    */
+
    public int add (SQLiteDatabase db)
    {
       DBUtil.assertUnsetId(id);
       DBUtil.assertSetId(tripId);
       validate();
 
-      ContentValues values = getPopulatedContentValues();
-      int result = (int) db.insert(Table.TripGroup.name(), null, values);
-
-      DBUtil.assertNotEquals(result, -1, "Table=TripGroup, Addition failed");
-      this.id = result;
-      return result;
+      this.id = DBUtil.addRow (db, Table.TripGroup, getPopulatedContentValues());
+      return this.id;
    }
 
    public int update (SQLiteDatabase db)
@@ -98,14 +104,34 @@ public class TripGroup
       DBUtil.assertNonEmpty(tripId, "Table=TripGroup, tripId is mandatory.");
    }
 
-   public static void addUserGroupOfAll (SQLiteDatabase db, TripUser user)
+   /*
+    * Static Methods
+    * ___________________________________________________________________________________________________
+    */
+
+   public static void addUserToGroupOfAll (SQLiteDatabase db, int tripId, TripUser user)
    {
-
       int userId = user.getId();
-      DBUtil.assertSetId(id);
       DBUtil.assertSetId(userId);
-   }
 
+      // Get groupId for group by name 'All'
+      Cursor cursor = new DBQueryBuilder(db)
+         .select(Column._id)
+         .from(Table.TripGroup)
+         .whereAND
+         (
+            Column.TripId + " = " + tripId,
+            Column.Name + " = " + TripGroup.All
+         )
+         .query();
+      int groupIdOfAll = cursor.getInt(0);
+
+      // Add user to group 'All' of this trip
+      ContentValues values = new ContentValues();
+      values.put(TripUserGroup.Column.GroupId.name(), groupIdOfAll);
+      values.put(TripUserGroup.Column.UserId.name(), userId);
+      DBUtil.addRow(db, Table.TripUserGroup, values);
+   }
 
    public static List<Integer> getUsersFromGroups (SQLiteDatabase db, List<Integer> listGroupId)
    {
@@ -134,6 +160,11 @@ public class TripGroup
       for (boolean isDone = cursor.moveToFirst(); isDone; isDone = cursor.moveToNext())
          Log.d(TAG, "FirstName=" + cursor.getString(0) + " LastName=" + cursor.getString(1) + " Name=" + cursor.getString(2));
    }
+
+   /*
+    * Instance variable setters and getters
+    * ___________________________________________________________________________________________________
+    */
 
    public int getId ()
    {

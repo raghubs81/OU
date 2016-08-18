@@ -178,7 +178,6 @@ public class UserListFragment extends ListFragment
 
       // Register for long click
       getListView().setMultiChoiceModeListener(new UserMultiChoiceListener());
-
    }
 
    /**
@@ -226,7 +225,7 @@ public class UserListFragment extends ListFragment
          else if (result  == 0)
             mesg = "Delete aborted! Please remove users from items they have paid for or share.";
          else
-            mesg = "Successfully deleted " + result + " users.";
+            mesg = result + " user deleted";
 
          if (result <= 0)
             Toast.makeText(context, mesg, Toast.LENGTH_LONG).show();

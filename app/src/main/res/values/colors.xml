@@ -24,6 +24,9 @@
 
     <color name="textHint">#502800</color>
 
+    <color name="bgListItemSelected">#AA689F38</color>
+    <color name="bgListItemPressed">#44689F38</color>
+
     <array name="bgDarkRainbow">
         <item>#689F38</item>
         <item>#673AB7</item>

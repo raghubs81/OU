@@ -3,7 +3,7 @@
    android:layout_width="match_parent"
    android:layout_height="wrap_content"
    android:orientation="horizontal"
-   android:background="?android:attr/activatedBackgroundIndicator"
+   android:background="@drawable/list_activated_background"
    android:minHeight="80dp"
    android:gravity="center"
    android:paddingLeft="@dimen/activity_horizontal_margin"

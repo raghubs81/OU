@@ -27,6 +27,8 @@ import com.maga.ou.util.OUCurrencyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.maga.ou.util.OUMultiChoiceListener;
 import com.maga.ou.util.UIUtil;
 
 public class ItemPaymentListFragment extends ListFragment
@@ -191,108 +193,6 @@ public class ItemPaymentListFragment extends ListFragment
    }
 
    /**
-    * Handles long press events and allows mulitple selection.
-    */
-   private class ItemPaymentMultiChoiceListener implements  AbsListView.MultiChoiceModeListener
-   {
-      private ListView listView = getListView();
-
-      private List<Integer> listItemId = new ArrayList<>();
-
-      private SQLiteDatabase db = DBUtil.getDB(context);
-
-      public ItemPaymentMultiChoiceListener ()
-      {
-         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-      }
-
-      @Override
-      public boolean onCreateActionMode(ActionMode mode, Menu menu)
-      {
-         MenuInflater inflater = mode.getMenuInflater();
-         inflater.inflate(R.menu.appbar_list_longtap, menu);
-         mode.setTitle("Select Items");
-         listItemId.clear();
-
-         if (activity.getSupportActionBar() != null)
-            activity.getSupportActionBar().hide();
-
-         return true;
-      }
-
-      @Override
-      public boolean onPrepareActionMode(ActionMode mode, Menu menu)
-      {
-         return false;
-      }
-
-      @Override
-      public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked)
-      {
-         int itemId = (int)id;
-         if (checked)
-            listItemId.add(itemId);
-         else
-            listItemId.remove(itemId);
-         mode.setSubtitle(listItemId.size() + " selected");
-      }
-
-      @Override
-      public boolean onActionItemClicked(ActionMode mode, MenuItem item)
-      {
-         switch (item.getItemId())
-         {
-            case R.id.appbar_list_delete:
-               new AsyncItemDeletionTask ().execute();
-               mode.finish();
-               return true;
-
-            default:
-               return false;
-         }
-      }
-
-      @Override
-      public void onDestroyActionMode(ActionMode mode)
-      {
-         if (activity.getSupportActionBar() != null)
-            activity.getSupportActionBar().show();
-      }
-
-      /**
-       * This class handles asynchronous deletion of list items.
-       *    - The OUAsyncTask is an AsyncTask that shows a modal dialog
-       */
-      class AsyncItemDeletionTask extends OUAsyncTask<Void,Integer>
-      {
-         public AsyncItemDeletionTask ()
-         {
-            super(context);
-         }
-
-         @Override
-         protected Integer doInBackground (Void... params)
-         {
-            if (listItemId.isEmpty())
-               return 0;
-            return Item.delete(db, listItemId);
-         }
-
-         @Override
-         protected void onPostExecute(Integer result)
-         {
-            CursorAdapter cursorAdapter = (CursorAdapter)listView.getAdapter();
-            cursorAdapter.changeCursor(Item.getItemPaymentSummary(db, tripId));
-            super.onPostExecute(result);
-            listItemId.clear();
-
-            String strValue = (result == 0) ? "No" : String.valueOf(result);
-            Toast.makeText(context, strValue + " items deleted", Toast.LENGTH_SHORT).show();
-         }
-      }
-   }
-
-   /**
     * An interface that delegates following events to the activity that contains this fragment.
     */
    public interface ItemPaymentListListener
@@ -326,6 +226,41 @@ public class ItemPaymentListFragment extends ListFragment
          textSummary.setText(DBUtil.getCell(cursor, Item.Column.Summary));
          textDetail.setText(DBUtil.getCell(cursor, Item.Column.Detail));
          textAmount.setText(OUCurrencyUtil.format(Integer.valueOf(DBUtil.getCell(cursor, Item.ItemPaidBy.Column.Amount))));
+      }
+   }
+
+   private class ItemPaymentMultiChoiceListener extends OUMultiChoiceListener<Integer>
+   {
+      private List<Integer> listId;
+
+      private SQLiteDatabase db = DBUtil.getDB(activity);
+
+      public ItemPaymentMultiChoiceListener ()
+      {
+         super(activity, getListView());
+         this.listId = getListId ();
+      }
+
+      @Override
+      protected Integer doBackgroundTask()
+      {
+         return (listId.isEmpty()) ? 0 : Item.delete(db, listId);
+      }
+
+      @Override
+      protected void doAfterTaskCompletionBeforeRestoration(Integer result)
+      {
+         if (result <= 0)
+            return;
+         CursorAdapter cursorAdapter = (CursorAdapter)getListView().getAdapter();
+         cursorAdapter.changeCursor(Item.getItemPaymentSummary(db, tripId));
+      }
+
+      @Override
+      protected void doAfterRestoration(Integer result)
+      {
+         String mesg = ((result == 0) ? "No" : String.valueOf(result)) + " items deleted";
+         Toast.makeText(context, mesg, Toast.LENGTH_SHORT).show();
       }
    }
 }

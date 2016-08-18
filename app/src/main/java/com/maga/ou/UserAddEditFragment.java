@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.maga.ou.model.TripGroup;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.UIUtil;
@@ -232,6 +234,7 @@ public class UserAddEditFragment extends Fragment implements View.OnClickListene
          {
             user.setTripId(tripId);
             user.add(db);
+            TripGroup.addUserToGroupOfAll(db, tripId, user);
          }
          else if (operationType == OperationType.Edit)
             user.update(db);
