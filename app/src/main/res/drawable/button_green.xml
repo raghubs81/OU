@@ -5,7 +5,7 @@
    <item android:state_enabled="false"
          android:drawable="@drawable/button_disabled"/>
 
-   <item  android:state_pressed="true">
+   <item android:state_pressed="true">
       <shape android:shape="rectangle">
          <corners
             android:radius="6dp"/>

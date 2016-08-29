@@ -12,7 +12,8 @@
         <activity
            android:name=".MainActivity"
            android:screenOrientation="portrait"
-           android:configChanges="orientation|screenSize">
+           android:configChanges="orientation|screenSize"
+           android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,7 +26,8 @@
         <activity
             android:name=".MainFragmentManagerActivity"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden"/>
 
     </application>
 
