@@ -17,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
@@ -26,6 +25,8 @@ import android.widget.ListView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.maga.ou.model.TripGroup;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.OUTextChangeListener;
@@ -169,7 +170,7 @@ public class ContactListFragment extends ListFragment
       switch (item.getItemId())
       {
          case R.id.appbar_list_done:
-            doDoneClicked();
+            doSaveContacts();
             return true;
 
          default:
@@ -224,7 +225,7 @@ public class ContactListFragment extends ListFragment
       });
    }
 
-   private void doDoneClicked ()
+   private void doSaveContacts()
    {
       if (mapPositionToContact.size() == 0)
       {
@@ -254,6 +255,8 @@ public class ContactListFragment extends ListFragment
             user.setContactId(contact.contactId);
             user.setTripId(tripId);
             user.add(db);
+
+            TripGroup.addUserToGroupOfAll(db, tripId, user);
          }
 
          db.setTransactionSuccessful();

@@ -114,7 +114,7 @@ public class TripGroup
       DBUtil.assertSetId(userId);
 
       // Get groupId for group by name 'All'
-      Cursor cursor = new DBQueryBuilder(db)
+      Cursor cursorAllGroupId = new DBQueryBuilder(db)
          .select(Column._id)
          .from(Table.TripGroup)
          .whereAND
@@ -124,10 +124,29 @@ public class TripGroup
          )
          .query();
 
-      if (!cursor.moveToFirst())
+      if (!cursorAllGroupId.moveToFirst())
          DBUtil.die("Could not get Id of TripGroup cursor for 'All' group");
 
-      int groupIdOfAll = cursor.getInt(0);
+      int groupIdOfAll = cursorAllGroupId.getInt(0);
+
+      // Check if the group 'All' already contains the userId
+      // Get groupId for group by name 'All'
+      Cursor cursorUserInAll = new DBQueryBuilder(db)
+         .select(TripUserGroup.Column._id)
+         .from (Table.TripUserGroup)
+         .whereAND
+         (
+           TripUserGroup.Column.UserId   + " = " + user.getId(),
+           TripUserGroup.Column.GroupId  + " = " + groupIdOfAll
+         )
+         .query();
+
+      // This user already exists in 'All'
+      if (cursorUserInAll.getCount() > 0)
+      {
+         Log.d(TAG, "User is already a part of Group All with Id=" + groupIdOfAll + ". Not adding to TripUserGroup table again!");
+         return;
+      }
 
       // Add user to group 'All' of this trip
       ContentValues values = new ContentValues();

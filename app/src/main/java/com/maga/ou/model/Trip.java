@@ -127,7 +127,7 @@ public class Trip
       DBUtil.deleteRowByReferenceId(db, Table.ItemSharedBy, Item.ItemSharedBy.Column.ItemId, listItemId);
       DBUtil.deleteRowByReferenceId(db, Table.ItemPaidBy  , Item.ItemPaidBy.Column.ItemId  , listItemId);
 
-      // Remove all thumb_items
+      // Remove all items
       Item.delete(db, listItemId);
 
       // Remove all trips

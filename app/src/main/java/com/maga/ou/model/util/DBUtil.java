@@ -191,6 +191,9 @@ public class DBUtil
 
    public static int deleteRowById (SQLiteDatabase db, AbstractTable table, List<Integer> listId)
    {
+      if (listId == null || listId.size() == 0)
+         return 0;
+
       String whereClause = "_id IN (" + TextUtils.join(",", listId) + ")";
       int result = db.delete(table.name(), whereClause, null);
       DBUtil.assertNotEquals(result, 0, "Table=Item, No row deleted");
@@ -216,6 +219,9 @@ public class DBUtil
 
    public static int deleteRowByReferenceId(SQLiteDatabase db, AbstractTable table, AbstractColumn refColumn, List<Integer> listId)
    {
+      if (listId == null || listId.size() == 0)
+         return 0;
+
       String whereClause = refColumn + " IN (" + TextUtils.join(",", listId) + ")";
       Log.d(TAG, "DELETE " + table + " WHERE " + whereClause);
       return db.delete(table.name(), whereClause, null);
