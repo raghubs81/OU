@@ -10,7 +10,7 @@ import com.maga.ou.TripDetailFragment.TripDetailListener;
 import com.maga.ou.UserListFragment.UserListListener;
 import com.maga.ou.UserDetailFragment.UserDetailListener;
 
-public class MainFragmentManagerActivity extends SingleFragmentActivity implements
+public class earMainFragmentManagerActivity extends SingleFragmentActivity implements
       ItemPaymentListListener, ItemPaymentDetailListener,
       TripListListener, TripDetailListener,
       UserListListener, UserDetailListener
