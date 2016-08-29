@@ -400,7 +400,7 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
                   tv.setText(""+counts);
 
 
-                  //the spinnertable has the 3 items to drop , delete , add row to the table selected by the user
+                  //the spinnertable has the 3 thumb_items to drop , delete , add row to the table selected by the user
                   //here we handle the 3 operations.
                   spinnertable.setOnItemSelectedListener((new AdapterView.OnItemSelectedListener() {
                      @Override

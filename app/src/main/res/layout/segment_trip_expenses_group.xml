@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="100dp"
+   android:orientation="vertical"
+   android:padding="8dp"
+   android:background="#BB1496BC">
+
+   <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:gravity="center">
+
+      <TextView
+         android:id="@+id/trip_expenses_group__name"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:textSize="24sp"
+         android:textColor="@color/textPrimaryLight"
+         android:text="Raghu"
+         />
+
+   </LinearLayout>
+
+   <GridLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:columnCount="2"
+      android:layout_marginTop="8dp"
+      >
+
+      <TextView
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_columnWeight="2"
+         android:layout_gravity="fill_horizontal"
+         android:text="@string/trip_expense_before"
+         android:textSize="16sp"
+         android:textColor="@color/textPrimaryLight"
+         android:textStyle="italic"
+         />
+
+      <TextView
+         android:id="@+id/trip_expenses_group__before_amount"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_columnWeight="1"
+         android:layout_gravity="fill_horizontal"
+         android:gravity="end"
+         android:text="1000.00"
+         android:textSize="16sp"
+         android:textColor="@color/textPrimaryLight"
+         android:textStyle="bold"
+         />
+
+      <TextView
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_columnWeight="2"
+         android:layout_gravity="fill_horizontal"
+         android:text="@string/trip_expense_after"
+         android:textSize="16sp"
+         android:textColor="@color/textPrimaryLight"
+         android:textStyle="italic"
+         />
+
+      <TextView
+         android:id="@+id/trip_expenses_group__after_amount"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_columnWeight="1"
+         android:layout_gravity="fill_horizontal"
+         android:gravity="end"
+         android:text="2500.00"
+         android:textSize="16sp"
+         android:textColor="@color/textPrimaryLight"
+         android:textStyle="bold"
+         />
+   </GridLayout>
+
+</LinearLayout>

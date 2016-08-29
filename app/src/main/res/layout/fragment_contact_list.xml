@@ -1,0 +1,48 @@
+<LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/fragment_contact_list"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:orientation="vertical"
+   android:background="@color/colorPrimary">
+
+   <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:layout_marginTop="4dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:gravity="center"
+      >
+
+      <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:drawableLeft="@drawable/ic_search_light"
+         android:padding="6dp"
+         />
+
+      <EditText
+         android:id="@+id/contact_list__search"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:background="@drawable/text_border"
+         style="@style/OU.TextStyle.Medium"
+         android:padding="6dp"
+         android:hint="@string/search"
+         />
+
+   </LinearLayout>
+
+   <ListView
+      android:id="@android:id/list"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:background="#CFFFFFFF"
+      android:divider="@drawable/divider"
+      android:dividerHeight="1dp"/>
+
+</LinearLayout>

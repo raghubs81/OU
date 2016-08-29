@@ -20,10 +20,9 @@ public class DBUtil
 
    private static SQLiteDatabase DB = null;
 
-   /**
-    * ----------------------------------------------------------------------------------------------------------------------
-    * Query Operations
-    * ----------------------------------------------------------------------------------------------------------------------
+   /*
+    * Core DB operations
+    * ___________________________________________________________________________________________________
     */
 
    /**
@@ -55,10 +54,9 @@ public class DBUtil
       }
    }
 
-   /**
-    * ----------------------------------------------------------------------------------------------------------------------
+   /*
     * Cursor Operations
-    * ----------------------------------------------------------------------------------------------------------------------
+    * ___________________________________________________________________________________________________
     */
 
    /**
@@ -122,10 +120,9 @@ public class DBUtil
       return (value == null) ? "" : value;
    }
 
-   /**
-    * ----------------------------------------------------------------------------------------------------------------------
-    * Utilities
-    * ----------------------------------------------------------------------------------------------------------------------
+   /*
+    * Asserts
+    * ___________________________________________________________________________________________________
     */
 
    public static void assertEquals (int actual, int expected, String mesg)
@@ -169,16 +166,10 @@ public class DBUtil
          die ("ID is not set. ID=" + id);
    }
 
-   public static void die (String mesg)
-   {
-      die (mesg, null);
-   }
-
-   public static void die (String mesg, Throwable e)
-   {
-      Log.e(TAG, mesg, e);
-      throw new IllegalStateException(mesg, e);
-   }
+   /*
+    * Basic Insert, Delete and Update operations
+    * ___________________________________________________________________________________________________
+    */
 
    public static int addRow (SQLiteDatabase db, AbstractTable table, ContentValues values)
    {
@@ -215,14 +206,45 @@ public class DBUtil
       return result;
    }
 
-   public static int deleteRowById(SQLiteDatabase db, AbstractTable table, AbstractColumn column, int id)
+   public static int deleteRowByReferenceId(SQLiteDatabase db, AbstractTable table, AbstractColumn refColumn, int id)
    {
-      String whereClause = column + " = ?";
+      String whereClause = refColumn + " = ?";
       String whereValues[] = new String [] {String.valueOf(id)};
       Log.d(TAG, "DELETE " + table + " WHERE " + whereClause + " WHERE-VALUE " + TextUtils.join(", ", whereValues));
-      int result = db.delete(table.name(), whereClause, whereValues);
-      DBUtil.assertNotEquals(result, 0, "Table=Item, No row(s) deleted");
-      return result;
+      return db.delete(table.name(), whereClause, whereValues);
+   }
+
+   public static int deleteRowByReferenceId(SQLiteDatabase db, AbstractTable table, AbstractColumn refColumn, List<Integer> listId)
+   {
+      String whereClause = refColumn + " IN (" + TextUtils.join(",", listId) + ")";
+      Log.d(TAG, "DELETE " + table + " WHERE " + whereClause);
+      return db.delete(table.name(), whereClause, null);
+   }
+
+   /*
+    * DB Util
+    * ___________________________________________________________________________________________________
+    */
+
+   public static String wrap (String value)
+   {
+      return "'" + value + "'";
+   }
+
+   /*
+    * Fatal exit
+    * ___________________________________________________________________________________________________
+    */
+
+   public static void die (String mesg)
+   {
+      die(mesg, null);
+   }
+
+   public static void die (String mesg, Throwable e)
+   {
+      Log.e(TAG, mesg, e);
+      throw new IllegalStateException(mesg, e);
    }
 
 }

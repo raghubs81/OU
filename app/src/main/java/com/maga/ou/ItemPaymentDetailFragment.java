@@ -199,9 +199,9 @@ public class ItemPaymentDetailFragment extends Fragment
       GridLayout layoutSegmentContainer  = (GridLayout)viewRoot.findViewById(R.id.item_payment_detail__shared_by_container);
       List<TripUser> listUser = item.getSharedByUsers(db);
 
-      int bgColor[] = context.getResources().getIntArray(R.array.bgDarkRainbow);
+      int bgColor[] = context.getResources().getIntArray(R.array.bgRainbowDark);
       int rowCount = -1;
-      for (TripUser user : listUser)
+      for (final TripUser user : listUser)
       {
          LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
          final View segmentViewRoot = inflater.inflate(R.layout.segment_shared_by_detail, layoutSegmentContainer, false);
@@ -210,7 +210,19 @@ public class ItemPaymentDetailFragment extends Fragment
          segmentViewRoot.setBackgroundColor(color);
 
          TextView textUser   = (TextView)segmentViewRoot.findViewById(R.id.segment_shared_by_detail__user);
-         textUser.setText (user.getNickName());
+         textUser.setText(user.getNickName());
+
+         textUser.setOnClickListener
+         (
+            new View.OnClickListener()
+            {
+               @Override
+               public void onClick(View view)
+               {
+                  listener.goToUserDetailClicked(tripId, user.getId());
+               }
+            }
+         );
 
          layoutSegmentContainer.addView(segmentViewRoot);
       }
@@ -222,5 +234,6 @@ public class ItemPaymentDetailFragment extends Fragment
    public interface ItemPaymentDetailListener
    {
       void itemPaymentEditClicked (int tripId, int itemId);
+      void goToUserDetailClicked  (int tripId, int userId);
    }
 }

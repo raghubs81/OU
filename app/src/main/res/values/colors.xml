@@ -5,16 +5,16 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#009688</color>
 
-    <color name="textDarkPrimary">#000000</color>
-    <color name="textLightPrimary">#FFFFFF</color>
+    <color name="textPrimaryDark">#000000</color>
+    <color name="textPrimaryLight">#FFFFFF</color>
 
-    <color name="textDarkTitle">#004080</color>
-    <color name="textDarkDetail">#006393</color>
-    <color name="textDarkAmount">#1D9641</color>
-    <color name="textDarkHelp">#804000</color>
+    <color name="textTitleDark">#400080</color>
+    <color name="textDetailDark">#0060C0</color>
+    <color name="textAmountDark">#1D9641</color>
+    <color name="textHelpDark">#804000</color>
 
-    <color name="textDarkPositive">#008000</color>
-    <color name="textDarkNegative">#800000</color>
+    <color name="textPositiveDark">#008000</color>
+    <color name="textNegativeDark">#800000</color>
 
     <color name="bgLightPrimary">#FFFFFF</color>
 
@@ -24,19 +24,26 @@
 
     <color name="textHint">#502800</color>
 
-    <color name="bgListItemSelected">#AA689F38</color>
-    <color name="bgListItemPressed">#44689F38</color>
+    <color name="bgListItemSelected">#60FF8000</color>
+    <color name="bgListItemPressed">#80FF8000</color>
 
-    <array name="bgDarkRainbow">
+    <!-- Trip Expenses Details -->
+    <color name="textExpenseBeforeSettlementDark">#400080</color>
+    <color name="textExpenseAfterSettlementDark">#400080</color>
+    <color name="textExpenseToPayDark">#800000</color>
+    <color name="textExpenseToGetDark">#0A7A3E</color>
+
+    <array name="bgRainbowDark">
         <item>#689F38</item>
         <item>#673AB7</item>
         <item>#009688</item>
         <item>#EF6C00</item>
         <item>#4285F4</item>
-        <item>#B97A57</item>
+        <item>#853962</item>
         <item>#408080</item>
-        <item>#B83852</item>
+        <item>#B97A57</item>
         <item>#3838B8</item>
+        <item>#B83852</item>
     </array>
 
 </resources>

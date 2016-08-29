@@ -6,7 +6,7 @@
    <!-- Delete button -->
    <item
       android:id="@+id/appbar_list_delete"
-      android:icon="@drawable/delete_light"
+      android:icon="@drawable/ic_delete_light"
       android:title="@string/delete"
       app:showAsAction="always"
       tools:ignore="AlwaysShowAction" />

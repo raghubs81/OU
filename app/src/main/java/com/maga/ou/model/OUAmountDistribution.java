@@ -4,7 +4,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
+import com.maga.ou.model.OUDatabaseHelper.Table;
 import com.maga.ou.util.OUCurrencyUtil;
 import com.maga.ou.util.UIUtil;
 
@@ -17,16 +19,39 @@ public class OUAmountDistribution
 {
    private static final String TAG = "ou." + OUAmountDistribution.class.getSimpleName();
 
+   /**
+    * Map lender's userId to a list of UserAmount (Borrower userId and the amount owed by borrower)
+    */
    private Map<Integer,List<UserAmount>> mapLenderToBorrowers = new TreeMap<> ();
 
+   /**
+    * Map borrower's userId to a list of UserAmount (Lenders userId and the amount owed to lender)
+    */
    private Map<Integer,List<UserAmount>> mapBorrowerToLenders = new TreeMap<> ();
 
+   /**
+    * Map of lender's userId to list of ItemAmount (ItemId, summary and amount paid for the item)
+    */
+   private Map<Integer,List<ItemAmount>> mapLenderToItems = new TreeMap<>();
+
+   /**
+    * Map of userId to amount owed - A +ve number indicates amount owed to the user, -ve indicates amount owed by the user.
+    */
    private Map<Integer,Integer> mapUserIdToOweAmount = new TreeMap<>();
 
+   /**
+    * List of all user IDs
+    */
    private List<Integer> listAllUserId = new ArrayList<>();
 
+   /**
+    * List of all user names
+    */
    private List<String> listAllUserName = new ArrayList<>();
 
+   /**
+    * Current trip ID
+    */
    private int tripId = DBUtil.UNSET_ID;
 
    private SQLiteDatabase db;
@@ -35,6 +60,10 @@ public class OUAmountDistribution
    {
       this.db = db;
       this.tripId = tripId;
+
+      Cursor cursorUser = TripUser.getTripUsers(db, tripId);
+      listAllUserId   = DBUtil.getIdColumn(cursorUser, TripUser.Column._id);
+      listAllUserName = DBUtil.getColumn  (cursorUser, TripUser.Column.NickName).get(0);
    }
 
    public static void main (String arg[])
@@ -56,15 +85,11 @@ public class OUAmountDistribution
 
    public void doFindWhoOwesWhom ()
    {
-      Cursor cursorUser = TripUser.getTripUsers(db, tripId);
-      listAllUserId   = DBUtil.getIdColumn(cursorUser, TripUser.Column._id);
-      listAllUserName = DBUtil.getColumn  (cursorUser, TripUser.Column.NickName).get(0);
-
       doMapUserIdToOweAmount();
-      doMapLendersToBorrowers();
+      doMapLendersAndBorrowers();
    }
 
-   public void doMapLendersToBorrowers()
+   private void doMapLendersAndBorrowers()
    {
       List<UserAmount> listLenderUA   = new ArrayList<>();
       List<UserAmount> listBorrowerUA = new ArrayList<>();
@@ -116,7 +141,6 @@ public class OUAmountDistribution
 
             if (lenderAmount > borrowerAmount)
             {
-               // 500 -300
                mapLenderToBorrowers.get(lenderId).add(new UserAmount(borrowerId, borrowerAmount));
                mapBorrowerToLenders.get(borrowerId).add(new UserAmount(lenderId, borrowerAmount));
                lenderAmount -= borrowerAmount;
@@ -125,7 +149,6 @@ public class OUAmountDistribution
             }
             else
             {
-               // -300 500
                mapLenderToBorrowers.get(lenderId).add(new UserAmount(borrowerId, lenderAmount));
                mapBorrowerToLenders.get(borrowerId).add (new UserAmount(lenderId, lenderAmount));
 
@@ -176,6 +199,13 @@ public class OUAmountDistribution
             int amountExisting = mapUserIdToOweAmount.get(userId);
             int amountResult   = amountExisting + amountPaid;
             mapUserIdToOweAmount.put(userId, amountResult);
+
+            // Populate mapLenderToItems
+            List<ItemAmount> list = mapLenderToItems.get(userId);
+            if (list == null)
+               list = new ArrayList<>();
+            list.add(new ItemAmount(currItem.getSummary(), amountPaid));
+            mapLenderToItems.put(userId, list);
          }
 
          Log.d(TAG, "After Credit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName) + " TotalAmountPaid=" + OUCurrencyUtil.format(totalAmountPaid));
@@ -185,7 +215,6 @@ public class OUAmountDistribution
          int amountSharePerUser = totalAmountPaid / sharedByUserCount;
          int remainderAfterShare = totalAmountPaid % sharedByUserCount;
          Log.d(TAG, "Shared By    :" + listSharedByUser + " AmountSharePerUser=" + OUCurrencyUtil.format(amountSharePerUser) + " remainderAfterShare=" + remainderAfterShare);
-
 
          for (TripUser currUser : listSharedByUser)
          {
@@ -216,6 +245,16 @@ public class OUAmountDistribution
       return builder.toString();
    }
 
+   public Map<Integer,Integer> getMapUserIdToOweAmount ()
+   {
+      return mapUserIdToOweAmount;
+   }
+
+   public Map<Integer,List<ItemAmount>> getMapLenderToItems ()
+   {
+      return mapLenderToItems;
+   }
+
    public Map<Integer,List<UserAmount>> getMapBorrowerToLenders ()
    {
       return mapBorrowerToLenders;
@@ -236,6 +275,28 @@ public class OUAmountDistribution
       return listAllUserName;
    }
 
+   public static class ItemAmount
+   {
+      private int amount;
+
+      private String summary;
+
+      public ItemAmount (String summary, int amount)
+      {
+         this.summary = summary;
+         this.amount = amount;
+      }
+
+      public String getSummary()
+      {
+         return summary;
+      }
+
+      public int getAmount()
+      {
+         return amount;
+      }
+   }
 
    public static class UserAmount implements Comparable<UserAmount>
    {
@@ -243,20 +304,20 @@ public class OUAmountDistribution
 
       private int id;
 
-      private Integer amount;
+      private int amount;
 
-      public UserAmount (int id, Integer amount)
+      public UserAmount (int id, int amount)
       {
          this.id = id;
          this.amount = amount;
       }
 
-      public Integer getId ()
+      public int getId ()
       {
          return id;
       }
 
-      public Integer getAmount ()
+      public int getAmount ()
       {
          return amount;
       }

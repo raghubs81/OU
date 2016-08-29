@@ -1,7 +1,6 @@
 package com.maga.ou;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,9 +12,8 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
-import com.maga.ou.model.Item;
-import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.model.OUAmountDistribution;
 import com.maga.ou.util.OUCurrencyUtil;
@@ -28,7 +26,7 @@ import java.util.*;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WhoOwesWhomFragment extends Fragment
+public class WhoOwesWhomFragment extends Fragment implements View.OnClickListener
 {
    private final String TAG = "ou." + getClass ().getSimpleName();
 
@@ -55,7 +53,9 @@ public class WhoOwesWhomFragment extends Fragment
     * ___________________________________________________________________________________________________
     */
 
-   ExpandableListView accordianListView;
+   private ExpandableListView accordianListView;
+
+   private WhoOwesWhomListAdapter adapterLenderToBorrowers, adapterBorrowerToLenders;
 
    /**
     * <b>Parameters</b>
@@ -123,7 +123,7 @@ public class WhoOwesWhomFragment extends Fragment
    private void initMembers ()
    {
       initMemberFromModel ();
-      inflateUIComponents ();
+      inflateUIComponents();
    }
 
    private void initMemberFromModel()
@@ -135,16 +135,52 @@ public class WhoOwesWhomFragment extends Fragment
    {
       UIUtil.setAppBarTitle(activity, "Who Owes Whom");
 
-      accordianListView = (ExpandableListView) viewRoot.findViewById(R.id.who_owes_whom__accordian);
+      accordianListView = (ExpandableListView) viewRoot.findViewById(R.id.who_owes_whom__accordion);
+
+      ToggleButton toggleButton = (ToggleButton)viewRoot.findViewById(R.id.who_owes_whom__toggle);
+      toggleButton.setOnClickListener(this);
 
       SQLiteDatabase db = DBUtil.getDB(context);
       OUAmountDistribution amountDistribution = new OUAmountDistribution(db, tripId);
       amountDistribution.doFindWhoOwesWhom();
-      Map<Integer,List<UserAmount>> mapLenderToBorrowers = amountDistribution.getMapLenderToBorrowers();
-      Map<Integer,List<UserAmount>> mapBorrowerToLenders = amountDistribution.getMapBorrowerToLenders();
+      adapterLenderToBorrowers = new WhoOwesWhomListAdapter(amountDistribution.getMapLenderToBorrowers(), amountDistribution.getListAllUserId(), amountDistribution.getListAllUserName());
+      adapterBorrowerToLenders = new WhoOwesWhomListAdapter(amountDistribution.getMapBorrowerToLenders(), amountDistribution.getListAllUserId(), amountDistribution.getListAllUserName());
+      accordianListView.setAdapter(adapterLenderToBorrowers);
+   }
 
-      Log.d(TAG, "MapLendersToBorrowers=" + mapLenderToBorrowers);
-      accordianListView.setAdapter(new WhoOwesWhomListAdapter(mapLenderToBorrowers, amountDistribution.getListAllUserId(), amountDistribution.getListAllUserName()));
+   /**
+    * Event Handler
+    * ___________________________________________________________________________________________________
+    */
+
+   @Override
+   public void onClick(View view)
+   {
+      int id = view.getId();
+      if (id == R.id.who_owes_whom__toggle)
+         doToggleLenderBorrower(((ToggleButton)view).isChecked());
+   }
+
+   /**
+    * Instance Methods
+    * ___________________________________________________________________________________________________
+    */
+
+   private void doToggleLenderBorrower (boolean isOn)
+   {
+      int titleId  = (isOn) ? R.string.wow_borrowers_title : R.string.wow_lenders_title;
+      int detailId = (isOn) ? R.string.wow_borrowers_detail : R.string.wow_lenders_detail;
+
+      if (isOn)
+         accordianListView.setAdapter(adapterBorrowerToLenders);
+      else
+         accordianListView.setAdapter(adapterLenderToBorrowers);
+
+      TextView textTitle = (TextView)viewRoot.findViewById(R.id.who_owes_whom__title);
+      textTitle.setText(getResources().getText(titleId));
+
+      TextView textDetail = (TextView)viewRoot.findViewById(R.id.who_owes_whom__detail);
+      textDetail.setText(getResources().getText(detailId));
    }
 
    class WhoOwesWhomListAdapter extends BaseExpandableListAdapter

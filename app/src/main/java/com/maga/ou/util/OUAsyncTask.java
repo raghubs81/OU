@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import com.maga.ou.R;
 
 /**
- * Show a modal dialog with a {@code R.drawable.loading} image while the background task is in progress.
+ * Show a modal dialog with a {@code R.drawable.thumb_loading} image while the background task is in progress.
  * The base class should
  * <ul>
  *    <li>Implement {@code doBackgroundTask (Params.. params) method} </li>
@@ -27,7 +27,7 @@ public abstract class OUAsyncTask<Params,Result> extends AsyncTask<Params,Void,R
    {
       this.context = context;
       ImageView image = new ImageView(context);
-      image.setImageResource(R.drawable.loading);
+      image.setImageResource(R.drawable.thumb_loading);
       AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.OU_DialogLoading);
       builder.setView(image, 0, 0, 0, 0);
       dialog = builder.create();

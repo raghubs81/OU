@@ -292,6 +292,13 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
          textItemSummary.setError("Please fill item summmary");
          valid = false;
       }
+
+      // Users
+      if (listTripUserId.isEmpty())
+      {
+         valid = false;
+      }
+
       builder.append("Summary=").append(itemSummary).append(DBUtil.NEW_LINE);
 
       // Item detail
@@ -509,6 +516,12 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
          Toast.makeText(context, "Atleast one entry is required", Toast.LENGTH_SHORT).show();
          return;
       }
+
+      final EditText txtAmount    = (EditText) ((LinearLayout)view.getParent()).findViewById(R.id.segment_paid_by_add_edit__amount);
+      int value = OUCurrencyUtil.valueOf(txtAmount.getText().toString());
+      totalAmount -= value;
+      textTotalAmount.setText(OUCurrencyUtil.format(totalAmount));
+
       layoutSegmentContainer.removeView((View)view.getParent());
    }
 }

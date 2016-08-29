@@ -11,6 +11,7 @@ import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.model.OUDatabaseHelper.Table;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -103,13 +104,33 @@ public class Trip
    }
 
    /**
-    * Delete all users in <b>listUserId</b> if they do not owe OR are owed by for any items.
-    * <br><b>NOTE :</b> The table schema syntax 'on delete cascade' takes care of auto removing the users from all groups.
+    * Delete all thumb_users in <b>listUserId</b> if they do not owe OR are owed by for any thumb_items.
+    * <br><b>NOTE :</b> The table schema syntax 'on delete cascade' takes care of auto removing the thumb_users from all groups.
     *
     * @return The number of rows affected, 0 if deletion failed.
     */
    public static int delete (SQLiteDatabase db, List<Integer> listTripId)
    {
+      // Get ItemId from all the trips to be deleted
+      Cursor cursor = new DBQueryBuilder(db)
+         .select(Item.Column._id)
+         .from(Table.TripItem, Table.Item)
+         .whereAND
+         (
+            TripItem.Column.ItemId + " = " + Item.Column._id,
+            TripItem.Column.TripId + " IN (" + TextUtils.join(",", listTripId) + ")"
+         )
+         .query();
+
+      // Remove ItemPaidBy and ItemSharedBy for all thumb_items
+      List<Integer> listItemId = DBUtil.getIdColumn(cursor, Item.Column._id);
+      DBUtil.deleteRowByReferenceId(db, Table.ItemSharedBy, Item.ItemSharedBy.Column.ItemId, listItemId);
+      DBUtil.deleteRowByReferenceId(db, Table.ItemPaidBy  , Item.ItemPaidBy.Column.ItemId  , listItemId);
+
+      // Remove all thumb_items
+      Item.delete(db, listItemId);
+
+      // Remove all trips
       return DBUtil.deleteRowById(db, Table.Trip, listTripId);
    }
 

@@ -6,11 +6,11 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.maga.ou.model.util.*;
 import com.maga.ou.model.OUDatabaseHelper.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by rbseshad on 24-Jun-16.
@@ -21,7 +21,7 @@ public class TripUser
 
    public enum Column implements AbstractColumn
    {
-      _id, NickName, FirstName, LastName, Mobile, Email, TripId;
+      _id, NickName, FullName, ContactId, TripId;
 
       @Override
       public String toString ()
@@ -32,7 +32,11 @@ public class TripUser
 
    private int id, tripId;
 
-   private String nickName, firstName, lastName, mobile, email;
+   private String nickName;
+
+   private String fullName;
+
+   private String contactId;
 
    /*
     * Get Instance
@@ -70,11 +74,9 @@ public class TripUser
 
       TripUser user = new TripUser();
       user.id = Integer.valueOf(DBUtil.getCell(cursor, Column._id));
-      user.setNickName (DBUtil.getCell(cursor, Column.NickName));
-      user.setFirstName(DBUtil.getCell(cursor, Column.FirstName));
-      user.setLastName(DBUtil.getCell(cursor, Column.LastName));
-      user.setMobile(DBUtil.getCell(cursor, Column.Mobile));
-      user.setEmail(DBUtil.getCell(cursor, Column.Email));
+      user.setNickName(DBUtil.getCell(cursor, Column.NickName));
+      user.setFullName(DBUtil.getCell(cursor, Column.FullName));
+      user.setContactId(DBUtil.getCell(cursor, Column.ContactId));
       user.setTripId(Integer.valueOf(DBUtil.getCell(cursor, Column.TripId)));
 
       return user;
@@ -106,8 +108,8 @@ public class TripUser
    }
 
    /**
-    * Delete all users in <b>listUserId</b> if they do not owe OR are owed by for any items.
-    * <br><b>NOTE :</b> The table schema syntax 'on delete cascade' takes care of auto removing the users from all groups.
+    * Delete all thumb_users in <b>listUserId</b> if they do not owe OR are owed by for any thumb_items.
+    * <br><b>NOTE :</b> The table schema syntax 'on delete cascade' takes care of auto removing the thumb_users from all groups.
     *
     * @return The number of rows affected, 0 if deletion failed.
     */
@@ -127,7 +129,7 @@ public class TripUser
    }
 
    /**
-    * Return a cursor of all trip users for this trip <b>tripId</b>.
+    * Return a cursor of all trip thumb_users for this trip <b>tripId</b>.
     */
    public static Cursor getTripUsers (SQLiteDatabase db, int tripId)
    {
@@ -138,14 +140,40 @@ public class TripUser
          .query();
    }
 
+   public static List<String> getTripUserContactIds (SQLiteDatabase db, int tripId)
+   {
+      Cursor cursor =  new DBQueryBuilder(db)
+         .select(Column.ContactId)
+         .from(Table.TripUser)
+         .where(Column.TripId + " = " + tripId)
+         .query();
+
+      return DBUtil.getColumn(cursor, Column.ContactId).get(0);
+   }
+
+   /**
+    * Return the count of trip thumb_users
+    */
+   public static int getTripUserCount (SQLiteDatabase db, int tripId)
+   {
+      Cursor cursor = new DBQueryBuilder(db)
+         .selectRaw("COUNT(*)")
+         .from (Table.TripUser)
+         .where(Column.TripId + " = " + tripId)
+         .query();
+
+      if (!cursor.moveToFirst())
+         DBUtil.die("Could not get first row of TripUser counting cursor");
+
+      return cursor.getInt(0);
+   }
+
    private ContentValues getPopulatedContentValues ()
    {
       ContentValues values = new ContentValues ();
       values.put(Column.NickName.name() , nickName);
-      values.put(Column.FirstName.name(), firstName);
-      values.put(Column.LastName.name() , lastName);
-      values.put(Column.Mobile.name(), mobile);
-      values.put(Column.Email.name(), email);
+      values.put(Column.FullName.name(), fullName);
+      values.put(Column.ContactId.name(), contactId);
       values.put(Column.TripId.name(), tripId);
       return values;
    }
@@ -153,7 +181,6 @@ public class TripUser
    private void validate ()
    {
       DBUtil.assertNonEmpty(nickName, "Table=TripUser, NickName is mandatory.");
-      DBUtil.assertNonEmpty(mobile, "Table=TripUser, Mobile is mandatory.");
    }
 
    /*
@@ -166,9 +193,9 @@ public class TripUser
       return id;
    }
 
-   public String getFirstName()
+   public String getFullName()
    {
-      return firstName;
+      return fullName;
    }
 
    public void setNickName(String nickName)
@@ -181,39 +208,9 @@ public class TripUser
       return nickName;
    }
 
-   public void setFirstName(String firstName)
+   public void setFullName(String fullName)
    {
-      this.firstName = firstName;
-   }
-
-   public String getLastName()
-   {
-      return lastName;
-   }
-
-   public void setLastName(String lastName)
-   {
-      this.lastName = lastName;
-   }
-
-   public String getMobile()
-   {
-      return mobile;
-   }
-
-   public void setMobile(String mobile)
-   {
-      this.mobile = mobile;
-   }
-
-   public String getEmail()
-   {
-      return email;
-   }
-
-   public void setEmail(String email)
-   {
-      this.email = email;
+      this.fullName = fullName;
    }
 
    public int getTripId()
@@ -225,6 +222,17 @@ public class TripUser
    {
       this.tripId = tripId;
    }
+
+   public String getContactId()
+   {
+      return contactId;
+   }
+
+   public void setContactId(String contactId)
+   {
+      this.contactId = contactId;
+   }
+
 
    @Override
    public String toString ()

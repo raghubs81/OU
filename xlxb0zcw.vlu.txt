@@ -1,0 +1,112 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+	modified:   app/src/main/AndroidManifest.xml
+	modified:   app/src/main/assets/oudb.sql
+	modified:   app/src/main/java/com/maga/ou/ItemPaymentAddEditFragment.java
+	modified:   app/src/main/java/com/maga/ou/ItemPaymentDetailFragment.java
+	modified:   app/src/main/java/com/maga/ou/ItemPaymentListFragment.java
+	modified:   app/src/main/java/com/maga/ou/MainActivity.java
+	deleted:    app/src/main/java/com/maga/ou/OUMainActivity.java
+	modified:   app/src/main/java/com/maga/ou/TripAddEditFragment.java
+	modified:   app/src/main/java/com/maga/ou/TripDetailFragment.java
+	deleted:    app/src/main/java/com/maga/ou/UserAddEditFragment.java
+	modified:   app/src/main/java/com/maga/ou/UserDetailFragment.java
+	modified:   app/src/main/java/com/maga/ou/UserListFragment.java
+	modified:   app/src/main/java/com/maga/ou/WhoOwesWhomFragment.java
+	modified:   app/src/main/java/com/maga/ou/model/Item.java
+	modified:   app/src/main/java/com/maga/ou/model/OUAmountDistribution.java
+	modified:   app/src/main/java/com/maga/ou/model/Trip.java
+	modified:   app/src/main/java/com/maga/ou/model/TripGroup.java
+	modified:   app/src/main/java/com/maga/ou/model/TripUser.java
+	modified:   app/src/main/java/com/maga/ou/model/util/AndroidDatabaseManager.java
+	modified:   app/src/main/java/com/maga/ou/model/util/DBUtil.java
+	modified:   app/src/main/java/com/maga/ou/util/OUAsyncTask.java
+	deleted:    app/src/main/res/drawable/add_light.png
+	modified:   app/src/main/res/drawable/button_blue.xml
+	modified:   app/src/main/res/drawable/button_green.xml
+	modified:   app/src/main/res/drawable/button_negative.xml
+	modified:   app/src/main/res/drawable/button_positive.xml
+	modified:   app/src/main/res/drawable/button_purple.xml
+	deleted:    app/src/main/res/drawable/clear_dark.png
+	deleted:    app/src/main/res/drawable/clear_light.png
+	deleted:    app/src/main/res/drawable/delete_dark.png
+	deleted:    app/src/main/res/drawable/delete_light.png
+	deleted:    app/src/main/res/drawable/delete_small_dark.png
+	deleted:    app/src/main/res/drawable/done_dark.png
+	deleted:    app/src/main/res/drawable/done_light.png
+	deleted:    app/src/main/res/drawable/edit_light.png
+	deleted:    app/src/main/res/drawable/list_add_dark.png
+	deleted:    app/src/main/res/drawable/list_add_light.png
+	deleted:    app/src/main/res/drawable/loading.png
+	modified:   app/src/main/res/drawable/text_border.xml
+	deleted:    app/src/main/res/drawable/trip_items.png
+	deleted:    app/src/main/res/drawable/users.png
+	modified:   app/src/main/res/layout/activity_main.xml
+	modified:   app/src/main/res/layout/fragment_item_payment_add_edit.xml
+	modified:   app/src/main/res/layout/fragment_item_payment_list.xml
+	modified:   app/src/main/res/layout/fragment_trip_add_edit.xml
+	modified:   app/src/main/res/layout/fragment_trip_detail.xml
+	modified:   app/src/main/res/layout/fragment_trip_list.xml
+	deleted:    app/src/main/res/layout/fragment_user_add_edit.xml
+	modified:   app/src/main/res/layout/fragment_user_detail.xml
+	modified:   app/src/main/res/layout/fragment_user_list.xml
+	modified:   app/src/main/res/layout/fragment_who_owes_whom.xml
+	modified:   app/src/main/res/layout/segment_paid_by_add_edit.xml
+	modified:   app/src/main/res/layout/segment_who_owes_whom_child.xml
+	modified:   app/src/main/res/layout/segment_who_owes_whom_group.xml
+	modified:   app/src/main/res/menu/appbar_detail_edit.xml
+	modified:   app/src/main/res/menu/appbar_list_add.xml
+	modified:   app/src/main/res/menu/appbar_list_longtap.xml
+	modified:   app/src/main/res/values/colors.xml
+	modified:   app/src/main/res/values/strings.xml
+	modified:   app/src/main/res/values/styles.xml
+#
+# Untracked files:
+#	ToDo.txt
+#	app/src/main/java/com/maga/ou/ContactListFragment.java
+#	app/src/main/java/com/maga/ou/MainFragmentManagerActivity.java
+#	app/src/main/java/com/maga/ou/TripExpensesFragment.java
+#	app/src/main/java/com/maga/ou/UserEditFragment.java
+#	app/src/main/res/color/
+#	app/src/main/res/drawable/bg_expense_list.png
+#	app/src/main/res/drawable/bg_nature_mountain.png
+#	app/src/main/res/drawable/bg_nature_sunset.png
+#	app/src/main/res/drawable/border_shadow.xml
+#	app/src/main/res/drawable/button_disabled.xml
+#	app/src/main/res/drawable/ic_add_light.png
+#	app/src/main/res/drawable/ic_clear_dark.png
+#	app/src/main/res/drawable/ic_clear_light.png
+#	app/src/main/res/drawable/ic_delete_dark.png
+#	app/src/main/res/drawable/ic_delete_light.png
+#	app/src/main/res/drawable/ic_delete_small_dark.png
+#	app/src/main/res/drawable/ic_done_dark.png
+#	app/src/main/res/drawable/ic_done_light.png
+#	app/src/main/res/drawable/ic_edit_light.png
+#	app/src/main/res/drawable/ic_list_add_dark.png
+#	app/src/main/res/drawable/ic_list_add_light.png
+#	app/src/main/res/drawable/ic_search_light.png
+#	app/src/main/res/drawable/ic_tick_light.png
+#	app/src/main/res/drawable/thumb_balance.png
+#	app/src/main/res/drawable/thumb_contact_view.png
+#	app/src/main/res/drawable/thumb_expense.png
+#	app/src/main/res/drawable/thumb_items.png
+#	app/src/main/res/drawable/thumb_loading.png
+#	app/src/main/res/drawable/thumb_users.png
+#	app/src/main/res/layout/fragment_contact_list.xml
+#	app/src/main/res/layout/fragment_trip_expenses.xml
+#	app/src/main/res/layout/fragment_user_edit.xml
+#	app/src/main/res/layout/segment_contact_list.xml
+#	app/src/main/res/layout/segment_trip_expenses_child.xml
+#	app/src/main/res/layout/segment_trip_expenses_child_after.xml
+#	app/src/main/res/layout/segment_trip_expenses_child_before.xml
+#	app/src/main/res/layout/segment_trip_expenses_child_to_get.xml
+#	app/src/main/res/layout/segment_trip_expenses_child_to_pay.xml
+#	app/src/main/res/layout/segment_trip_expenses_group.xml
+#	app/src/main/res/menu/appbar_list_done.xml
+#
+

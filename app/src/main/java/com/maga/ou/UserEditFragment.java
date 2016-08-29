@@ -1,8 +1,12 @@
 package com.maga.ou;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,17 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.maga.ou.model.TripGroup;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.UIUtil;
 
-/**
- * Created by rbseshad on 10-Aug-16. RBSESHAD
- */
-public class UserAddEditFragment extends Fragment implements View.OnClickListener
+public class UserEditFragment extends Fragment implements View.OnClickListener
 {
    private final String TAG = "ou." + getClass ().getSimpleName();
 
@@ -37,20 +38,29 @@ public class UserAddEditFragment extends Fragment implements View.OnClickListene
    private AppCompatActivity activity;
 
    /**
+    * UI Components
+    * ___________________________________________________________________________________________________
+    */
+
+   private TextView textContactHelp;
+
+   /**
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
 
-   public enum OperationType
-   {
-      Add, Edit;
-   }
-
-   private OperationType operationType = OperationType.Add;
-
    private int userId = DBUtil.UNSET_ID;
 
    private int tripId = DBUtil.UNSET_ID;
+
+   /**
+    * Member variables
+    * ___________________________________________________________________________________________________
+    */
+
+   private TripUser user;
+
+   private static final int PICK_CONTACT = 101;
 
    /**
     * <b>Parameters</b>
@@ -60,7 +70,7 @@ public class UserAddEditFragment extends Fragment implements View.OnClickListene
     *    <li>userId        : Optional if operationType is 'Add'   </li>
     * </ul>
     */
-   public UserAddEditFragment()
+   public UserEditFragment()
    {
 
    }
@@ -69,11 +79,6 @@ public class UserAddEditFragment extends Fragment implements View.OnClickListene
     * Setters
     * ___________________________________________________________________________________________________
     */
-
-   public void setOperationType (OperationType operationType)
-   {
-      this.operationType = operationType;
-   }
 
    public void setUserId (int id)
    {
@@ -95,7 +100,7 @@ public class UserAddEditFragment extends Fragment implements View.OnClickListene
    {
       // Inflate the layout for this fragment
       context = inflater.getContext();
-      return inflater.inflate(R.layout.fragment_user_add_edit, container, false);
+      return inflater.inflate(R.layout.fragment_user_edit, container, false);
    }
 
    @Override
@@ -107,6 +112,24 @@ public class UserAddEditFragment extends Fragment implements View.OnClickListene
       initMembers();
    }
 
+   public void onActivityResult(int reqCode, int resultCode, Intent data)
+   {
+      super.onActivityResult(reqCode, resultCode, data);
+
+      switch (reqCode)
+      {
+         case (PICK_CONTACT) :
+            if (resultCode == Activity.RESULT_OK)
+            {
+               Uri uriContact = data.getData();
+               String contactId = uriContact.getLastPathSegment();
+               user.setContactId(contactId);
+               textContactHelp.setText(getResources().getString(R.string.help_contact_with_id, user.getContactId()));
+            }
+         break;
+      }
+   }
+
    /**
     * Event Handler
     * ___________________________________________________________________________________________________
@@ -116,10 +139,12 @@ public class UserAddEditFragment extends Fragment implements View.OnClickListene
    public void onClick(View view)
    {
       int id = view.getId();
-      if (id == R.id.user_add_edit__save)
+      if (id == R.id.user_edit__save)
          doSave();
-      else if (id == R.id.user_add_edit__cancel)
+      else if (id == R.id.user_edit__cancel)
          doCancel();
+      else if (id == R.id.user_edit__relink_contact)
+         doRelinkContact ();
    }
 
    /**
@@ -130,55 +155,58 @@ public class UserAddEditFragment extends Fragment implements View.OnClickListene
    private void initMembers()
    {
       initMemberFromModel ();
-      inflateUIComponents ();
+      inflateUIComponents();
+
+      SQLiteDatabase db = DBUtil.getDB(context);
+      user = TripUser.getInstance(db, userId);
+
       populateUIComponents();
    }
 
    private void initMemberFromModel()
    {
       DBUtil.assertSetId(tripId);
-      if (operationType == OperationType.Edit)
-         DBUtil.assertSetId(userId);
+      DBUtil.assertSetId(userId);
+
+      SQLiteDatabase db = DBUtil.getDB(context);
+      user = TripUser.getInstance(db, userId);
    }
 
    private void inflateUIComponents()
    {
-      if (operationType == OperationType.Add)
-         UIUtil.setAppBarTitle(activity, "Add User");
-      else
-         UIUtil.setAppBarTitle(activity, "Edit User");
+      UIUtil.setAppBarTitle(activity, "Edit User");
+
+      // Relink contact
+      Button buttonRelinkContact = (Button)viewRoot.findViewById(R.id.user_edit__relink_contact);
+      buttonRelinkContact.setOnClickListener(this);
+
+      // Contact Id
+      textContactHelp = (TextView)viewRoot.findViewById(R.id.user_detail__contact_help);
+      textContactHelp.setText(getResources().getString(R.string.help_contact_with_id, user.getContactId()));
 
       // Save
-      Button buttonSave = (Button)viewRoot.findViewById(R.id.user_add_edit__save);
+      Button buttonSave = (Button)viewRoot.findViewById(R.id.user_edit__save);
       buttonSave.setOnClickListener(this);
 
       // Cancel
-      Button buttonCancel = (Button)viewRoot.findViewById(R.id.user_add_edit__cancel);
+      Button buttonCancel = (Button)viewRoot.findViewById(R.id.user_edit__cancel);
       buttonCancel.setOnClickListener(this);
    }
 
    private void populateUIComponents ()
    {
-      if (operationType == OperationType.Add)
-         return;
-
-      SQLiteDatabase db = DBUtil.getDB(context);
-      TripUser user = TripUser.getInstance(db, userId);
-
-      EditText textName = (EditText)viewRoot.findViewById(R.id.user_add_edit__nick_name);
+      EditText textName = (EditText)viewRoot.findViewById(R.id.user_edit__nick_name);
       textName.setText(user.getNickName());
 
-      EditText textFirstName = (EditText)viewRoot.findViewById(R.id.user_add_edit__first_name);
-      textFirstName.setText(user.getFirstName());
+      EditText textFirstName = (EditText)viewRoot.findViewById(R.id.user_edit__full_name);
+      textFirstName.setText(user.getFullName());
+   }
 
-      EditText textLastName = (EditText)viewRoot.findViewById(R.id.user_add_edit__last_name);
-      textLastName.setText(user.getLastName());
-
-      EditText textMobile = (EditText)viewRoot.findViewById(R.id.user_add_edit__mobile);
-      textMobile.setText(user.getMobile());
-
-      EditText textEmail = (EditText)viewRoot.findViewById(R.id.user_add_edit__email);
-      textEmail.setText(user.getEmail());
+   private void doRelinkContact ()
+   {
+      Intent intent = new Intent(Intent.ACTION_PICK);
+      intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+      startActivityForResult(intent, PICK_CONTACT);
    }
 
    private void doSave ()
@@ -186,30 +214,16 @@ public class UserAddEditFragment extends Fragment implements View.OnClickListene
       // Validate Input
       boolean valid = true;
 
-      EditText textNickName = (EditText)viewRoot.findViewById(R.id.user_add_edit__nick_name);
+      EditText textNickName = (EditText)viewRoot.findViewById(R.id.user_edit__nick_name);
       String nickName  = textNickName.getText().toString();
 
-      String firstName = ((EditText)viewRoot.findViewById(R.id.user_add_edit__first_name)).getText().toString();
-
-      String lastName  = ((EditText)viewRoot.findViewById(R.id.user_add_edit__last_name)).getText().toString();
-
-      EditText textMobile   = (EditText)viewRoot.findViewById(R.id.user_add_edit__mobile);
-      String mobile    = textMobile.getText().toString();
-
-      String email     = ((EditText)viewRoot.findViewById(R.id.user_add_edit__email)).getText().toString();
+      String fullName = ((EditText)viewRoot.findViewById(R.id.user_edit__full_name)).getText().toString();
 
       if (nickName.equals(""))
       {
          textNickName.setError("Nick name is required.");
          valid = false;
       }
-
-      if (mobile.equals("") || mobile.length() != 10)
-      {
-         textMobile.setError("Mobile should have 10 digits.");
-         valid = false;
-      }
-
       // End processing if not valid
       if (!valid)
       {
@@ -222,22 +236,9 @@ public class UserAddEditFragment extends Fragment implements View.OnClickListene
       db.beginTransaction();
       try
       {
-         TripUser user = (operationType == OperationType.Add) ? new TripUser() : TripUser.getLiteInstance(db, userId);
-
          user.setNickName(nickName);
-         user.setFirstName(firstName);
-         user.setLastName(lastName);
-         user.setMobile(mobile);
-         user.setEmail(email);
-
-         if (operationType == OperationType.Add)
-         {
-            user.setTripId(tripId);
-            user.add(db);
-            TripGroup.addUserToGroupOfAll(db, tripId, user);
-         }
-         else if (operationType == OperationType.Edit)
-            user.update(db);
+         user.setFullName(fullName);
+         user.update(db);
 
          db.setTransactionSuccessful();
          Toast.makeText(context, "Saved successfully", Toast.LENGTH_SHORT).show();

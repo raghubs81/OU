@@ -208,7 +208,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
             TripGroup group = new TripGroup();
             group.setName(TripGroup.All);
             group.setDetail(TripGroup.ALL_DESCRIPTION);
-            group.setTripId(tripId);
+            group.setTripId(trip.getId());
             group.add(db);
          }
          else if (operationType == OperationType.Edit)

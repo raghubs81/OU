@@ -3,9 +3,7 @@ package com.maga.ou.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
 
-import com.maga.ou.OUContext;
 import com.maga.ou.model.util.AbstractColumn;
 import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
@@ -19,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * An item that is shared by a group of users.
+ * An item that is shared by a group of thumb_users.
  */
 public class Item
 {
@@ -126,7 +124,7 @@ public class Item
             .from(Table.ItemPaidBy, Table.TripUser)
             .where(ItemPaidBy.Column.ItemId + " = ?").whereValue(String.valueOf(this.id)).where("AND")
             .where(ItemPaidBy.Column.UserId + " = " + TripUser.Column._id)
-            .orderBy(TripUser.Column.FirstName)
+            .orderBy(TripUser.Column.FullName)
             .query();
       List<String[]> listData = DBUtil.getRow(cursor);
 
@@ -179,7 +177,7 @@ public class Item
 
    public int deletePaidBy (SQLiteDatabase db)
    {
-      return DBUtil.deleteRowById(db, Table.ItemPaidBy, ItemPaidBy.Column.ItemId, id);
+      return DBUtil.deleteRowByReferenceId(db, Table.ItemPaidBy, ItemPaidBy.Column.ItemId, id);
    }
 
    public void setSharedBy (SQLiteDatabase db, Collection<Integer> setUserId)
@@ -197,7 +195,7 @@ public class Item
 
    public int deleteSharedBy (SQLiteDatabase db)
    {
-      return DBUtil.deleteRowById(db, Table.ItemSharedBy, ItemSharedBy.Column.ItemId, id);
+      return DBUtil.deleteRowByReferenceId(db, Table.ItemSharedBy, ItemSharedBy.Column.ItemId, id);
    }
 
    /*
@@ -211,13 +209,13 @@ public class Item
    public static List<Item> getItems(SQLiteDatabase db, int tripId)
    {
       Cursor cursor = new DBQueryBuilder(db)
-            .from(Table.TripItem, Table.Item)
-            .whereAND
-                  (
-                        TripItem.Column.ItemId + " = " + Column._id,
-                        TripItem.Column.TripId + " = " + tripId
-                  )
-            .query();
+         .from(Table.TripItem, Table.Item)
+         .whereAND
+               (
+                     TripItem.Column.ItemId + " = " + Column._id,
+                     TripItem.Column.TripId + " = " + tripId
+               )
+         .query();
 
       List<Item> listItem = new ArrayList<>();
       boolean isDone = false;

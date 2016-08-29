@@ -6,8 +6,8 @@
    <!-- "Mark Favorite", should appear as action button if possible -->
    <item
       android:id="@+id/appbar_list_add"
-      android:icon="@drawable/list_add_light"
-      android:title="@string/add"
+      android:icon="@drawable/ic_list_add_light"
+      android:title="@string/done"
       app:showAsAction="always"
       tools:ignore="AlwaysShowAction" />
 

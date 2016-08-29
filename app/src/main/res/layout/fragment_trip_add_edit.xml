@@ -1,17 +1,19 @@
 <LinearLayout
    xmlns:android="http://schemas.android.com/apk/res/android"
    xmlns:tools="http://schemas.android.com/tools"
-   tools:context="com.maga.ou.UserAddEditFragment"
+   tools:context=".UserEditFragment"
    android:id="@+id/fragment_trip_add_edit"
    android:layout_width="match_parent"
    android:layout_height="match_parent"
-   android:background="@color/bgLightPrimary"
-   android:orientation="vertical">
+   android:orientation="vertical"
+   android:background="@drawable/bg_nature_sunset"
+   >
 
    <ScrollView
       android:layout_width="match_parent"
       android:layout_height="0dp"
-      android:layout_weight="1">
+      android:layout_weight="1"
+      android:background="#80FFFFFF">
 
       <LinearLayout
          android:layout_width="match_parent"
@@ -61,7 +63,7 @@
          android:layout_height="match_parent"
          android:layout_weight="1"
          android:text="@string/cancel"
-         android:drawableStart="@drawable/clear_dark"
+         android:drawableStart="@drawable/ic_clear_dark"
          android:paddingLeft="20dp"
          android:paddingRight="20dp"
          style="@style/OU.Button.Op.Negative"
@@ -73,7 +75,7 @@
          android:layout_height="match_parent"
          android:layout_weight="1"
          android:text="@string/save"
-         android:drawableStart="@drawable/done_dark"
+         android:drawableStart="@drawable/ic_done_dark"
          android:paddingLeft="20dp"
          android:paddingRight="20dp"
          style="@style/OU.Button.Op.Positive"

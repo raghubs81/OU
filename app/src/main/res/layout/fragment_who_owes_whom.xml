@@ -1,15 +1,58 @@
 <LinearLayout
    xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/fragment_who_owes_whom"
    android:layout_width="match_parent"
    android:layout_height="match_parent"
-   android:id="@+id/fragment_who_owes_whom">
+   android:orientation="vertical"
+   android:background="@color/bgLightPrimary"
+   >
 
-   <ExpandableListView
-      android:id="@+id/who_owes_whom__accordian"
-      android:layout_height="match_parent"
+   <TextView
+      android:id="@+id/who_owes_whom__title"
       android:layout_width="match_parent"
-      android:divider="@drawable/divider"
-      android:dividerHeight="1dp"
+      android:layout_height="wrap_content"
+      style="@style/OU.Dark_Title1"
+      android:text="@string/wow_lenders_title"
+      />
+
+   <View style="@style/OU.Separator.H1"/>
+
+   <TextView
+      android:id="@+id/who_owes_whom__detail"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      style="@style/OU.Dark_Detail1"
+      android:text="@string/wow_lenders_detail"
+      />
+
+   <LinearLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:orientation="vertical"
+      android:background="@drawable/bg_expense_list"
+      android:layout_marginTop="8dp"
+      android:layout_weight="1"
+      >
+
+      <ExpandableListView
+         android:id="@+id/who_owes_whom__accordion"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:divider="@drawable/divider"
+         android:dividerHeight="1dp"
+         android:background="#BBFFFFFF"
+         />
+   </LinearLayout>
+
+   <ToggleButton
+      android:id="@+id/who_owes_whom__toggle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textAllCaps="false"
+      android:textOn="@string/wow_switch_to_lenders_list"
+      android:textOff="@string/wow_switch_to_borrowers_list"
+      style="@style/OU.Button.Op.Positive"
       />
 
 </LinearLayout>

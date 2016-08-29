@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.maga.ou.model.Trip;
+import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.UIUtil;
 
@@ -35,7 +36,7 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
    private TripDetailListener listener;
 
    /**
-    * Member variables
+    * Fragment parameters
     * ___________________________________________________________________________________________________
     */
 
@@ -125,7 +126,14 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
          onClickTripUsers();
       else if (id == R.id.trip_detail__wow)
          onClickTripWOW ();
+      else if (id == R.id.trip_detail__expenses)
+         onClickTripExpenses ();
    }
+
+   /**
+    * Member functions
+    * ___________________________________________________________________________________________________
+    */
 
    private void initMembers()
    {
@@ -159,6 +167,16 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
 
       Button buttonTripWOW = (Button)viewRoot.findViewById(R.id.trip_detail__wow);
       buttonTripWOW.setOnClickListener(this);
+
+      Button buttonTripExpenses = (Button)viewRoot.findViewById(R.id.trip_detail__expenses);
+      buttonTripExpenses.setOnClickListener(this);
+
+      if (TripUser.getTripUserCount(db, tripId) == 0)
+      {
+         buttonTripItems.setEnabled(false);
+         buttonTripWOW.setEnabled(false);
+         buttonTripExpenses.setEnabled(false);
+      }
    }
 
    private void onClickTripItems()
@@ -176,12 +194,18 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
       listener.goToTripWOWClicked(tripId);
    }
 
+   private void onClickTripExpenses ()
+   {
+      listener.gotoTripExpenses (tripId);
+   }
+
    public interface TripDetailListener
    {
       void tripEditClicked (int tripId);
       void goToTripItemsClicked(int tripId);
       void goToTripUsersClicked(int tripId);
       void goToTripWOWClicked  (int tripId);
+      void gotoTripExpenses    (int tripId);
    }
 
 }

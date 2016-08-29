@@ -1,8 +1,11 @@
 package com.maga.ou;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -11,15 +14,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.UIUtil;
 
-/**
- * Created by Pavithra on 09-Aug-16.
- */
-public class UserDetailFragment  extends Fragment
+public class UserDetailFragment  extends Fragment implements View.OnClickListener
 {
    /**
     * UI Base Objects
@@ -33,13 +34,20 @@ public class UserDetailFragment  extends Fragment
    private View viewRoot;
 
    /**
-    * Member variables
+    * Fragment parameters
     * ___________________________________________________________________________________________________
     */
 
    private int userId = DBUtil.UNSET_ID;
 
    private int tripId = DBUtil.UNSET_ID;
+
+   /**
+    * Member variables
+    * ___________________________________________________________________________________________________
+    */
+
+   private TripUser user = null;
 
    private UserDetailListener listener = null;
 
@@ -116,6 +124,25 @@ public class UserDetailFragment  extends Fragment
       }
    }
 
+   /**
+    * Event handlers
+    * ___________________________________________________________________________________________________
+    */
+
+   @Override
+   public void onClick(View view)
+   {
+      int id = view.getId();
+
+      if (id == R.id.user_detail__contact)
+         doViewContact ();
+
+   }
+
+   /**
+    * Instance methods
+    * ___________________________________________________________________________________________________
+    */
 
    public void initMembers ()
    {
@@ -127,29 +154,34 @@ public class UserDetailFragment  extends Fragment
    {
       DBUtil.assertSetId(tripId);
       DBUtil.assertSetId(userId);
+
+      SQLiteDatabase db = DBUtil.getDB(context);
+      user = TripUser.getInstance(db, userId);
    }
 
    private void inflateUIComponents ()
    {
       UIUtil.setAppBarTitle(activity, "Member Details");
 
-      SQLiteDatabase db = DBUtil.getDB(context);
-      TripUser user = TripUser.getInstance(db, userId);
-
       TextView textNickName = (TextView)viewRoot.findViewById(R.id.user_detail__nick_name);
       textNickName.setText(user.getNickName());
 
       TextView textFullName = (TextView)viewRoot.findViewById(R.id.user_detail__full_name);
-      String firstName = user.getFirstName();
-      String lastName  = user.getLastName();
-      String fullName  = ((firstName == null) ? "" : firstName + " ") + ((lastName == null) ? "" : lastName);
-      textFullName.setText(fullName);
+      textFullName.setText(user.getFullName());
 
-      TextView textMobile   = (TextView)viewRoot.findViewById(R.id.user_detail__mobile);
-      textMobile.setText(user.getMobile());
+      TextView textContactHelp = (TextView)viewRoot.findViewById(R.id.user_detail__contact_help);
+      textContactHelp.setText(getResources().getString(R.string.help_contact_with_id, user.getContactId()));
 
-      TextView textEmail    = (TextView)viewRoot.findViewById(R.id.user_detail__email);
-      textEmail.setText(user.getEmail());
+      Button buttonViewContact = (Button)viewRoot.findViewById(R.id.user_detail__contact);
+      buttonViewContact.setOnClickListener(this);
+   }
+
+   private void doViewContact ()
+   {
+      Intent intent = new Intent (Intent.ACTION_VIEW);
+      Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(user.getContactId()));
+      intent.setData(uri);
+      context.startActivity(intent);
    }
 
    interface UserDetailListener

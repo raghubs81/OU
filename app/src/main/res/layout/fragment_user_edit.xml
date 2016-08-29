@@ -1,7 +1,7 @@
 <LinearLayout
    xmlns:android="http://schemas.android.com/apk/res/android"
    xmlns:tools="http://schemas.android.com/tools"
-   tools:context="com.maga.ou.UserAddEditFragment"
+   tools:context=".UserEditFragment"
    android:id="@+id/fragment_user_add_edit"
    android:layout_width="match_parent"
    android:layout_height="match_parent"
@@ -23,7 +23,7 @@
          android:orientation="vertical">
 
          <EditText
-            android:id="@+id/user_add_edit__nick_name"
+            android:id="@+id/user_edit__nick_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/user_nick_name"
@@ -32,38 +32,35 @@
             />
 
          <EditText
-            android:id="@+id/user_add_edit__first_name"
+            android:id="@+id/user_edit__full_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/user_first_name"
+            android:hint="@string/user_full_name"
             style="@style/OU.Dark_Title2"
             />
 
-         <EditText
-            android:id="@+id/user_add_edit__last_name"
+         <Button
+            android:id="@+id/user_edit__relink_contact"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/user_last_name"
-            style="@style/OU.Dark_Title2"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            style="@style/OU.Button.Green"
+            android:text="@string/user_relink_contact"
+            android:drawableLeft="@drawable/thumb_contact_view"
+            android:paddingLeft="40dp"
+            android:drawablePadding="-40dp"
             />
 
-         <EditText
-            android:id="@+id/user_add_edit__mobile"
+         <TextView
+            android:id="@+id/user_detail__contact_help"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/user_mobile"
-            android:inputType="phone"
-            style="@style/OU.Dark_Title2"
-            />
+            android:text="@string/help_contact_with_id"
+            android:gravity="center"
+            style="@style/OU.TextStyle.Help"/>
 
-         <EditText
-            android:id="@+id/user_add_edit__email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/user_email"
-            android:inputType="textEmailAddress"
-            style="@style/OU.Dark_Title2"
-            />
       </LinearLayout>
 
    </ScrollView>
@@ -75,24 +72,24 @@
       android:weightSum="2">
 
       <Button
-         android:id="@+id/user_add_edit__cancel"
+         android:id="@+id/user_edit__cancel"
          android:layout_width="0dp"
          android:layout_height="match_parent"
          android:layout_weight="1"
          android:text="@string/cancel"
-         android:drawableStart="@drawable/clear_dark"
+         android:drawableStart="@drawable/ic_clear_dark"
          android:paddingLeft="20dp"
          android:paddingRight="20dp"
          style="@style/OU.Button.Op.Negative"
          />
 
       <Button
-         android:id="@+id/user_add_edit__save"
+         android:id="@+id/user_edit__save"
          android:layout_width="0dp"
          android:layout_height="match_parent"
          android:layout_weight="1"
          android:text="@string/save"
-         android:drawableStart="@drawable/done_dark"
+         android:drawableStart="@drawable/ic_done_dark"
          android:paddingLeft="20dp"
          android:paddingRight="20dp"
          style="@style/OU.Button.Op.Positive"

@@ -8,12 +8,10 @@ create table Trip
 create table TripUser
 (
    _id        integer primary key autoincrement,
-   NickName   text    not null,
-   FirstName  text,
-   LastName   text,
-   Mobile     text    not null,
-   Email      text,
-   TripId     integer not null,
+   NickName   text     not null,
+   FullName   text,
+   ContactId  integer  not null,
+   TripId     integer  not null,
 
    foreign key (TripId) references Trip (_id) on delete cascade
 );
@@ -84,18 +82,18 @@ insert into Trip (Name, Detail) values ("Coorg Trip", "A trip to coorg");
 
 # Trip Users - 1-12
 # ----------------------------------------------------------------------------------------------------
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Raghu"   , "Raghunandan" , "Seshadri" , "9880526030", "raghubs81@gmail.com"    , 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Madhu"   , "Madhukiran"  , "Seelam"   , "7897838942", "madhu.seelam@gmail.com" , 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Srini"   , "Srinivaslu"  , "Darmika"  , "8985989495", "smd@gmail.com"          , 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Sanjeev" , "Sanjeev"     , "S.V."      , "5367894963", "sanjeevi@gmail.com"    , 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Rakesh"  , "Rakesh"      , "Kashyap"   , "3462467646", "rakesh@gmail.com"      , 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Hari"    , "ShreeHari"   , "Narshimha" , "1243434334", "hari@gmail.com"        , 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Harsha"  , "ShreeHarsha" , "Narshimha" , "6756434334", "harsha@gmail.com"      , 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Pavi"    , "Pavithra"    , "Rajagopal" , "9632767348", "pavi@gmail.com"        , 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Abi"     , "Abirami"     , "Seelam"    , "7897838942", "madhu.seelam@gmail.com", 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("SriLatha", "SriLatha"    , "Uravakonda", "4354976475", "srilatha@gmail.com"    , 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Shruthi" , "Shruthi"     , "Kumar"     , "5274566565", "shru.chilli@gmail.com" , 1);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Shwetha" , "Shwetha"     , "Kumar"     , "4133416547", "swetha@gmail.com"      , 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Raghu"   , "Raghunandan Seshadri" ,  787, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Madhu"   , "Madhukiran Seelam"    ,  397, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Srini"   , "Srinivaslu Darmika"   ,  305, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Sanjeev" , "Sanjeev S.V."         ,  330, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Rakesh"  , "Rakesh Kashyap"       ,  787, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Hari"    , "ShreeHari Narshimha"  ,  265, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Harsha"  , "ShreeHarsha Narshimha", 1929, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Pavi"    , "Pavithra Rajagopal"   ,  643, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Abi"     , "Abirami Seelam"       ,  320, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("SriLatha", "SriLatha Uravakonda"  ,  338, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Shruthi" , "Shruthi Kumar"        ,  359, 1);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Shwetha" , "Shwetha Kumar"        ,  357, 1);
 
 # Trip Groups - 1-3
 # ----------------------------------------------------------------------------------------------------
@@ -222,10 +220,10 @@ insert into Trip (Name, Detail) values ("Dharwad Trip", "A trip to dharward");
 
 # Trip Users - 13-16
 # ----------------------------------------------------------------------------------------------------
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Raghu"  , "Raghunandan", "Seshadri"  , "9880526030", "raghubs81@gmail.com"   , 2);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Sanjeev", "Sanjeev"    , "S.V."      , "5367894963", "sanjeevi@gmail.com"    , 2);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Pavi"   , "Pavithra"   , "Rajagopal" , "9632767348", "pavi@gmail.com"        , 2);
-insert into TripUser (NickName, FirstName, LastName, Mobile, Email, TripId) values ("Sudan"  , "Sudanesh"   , "Madhu"     , "5666767348", "sudan@gmail.com"       , 2);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Raghu"  , "Raghunandan Seshadri", 787, 2);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Sanjeev", "Sanjeev S.V."        , 330, 2);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Pavi"   , "Pavithra Rajagopal"  , 643, 2);
+insert into TripUser (NickName, FullName, ContactId, TripId) values ("Sudan"  , "Sudanesh Madhu"      , 787, 2);
 
 # Trip Groups - 4-4
 # ----------------------------------------------------------------------------------------------------

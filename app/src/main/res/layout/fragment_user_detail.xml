@@ -10,87 +10,46 @@
    android:paddingTop="@dimen/activity_vertical_margin"
    android:paddingBottom="@dimen/activity_vertical_margin"
    android:background="@color/bgLightPrimary"
-   android:gravity="center"
    android:orientation="vertical">
 
-
-   <LinearLayout
+   <TextView
+      android:id="@+id/user_detail__nick_name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      style="@style/OU.Dark_Title1"
+      android:text="Raghu"/>
+
+   <View style="@style/OU.Separator.H1"/>
+
+   <TextView
+      android:id="@+id/user_detail__full_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      style="@style/OU.Dark_Detail1"
+      android:text="Raghunandan Seshadri"
+      />
+
+   <Button
+      android:id="@+id/user_detail__contact"
+      android:layout_width="match_parent"
+      android:layout_height="80dp"
+      android:layout_marginTop="20dp"
+      android:layout_gravity="center"
+      android:textSize="18sp"
+      style="@style/OU.Button.Green"
+      android:text="@string/user_view_contact"
+      android:drawableLeft="@drawable/thumb_contact_view"
+      android:paddingLeft="40dp"
+      android:drawablePadding="-40dp"
+      />
+
+   <TextView
+      android:id="@+id/user_detail__contact_help"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/help_contact_with_id"
       android:gravity="center"
-      android:orientation="vertical"
-      android:background="@drawable/border_blue"
-      android:padding="2dp"
-      >
+      style="@style/OU.TextStyle.Help"/>
 
-      <TextView
-         android:id="@+id/user_detail__nick_name"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:gravity="center"
-         android:textSize="24sp"
-         android:padding="4dp"
-         android:background="#4285F4"
-         android:textColor="@color/textLightPrimary"
-         android:text="Raghu"
-         />
-
-      <TextView
-         android:id="@+id/user_detail__full_name"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:gravity="center"
-         android:textSize="16dp"
-         android:padding="2dp"
-         android:background="#A6D2FF"
-         android:text="Raghunandan Seshadri"
-         />
-
-      <GridLayout
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:columnCount="2"
-         android:paddingLeft="10dp"
-         android:paddingRight="10dp">
-
-         <TextView
-            android:id="@+id/user_detail__mobile"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:gravity="center_vertical"
-            android:textSize="18dp"
-            android:text="9880526030"
-            android:layout_columnWeight="1"
-            />
-
-         <TextView
-            android:id="@+id/user_detail__mobile_icon"
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="C"
-            />
-
-         <TextView
-            android:id="@+id/user_detail__email"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:gravity="center_vertical"
-            android:textSize="18dp"
-            android:text="raghubs81@gmail.com"
-            android:layout_columnWeight="1"
-            />
-
-         <TextView
-            android:id="@+id/user_detail__email_icon"
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="M"
-            />
-
-      </GridLayout>
-
-   </LinearLayout>
 
 </LinearLayout>

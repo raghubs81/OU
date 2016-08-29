@@ -58,7 +58,7 @@ public class ItemPaymentListFragment extends ListFragment
    /**
     * <b>Parameters</b>
     * <ul>
-    *    <li>tripId : Mandatory - Display list of items belonging to the trip.</li>
+    *    <li>tripId : Mandatory - Display list of thumb_items belonging to the trip.</li>
     * </ul>
     */
    public ItemPaymentListFragment()
@@ -259,7 +259,7 @@ public class ItemPaymentListFragment extends ListFragment
       @Override
       protected void doAfterRestoration(Integer result)
       {
-         String mesg = ((result == 0) ? "No" : String.valueOf(result)) + " items deleted";
+         String mesg = ((result == 0) ? "No" : String.valueOf(result)) + " thumb_items deleted";
          Toast.makeText(context, mesg, Toast.LENGTH_SHORT).show();
       }
    }

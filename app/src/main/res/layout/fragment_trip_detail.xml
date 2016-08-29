@@ -40,24 +40,46 @@
             android:text="A road trip to the chilling fresh coffee aroma of the kodagu."/>
 
          <Button
-            android:id="@+id/trip_detail__items"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:textSize="16sp"
-            style="@style/OU.Button.Purple"
-            android:text="@string/trip_items"/>
-
-         <Button
             android:id="@+id/trip_detail__users"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
-            android:textSize="16sp"
+            android:textSize="18sp"
             style="@style/OU.Button.Blue"
-            android:text="@string/trip_users"/>
+            android:text="@string/trip_users"
+            android:drawableLeft="@drawable/thumb_users"
+            android:paddingLeft="40dp"
+            android:drawablePadding="-40dp"
+            />
+
+         <Button
+            android:id="@+id/trip_detail__items"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            style="@style/OU.Button.Purple"
+            android:text="@string/trip_items"
+            android:drawableLeft="@drawable/thumb_items"
+            android:paddingLeft="40dp"
+            android:drawablePadding="-40dp"
+            />
+
+         <Button
+            android:id="@+id/trip_detail__expenses"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            style="@style/OU.Button.Blue"
+            android:text="@string/trip_expenses"
+            android:drawableLeft="@drawable/thumb_expense"
+            android:paddingLeft="40dp"
+            android:drawablePadding="-40dp"
+            />
 
          <Button
             android:id="@+id/trip_detail__wow"
@@ -65,10 +87,13 @@
             android:layout_height="80dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
-            android:textSize="16sp"
+            android:textSize="18sp"
             style="@style/OU.Button.Green"
-            android:text="@string/trip_wow"/>
-
+            android:text="@string/trip_wow"
+            android:drawableLeft="@drawable/thumb_balance"
+            android:paddingLeft="40dp"
+            android:drawablePadding="-40dp"
+            />
 
       </LinearLayout>
 

@@ -1,0 +1,17 @@
+<LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:id="@+id/fragment_trip_expenses"
+   android:background="@drawable/bg_expense_list">
+
+   <ExpandableListView
+      android:id="@+id/trip_expenses__accordion"
+      android:layout_height="match_parent"
+      android:layout_width="match_parent"
+      android:divider="@drawable/divider"
+      android:dividerHeight="1dp"
+      android:background="#BBFFFFFF"
+      />
+
+</LinearLayout>

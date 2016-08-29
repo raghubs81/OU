@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.maga.ou.OUContext;
 import com.maga.ou.model.util.AbstractColumn;
 import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
@@ -121,9 +120,13 @@ public class TripGroup
          .whereAND
          (
             Column.TripId + " = " + tripId,
-            Column.Name + " = " + TripGroup.All
+            Column.Name   + " = " + DBUtil.wrap(TripGroup.All)
          )
          .query();
+
+      if (!cursor.moveToFirst())
+         DBUtil.die("Could not get Id of TripGroup cursor for 'All' group");
+
       int groupIdOfAll = cursor.getInt(0);
 
       // Add user to group 'All' of this trip
@@ -148,17 +151,17 @@ public class TripGroup
    {
       Cursor cursor = new DBQueryBuilder(db)
             .distinct(true)
-            .select(TripUser.Column.FirstName, TripUser.Column.LastName, TripGroup.Column.Name)
+            .select(TripUser.Column.FullName, TripGroup.Column.Name)
             .from(Table.TripUserGroup, Table.TripUser, Table.TripGroup)
-            .where("TripUserGroup.UserId = TripUser._id AND TripUserGroup.GroupId = TripGroup._id")
+            .whereAND
+            (
+               TripUserGroup.Column.UserId  + " = " + TripUser.Column._id,
+               TripUserGroup.Column.GroupId + " = " + TripGroup.Column._id
+            )
             .query();
 
-      String sql = "SELECT FirstName, LastName, Name " +
-                   "FROM   TripUserGroup, TripUser, TripGroup " +
-                   "WHERE  TripUserGroup.UserId = TripUser._id AND TripUserGroup.GroupId = TripGroup._id";
-
       for (boolean isDone = cursor.moveToFirst(); isDone; isDone = cursor.moveToNext())
-         Log.d(TAG, "FirstName=" + cursor.getString(0) + " LastName=" + cursor.getString(1) + " Name=" + cursor.getString(2));
+         Log.d(TAG, "FullName=" + cursor.getString(0) + " Name=" + cursor.getString(1));
    }
 
    /*

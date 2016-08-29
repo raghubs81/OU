@@ -258,9 +258,7 @@ public class UserListFragment extends ListFragment
 
          // Set full name
          TextView textDetail = (TextView)view.findViewById(R.id.segment_user_list__fullname);
-         String firstName = DBUtil.getCell(cursor, TripUser.Column.FirstName);
-         String lastName  = DBUtil.getCell(cursor, TripUser.Column.LastName);
-         String fullName  = ((firstName == null) ? "" : firstName + " ") + ((lastName == null) ? "" : lastName);
+         String fullName = DBUtil.getCell(cursor, TripUser.Column.FullName);
          textDetail.setText(fullName);
       }
    }
