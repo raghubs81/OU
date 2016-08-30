@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import com.maga.ou.model.*;
 import com.maga.ou.model.util.AndroidDatabaseManager;
@@ -13,6 +14,12 @@ import com.maga.ou.util.UIUtil;
 
 public class MainActivity extends AppCompatActivity
 {
+   public static String TAG = "ou." + MainActivity.class.getSimpleName();
+
+   private static final int REQUEST_CODE_TRIP_ADD  = 101;
+
+   private static final int REQUEST_CODE_TRIP_LIST = 100;
+
    @Override
    protected void onCreate(Bundle savedInstanceState)
    {
@@ -27,9 +34,7 @@ public class MainActivity extends AppCompatActivity
       {
          public void onClick(View v)
          {
-            Intent intent = new Intent(v.getContext(), MainFragmentManagerActivity.class);
-            intent.putExtra(MainFragmentManagerActivity.Arg.ON_START_FRAGMENT.name(), TripAddEditFragment.class.getSimpleName());
-            startActivity(intent);
+            goToFragment(TripAddEditFragment.class, REQUEST_CODE_TRIP_ADD);
          }
       });
 
@@ -38,9 +43,7 @@ public class MainActivity extends AppCompatActivity
       {
          public void onClick(View v)
          {
-            Intent intent = new Intent(v.getContext(), MainFragmentManagerActivity.class);
-            intent.putExtra(MainFragmentManagerActivity.Arg.ON_START_FRAGMENT.name(), TripListFragment.class.getSimpleName());
-            startActivity(intent);
+            goToFragment(TripListFragment.class, REQUEST_CODE_TRIP_LIST);
          }
       });
 
@@ -54,6 +57,25 @@ public class MainActivity extends AppCompatActivity
 
       TripGroup.logGroups(DBUtil.getDB(this));
   }
+
+   private void goToFragment (Class classFragment, int requestCode)
+   {
+      Intent intent = new Intent(this, MainFragmentManagerActivity.class);
+      intent.putExtra(MainFragmentManagerActivity.Arg.ON_START_FRAGMENT.name(), classFragment.getSimpleName());
+      startActivityForResult(intent, requestCode);
+   }
+
+   @Override
+   protected void onActivityResult(int requestCode, int resultCode, Intent data)
+   {
+      super.onActivityResult(requestCode, resultCode, data);
+
+      if (requestCode == REQUEST_CODE_TRIP_ADD)
+      {
+         if (resultCode == RESULT_OK)
+            goToFragment(TripListFragment.class, REQUEST_CODE_TRIP_LIST);
+      }
+   }
 
    @Override
    public void onDestroy ()

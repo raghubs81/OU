@@ -10,7 +10,7 @@ import com.maga.ou.TripDetailFragment.TripDetailListener;
 import com.maga.ou.UserListFragment.UserListListener;
 import com.maga.ou.UserDetailFragment.UserDetailListener;
 
-public class earMainFragmentManagerActivity extends SingleFragmentActivity implements
+public class MainFragmentManagerActivity extends SingleFragmentActivity implements
       ItemPaymentListListener, ItemPaymentDetailListener,
       TripListListener, TripDetailListener,
       UserListListener, UserDetailListener
@@ -20,7 +20,6 @@ public class earMainFragmentManagerActivity extends SingleFragmentActivity imple
    {
       ON_START_FRAGMENT;
    }
-
 
    private Fragment onStartFragment;
 
@@ -39,16 +38,6 @@ public class earMainFragmentManagerActivity extends SingleFragmentActivity imple
          onStartFragment = fragment;
       }
       super.onCreate(savedInstanceState);
-   }
-
-   /**
-    * Setters
-    * ___________________________________________________________________________________________________
-    */
-
-   public void setOnStartFragment(Fragment onStartFragment)
-   {
-      this.onStartFragment = onStartFragment;
    }
 
    @Override

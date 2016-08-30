@@ -2,6 +2,7 @@ package com.maga.ou;
 
 // TODO : Create a group 'All' with new Trip. Add member to 'All' when new member is added.
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
 
    public enum OperationType
    {
-      Add, Edit;
+      Add, Edit
    }
 
    private OperationType operationType = OperationType.Add;
@@ -226,11 +227,13 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
       {
          db.endTransaction();
       }
+      getActivity().setResult(Activity.RESULT_OK);
       getActivity().onBackPressed();
    }
 
    private void doCancel()
    {
+      getActivity().setResult(Activity.RESULT_CANCELED);
       getActivity().onBackPressed();
    }
 
