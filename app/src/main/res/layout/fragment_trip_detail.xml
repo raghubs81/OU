@@ -54,6 +54,21 @@
             />
 
          <Button
+            android:id="@+id/trip_detail__groups"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            style="@style/OU.Button.Green"
+            android:text="@string/trip_groups"
+            android:drawableLeft="@drawable/thumb_users"
+            android:paddingLeft="40dp"
+            android:drawablePadding="-40dp"
+            />
+
+
+         <Button
             android:id="@+id/trip_detail__items"
             android:layout_width="match_parent"
             android:layout_height="80dp"

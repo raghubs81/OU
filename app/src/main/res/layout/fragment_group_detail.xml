@@ -12,40 +12,56 @@
    android:background="@color/bgLightPrimary"
    android:orientation="vertical">
 
-   <TextView
-      android:id="@+id/group_detail__name"
+   <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      style="@style/OU.Dark_Title1"
-      android:text="Boys Group"/>
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:layout_weight="1"
+      android:fillViewport="true">
 
-   <View style="@style/OU.Separator.H1"/>
+      <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical">
 
-   <TextView
-      android:id="@+id/group_detail__detail"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      style="@style/OU.Dark_Detail1"
-      android:text="A group of boys."
-      />
 
-   <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="10dp"
-      style="@style/OU.Heading"
-      android:text="@string/group_members"/>
+         <TextView
+            android:id="@+id/group_detail__name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/OU.Dark_Title1"
+            android:text="Boys Group"/>
 
-   <GridLayout
-      android:id="@+id/group_detail__user_container"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:columnCount="2"
-      android:background="@color/borderLight">
+         <View style="@style/OU.Separator.H1"/>
 
-      <!-- Layouts from segment_group_detail.xml have to be dynamically added here -->
+         <TextView
+            android:id="@+id/group_detail__detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/OU.Dark_Detail1"
+            android:text="A group of boys."
+            />
 
-   </GridLayout>
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            style="@style/OU.Heading"
+            android:text="@string/group_members"/>
 
+         <GridLayout
+            android:id="@+id/group_detail__user_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:background="@color/borderLight">
+
+            <!-- Layouts from segment_group_detail.xml have to be dynamically added here -->
+
+         </GridLayout>
+
+      </LinearLayout>
+
+   </ScrollView>
 
 </LinearLayout>

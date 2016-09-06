@@ -1,4 +1,4 @@
-package com.maga.ou.util;
+package com.maga.ou;
 
 
 import android.content.Context;
@@ -19,6 +19,7 @@ import com.maga.ou.model.Item;
 import com.maga.ou.model.TripGroup;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
+import com.maga.ou.util.UIUtil;
 
 import java.util.List;
 
@@ -154,37 +155,39 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
       TextView textDetail = (TextView) viewRoot.findViewById(R.id.group_detail__detail);
       textDetail.setText(group.getDetail());
 
+      SQLiteDatabase db = DBUtil.getDB(context);
+      doAddGroupUserSegment (db);
    }
 
    public void doAddGroupUserSegment (SQLiteDatabase db)
    {
       GridLayout layoutSegmentContainer  = (GridLayout)viewRoot.findViewById(R.id.group_detail__user_container);
-      List<TripUser> listUser = item.getSharedByUsers(db);
+      List<TripUser> listUser = group.getUsers(db);
 
       int bgColor[] = context.getResources().getIntArray(R.array.bgRainbowDark);
       int rowCount = -1;
       for (final TripUser user : listUser)
       {
          LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-         final View segmentViewRoot = inflater.inflate(R.layout.segment_shared_by_detail, layoutSegmentContainer, false);
+         final View segmentViewRoot = inflater.inflate(R.layout.segment_group_detail, layoutSegmentContainer, false);
 
          int color = bgColor[++rowCount % bgColor.length];
          segmentViewRoot.setBackgroundColor(color);
 
-         TextView textUser   = (TextView)segmentViewRoot.findViewById(R.id.segment_shared_by_detail__user);
+         TextView textUser   = (TextView)segmentViewRoot.findViewById(R.id.segment_group_detail__user);
          textUser.setText(user.getNickName());
 
          textUser.setOnClickListener
-               (
-                     new View.OnClickListener()
-                     {
-                        @Override
-                        public void onClick(View view)
-                        {
-                           listener.goToUserDetailClicked(tripId, user.getId());
-                        }
-                     }
-               );
+         (
+            new View.OnClickListener()
+            {
+               @Override
+               public void onClick(View view)
+               {
+                  listener.goToUserDetailClicked(tripId, user.getId());
+               }
+            }
+         );
 
          layoutSegmentContainer.addView(segmentViewRoot);
       }
@@ -193,5 +196,6 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
    interface GroupDetailListener
    {
       void groupEditClicked (int tripId, int userId);
+      void goToUserDetailClicked (int tripId, int userId);
    }
 }

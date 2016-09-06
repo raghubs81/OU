@@ -120,14 +120,16 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
    {
       int id = view.getId();
 
-      if (id == R.id.trip_detail__items)
-         onClickTripItems();
-      else if (id == R.id.trip_detail__users)
+      if (id == R.id.trip_detail__users)
          onClickTripUsers();
+      else if (id == R.id.trip_detail__groups)
+         onClickTripGroups();
+      else if (id == R.id.trip_detail__items)
+         onClickTripItems();
       else if (id == R.id.trip_detail__wow)
-         onClickTripWOW ();
+         onClickTripWOW();
       else if (id == R.id.trip_detail__expenses)
-         onClickTripExpenses ();
+         onClickTripExpenses();
    }
 
    /**
@@ -159,11 +161,14 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
       TextView textDetail = (TextView)viewRoot.findViewById(R.id.trip_detail__detail);
       textDetail.setText(trip.getDetail());
 
-      Button buttonTripItems = (Button)viewRoot.findViewById(R.id.trip_detail__items);
-      buttonTripItems.setOnClickListener(this);
-
       Button buttonTripUsers = (Button)viewRoot.findViewById(R.id.trip_detail__users);
       buttonTripUsers.setOnClickListener(this);
+
+      Button buttonTripGroups = (Button)viewRoot.findViewById(R.id.trip_detail__groups);
+      buttonTripGroups.setOnClickListener(this);
+
+      Button buttonTripItems = (Button)viewRoot.findViewById(R.id.trip_detail__items);
+      buttonTripItems.setOnClickListener(this);
 
       Button buttonTripWOW = (Button)viewRoot.findViewById(R.id.trip_detail__wow);
       buttonTripWOW.setOnClickListener(this);
@@ -189,6 +194,11 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
       listener.goToTripUsersClicked(tripId);
    }
 
+   private void onClickTripGroups ()
+   {
+      listener.goToTripGroupsClicked(tripId);
+   }
+
    private void onClickTripWOW ()
    {
       listener.goToTripWOWClicked(tripId);
@@ -201,11 +211,12 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
 
    public interface TripDetailListener
    {
-      void tripEditClicked (int tripId);
-      void goToTripItemsClicked(int tripId);
-      void goToTripUsersClicked(int tripId);
-      void goToTripWOWClicked  (int tripId);
-      void gotoTripExpenses    (int tripId);
+      void goToTripUsersClicked  (int tripId);
+      void goToTripGroupsClicked (int tripId);
+      void tripEditClicked      (int tripId);
+      void goToTripItemsClicked (int tripId);
+      void goToTripWOWClicked   (int tripId);
+      void gotoTripExpenses     (int tripId);
    }
 
 }

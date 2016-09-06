@@ -91,10 +91,17 @@ public class TripGroup
    public List<TripUser> getUsers (SQLiteDatabase db)
    {
       Cursor cursor = new DBQueryBuilder(db)
-         .select(TripUserGroup.Column.UserId)
-         .from(Table.TripUserGroup)
-         .where(TripUserGroup.Column.GroupId + " = " + id)
-         .query();
+         .select (TripUserGroup.Column.UserId)
+         .from   (Table.TripUserGroup)
+         .where  (TripUserGroup.Column.GroupId + " = " + id)
+         .query  ();
+
+      List<Integer>  listUserId = DBUtil.getIdColumn(cursor, TripUserGroup.Column.UserId);
+      List<TripUser> listUser = new ArrayList<>();
+      for (Integer userId : listUserId)
+         listUser.add(TripUser.getLiteInstance(db, userId));
+
+      return listUser;
    }
 
    private ContentValues getPopulatedContentValues ()

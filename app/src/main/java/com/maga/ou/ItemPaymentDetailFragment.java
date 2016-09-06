@@ -217,7 +217,7 @@ public class ItemPaymentDetailFragment extends Fragment
             new View.OnClickListener()
             {
                @Override
-               public void onClick(View view)
+               public void onClick (View view)
                {
                   listener.goToUserDetailClicked(tripId, user.getId());
                }

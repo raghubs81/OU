@@ -28,6 +28,7 @@
    <string name="trip_hint_details">Tell me more about it...</string>
    <string name="trip_items">Items Purchased</string>
    <string name="trip_users">Trip Members</string>
+   <string name="trip_groups">Trip Groups</string>
    <string name="trip_wow">Who Owes Whom</string>
    <string name="trip_expenses">Trip Expenses</string>
 
