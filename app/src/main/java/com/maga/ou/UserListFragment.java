@@ -52,6 +52,11 @@ public class UserListFragment extends ListFragment
    private int tripId = DBUtil.UNSET_ID;
 
    /**
+    * Constructor
+    * ___________________________________________________________________________________________________
+    */
+
+   /**
     * <b>Parameters</b>
     * None
     */
@@ -157,10 +162,10 @@ public class UserListFragment extends ListFragment
    }
 
    private void initMembers ()
-   {
-      initMemberFromModel();
-      inflateUIComponents();
-   }
+{
+   initMemberFromModel();
+   inflateUIComponents();
+}
 
    private void initMemberFromModel()
    {

@@ -44,10 +44,9 @@ public class TripGroup
     * ___________________________________________________________________________________________________
     */
 
-   private static TripGroup getLiteInstance (SQLiteDatabase db, int id)
+   public static TripGroup getInstance (SQLiteDatabase db, int id)
    {
       Cursor cursor = new DBQueryBuilder(db)
-         .select(Column._id, Column.Name)
          .from(Table.TripGroup)
          .where(Column._id + "= ?").whereValue(String.valueOf(id))
          .query();
@@ -58,6 +57,7 @@ public class TripGroup
       TripGroup group = new TripGroup();
       group.id = id;
       group.setName(DBUtil.getCell(cursor, Column.Name));
+      group.setDetail(DBUtil.getCell(cursor, Column.Detail));
       group.setTripId(Integer.valueOf(DBUtil.getCell(cursor, Column.TripId)));
 
       return group;
@@ -88,6 +88,15 @@ public class TripGroup
       return DBUtil.updateRowById(db, Table.TripUser, id, values);
    }
 
+   public List<TripUser> getUsers (SQLiteDatabase db)
+   {
+      Cursor cursor = new DBQueryBuilder(db)
+         .select(TripUserGroup.Column.UserId)
+         .from(Table.TripUserGroup)
+         .where(TripUserGroup.Column.GroupId + " = " + id)
+         .query();
+   }
+
    private ContentValues getPopulatedContentValues ()
    {
       ContentValues values = new ContentValues();
@@ -107,6 +116,18 @@ public class TripGroup
     * Static Methods
     * ___________________________________________________________________________________________________
     */
+
+   /**
+    * Return a cursor of all trip groups for this trip <b>tripId</b>.
+    */
+   public static Cursor getTripGroups (SQLiteDatabase db, int tripId)
+   {
+      return new DBQueryBuilder(db)
+            .from (Table.TripGroup)
+            .where(Column.TripId + " = " + tripId)
+            .orderBy(TripGroup.Column.Name)
+            .query();
+   }
 
    public static void addUserToGroupOfAll (SQLiteDatabase db, int tripId, TripUser user)
    {
