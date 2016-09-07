@@ -149,6 +149,11 @@ public class TripListFragment extends ListFragment
       }
    }
 
+   /**
+    * Instance Methods
+    * ___________________________________________________________________________________________________
+    */
+
    private void initMembers ()
    {
       inflateUIComponents();

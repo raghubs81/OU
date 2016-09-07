@@ -38,13 +38,6 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
    private AppCompatActivity activity;
 
    /**
-    * UI Components
-    * ___________________________________________________________________________________________________
-    */
-
-   private TextView textContactHelp;
-
-   /**
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
@@ -52,6 +45,14 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
    private int userId = DBUtil.UNSET_ID;
 
    private int tripId = DBUtil.UNSET_ID;
+
+   /**
+    * UI Components
+    * ___________________________________________________________________________________________________
+    */
+
+   private TextView textContactHelp;
+
 
    /**
     * Member variables

@@ -161,11 +161,16 @@ public class UserListFragment extends ListFragment
       }
    }
 
+   /**
+    * Instance Methods
+    * ___________________________________________________________________________________________________
+    */
+
    private void initMembers ()
-{
-   initMemberFromModel();
-   inflateUIComponents();
-}
+   {
+      initMemberFromModel();
+      inflateUIComponents();
+   }
 
    private void initMemberFromModel()
    {

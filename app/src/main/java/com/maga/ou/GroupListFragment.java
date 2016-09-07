@@ -8,6 +8,9 @@ import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
@@ -20,9 +23,6 @@ import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.UIUtil;
 
-/**
- * Created by rbseshad on 09-Aug-16.
- */
 public class GroupListFragment extends ListFragment
 {
    private final String TAG = "ou." + getClass().getSimpleName();
@@ -117,8 +117,50 @@ public class GroupListFragment extends ListFragment
       Log.d(TAG, "List item clicked. position=" + position + " id=" + id + " listenerExists=" + (listener != null));
       if (listener == null)
          return;
-      listener.groupClicked(tripId, (int)id);
+      listener.groupClicked(tripId, (int) id);
    }
+
+   /**
+    * Use custom app bar - {@code R.menu.appbar_list_add}
+    *
+    * <br/>
+    * <br/><b>Inherited Doc:</b>
+    * <br/>{@inheritDoc}
+    */
+   @Override
+   public void onCreateOptionsMenu (Menu menu, MenuInflater inflater)
+   {
+      inflater.inflate(R.menu.appbar_list_add, menu);
+      super.onCreateOptionsMenu(menu, inflater);
+   }
+
+   /**
+    * Handle app bar actions - When app bar buttons are tapped.
+    *
+    * <br/>
+    * <br/><b>Inherited Doc:</b>
+    * <br/>{@inheritDoc}
+    */
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item)
+   {
+      switch (item.getItemId())
+      {
+         case R.id.appbar_list_add:
+            listener.groupAddClicked(tripId);
+            return true;
+
+         default:
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            return super.onOptionsItemSelected(item);
+      }
+   }
+
+   /**
+    * Instance Methods
+    * ___________________________________________________________________________________________________
+    */
 
    private void initMembers ()
    {
@@ -150,7 +192,8 @@ public class GroupListFragment extends ListFragment
     */
    public interface GroupListListener
    {
-      void groupClicked (int tripId, int groupId);
+      void groupClicked    (int tripId, int groupId);
+      void groupAddClicked (int tripId);
    }
 
    private class GroupCursorAdapter extends ResourceCursorAdapter

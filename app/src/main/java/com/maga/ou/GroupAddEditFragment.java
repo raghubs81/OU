@@ -1,9 +1,8 @@
 package com.maga.ou;
 
-// TODO : Create a group 'All' with new Trip. Add member to 'All' when new member is added.
-
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,17 +15,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.maga.ou.model.Trip;
 import com.maga.ou.model.TripGroup;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.UIUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class TripAddEditFragment extends Fragment implements View.OnClickListener
+
+public class GroupAddEditFragment extends Fragment implements View.OnClickListener
 {
    private final String TAG = "ou." + getClass().getSimpleName();
 
@@ -53,7 +52,30 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
 
    private OperationType operationType = OperationType.Add;
 
+   private int groupId = DBUtil.UNSET_ID;
+
    private int tripId = DBUtil.UNSET_ID;
+
+   /**
+    * UI Components
+    * ___________________________________________________________________________________________________
+    */
+
+   private MembersDialogFragment dialogMembers;
+
+   /**
+    * Instance variables
+    * ___________________________________________________________________________________________________
+    */
+
+   private ArrayList<Integer> listTripUserId = new ArrayList<>();
+
+   private ArrayList<String> listTripUserName = new ArrayList<>();
+
+   /**
+    * List of index indicating the TripGroup and TripUser item that were selected.
+    */
+   private ArrayList<Integer> listChosenUserIndex = new ArrayList<>();
 
    /**
     * <b>Parameters</b>
@@ -63,7 +85,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
     * <li>userId        : Optional if operationType is 'Add'   </li>
     * </ul>
     */
-   public TripAddEditFragment()
+   public GroupAddEditFragment()
    {
 
    }
@@ -83,6 +105,11 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
       this.tripId = id;
    }
 
+   public void setGroupId(int id)
+   {
+      this.groupId = id;
+   }
+
    /**
     * Lifecycle methods
     * ___________________________________________________________________________________________________
@@ -93,7 +120,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
    {
       // Inflate the layout for this fragment
       context = inflater.getContext();
-      return inflater.inflate(R.layout.fragment_trip_add_edit, container, false);
+      return inflater.inflate(R.layout.fragment_group_add_edit, container, false);
    }
 
    @Override
@@ -114,11 +141,14 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
    public void onClick(View view)
    {
       int id = view.getId();
-      if (id == R.id.trip_add_edit__save)
+      if (id == R.id.group_add_edit__members)
+         doSelectMembers ();
+      else if (id == R.id.group_add_edit__save)
          doSave();
-      else if (id == R.id.trip_add_edit__cancel)
+      else if (id == R.id.group_add_edit__cancel)
          doCancel();
    }
+
 
    /**
     * Members methods
@@ -134,40 +164,68 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
 
    private void initMemberFromModel()
    {
+      DBUtil.assertSetId(tripId);
       if (operationType == OperationType.Edit)
-         DBUtil.assertSetId(tripId);
+         DBUtil.assertSetId(groupId);
+
+      SQLiteDatabase db = DBUtil.getDB(context);
+      TripGroup group = TripGroup.getInstance(db, groupId);
+      List<TripUser> listUser = group.getUsers(db);
+      for (TripUser user : listUser)
+      {
+         listTripUserId.add(user.getId());
+         listTripUserName.add(user.getNickName());
+      }
    }
 
    private void inflateUIComponents()
    {
       if (operationType == OperationType.Add)
-         UIUtil.setAppBarTitle(activity, "Add Trip");
+         UIUtil.setAppBarTitle(activity, "Add Group");
       else
-         UIUtil.setAppBarTitle(activity, "Edit Trip");
+         UIUtil.setAppBarTitle(activity, "Edit Group");
+
+      // Select shared by users
+      Button buttonSharedBy = (Button)viewRoot.findViewById(R.id.group_add_edit__members);
+      buttonSharedBy.setOnClickListener(this);
 
       // Save
-      Button buttonSave = (Button) viewRoot.findViewById(R.id.trip_add_edit__save);
+      Button buttonSave = (Button) viewRoot.findViewById(R.id.group_add_edit__save);
       buttonSave.setOnClickListener(this);
 
       // Cancel
-      Button buttonCancel = (Button) viewRoot.findViewById(R.id.trip_add_edit__cancel);
+      Button buttonCancel = (Button) viewRoot.findViewById(R.id.group_add_edit__cancel);
       buttonCancel.setOnClickListener(this);
+
+      // Ensure that the 'listChosenUserIndex' are chosen even if user does not click on 'SharedBy' button.
+      dialogMembers = new MembersDialogFragment();
+      Bundle bundle = new Bundle();
+      bundle.putIntegerArrayList(SharedByDialogFragment.Arg.ChosenIndexList.name(), listChosenUserIndex);
+      dialogMembers.setArguments(bundle);
    }
 
-   private void populateUIComponents ()
+   private void populateUIComponents()
    {
       if (operationType == OperationType.Add)
          return;
 
       SQLiteDatabase db = DBUtil.getDB(context);
+      TripGroup group = TripGroup.getInstance(db, groupId);
 
-      Trip trip = Trip.getInstance(db, tripId);
+      EditText textName = (EditText)viewRoot.findViewById(R.id.group_add_edit__name);
+      textName.setText(group.getName());
 
-      EditText textName = (EditText)viewRoot.findViewById(R.id.trip_add_edit__summary);
-      textName.setText(trip.getName());
+      EditText textDetail = (EditText)viewRoot.findViewById(R.id.group_add_edit__detail);
+      textDetail.setText(group.getDetail());
+   }
 
-      EditText textDetail = (EditText)viewRoot.findViewById(R.id.trip_add_edit__detail);
-      textDetail.setText(trip.getDetail());
+   private void doSelectMembers ()
+   {
+      Bundle bundle = new Bundle();
+      bundle.putStringArrayList (MembersDialogFragment.Arg.NameList.name(), listTripUserName);
+      bundle.putIntegerArrayList(MembersDialogFragment.Arg.ChosenIndexList.name(), listChosenUserIndex);
+      dialogMembers.setArguments(bundle);
+      dialogMembers.show(getFragmentManager(), "dialog_members");
    }
 
    private void doSave()
@@ -175,15 +233,15 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
       // Validate Input
       boolean valid = true;
 
-      EditText textName = (EditText)viewRoot.findViewById(R.id.trip_add_edit__summary);
+      EditText textName = (EditText) viewRoot.findViewById(R.id.group_add_edit__name);
       String name = textName.getText().toString();
 
-      EditText textDetail = (EditText)viewRoot.findViewById(R.id.trip_add_edit__detail);
+      EditText textDetail = (EditText) viewRoot.findViewById(R.id.group_add_edit__detail);
       String detail = textDetail.getText().toString();
 
       if (name.equals(""))
       {
-         textName.setError("You got to say something");
+         textName.setError("Please name the group.");
          valid = false;
       }
 
@@ -198,23 +256,29 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
       db.beginTransaction();
       try
       {
-         Trip trip = (operationType == OperationType.Add) ? new Trip() : Trip.getInstance(db, tripId);
-
-         trip.setName(name);
-         trip.setDetail(detail);
+         TripGroup group = (operationType == OperationType.Add) ? new TripGroup() : TripGroup.getInstance(db, groupId);
+         group.setName(name);
+         group.setDetail(detail);
 
          if (operationType == OperationType.Add)
          {
-            trip.add(db);
-
-            TripGroup group = new TripGroup();
-            group.setName(TripGroup.All);
-            group.setDetail(TripGroup.ALL_DESCRIPTION);
-            group.setTripId(trip.getId());
+            group.setTripId(tripId);
             group.add(db);
          }
          else if (operationType == OperationType.Edit)
-            trip.update(db);
+         {
+            group.update(db);
+            group.deleteAllUsers(db);
+         }
+
+         // Convert chosen index to Id
+         listChosenUserIndex = dialogMembers.getChosenIndexList();
+         List<Integer> listChosenUserId = new ArrayList<>();
+         for (Integer currUserIndex : listChosenUserIndex)
+            listChosenUserId.add(listTripUserId.get(currUserIndex));
+
+         // Add users with list of IDs to group
+         group.addUsers(db, listChosenUserId);
 
          db.setTransactionSuccessful();
          Toast.makeText(context, "Saved successfully", Toast.LENGTH_SHORT).show();
@@ -237,5 +301,6 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
       getActivity().setResult(Activity.RESULT_CANCELED);
       getActivity().onBackPressed();
    }
+
 
 }

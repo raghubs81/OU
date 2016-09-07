@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
@@ -113,6 +114,22 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
       super.onCreateOptionsMenu(menu, inflater);
    }
 
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item)
+   {
+      switch (item.getItemId())
+      {
+         case R.id.appbar_detail_edit:
+            listener.groupEditClicked(tripId, groupId);
+            return true;
+
+         default:
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            return super.onOptionsItemSelected(item);
+      }
+   }
+
    /**
     * Event handlers
     * ___________________________________________________________________________________________________
@@ -195,7 +212,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
 
    interface GroupDetailListener
    {
-      void groupEditClicked (int tripId, int userId);
+      void groupEditClicked (int tripId, int groupId);
       void goToUserDetailClicked (int tripId, int userId);
    }
 }

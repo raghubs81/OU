@@ -16,7 +16,6 @@
    <string name="main_trip_add">New Trip!</string>
    <string name="main_trip_list">My Trips</string>
 
-
    <!-- Item -->
    <string name="item_summary">Item Summary</string>
    <string name="item_detail">Item Details</string>
@@ -38,6 +37,8 @@
 
    <!-- Group -->
    <string name="group_members">Members</string>
+   <string name="group_name">Group Name</string>
+   <string name="group_detail">Group Details</string>
 
    <!-- Segment: Paid By-->
    <string name="segment_payment_delete_description">Delete row</string>
@@ -64,8 +65,9 @@
    <!-- Help -->
    <string name="help_shared_by">All members of the trip group share the item\'s cost, by default.</string>
    <string name="help_contact_with_id">Contact Id = %s</string>
+   <string name="help_group_members">Add or remove members from the group</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+   <!-- TODO: Remove or change this placeholder text -->
    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

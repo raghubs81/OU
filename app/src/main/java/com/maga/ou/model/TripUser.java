@@ -62,6 +62,15 @@ public class TripUser
       return user;
    }
 
+   public static TripUser getLiteInstance (String id, String nickName, int tripId)
+   {
+      TripUser user = new TripUser();
+      user.id = Integer.valueOf(id);
+      user.setNickName(nickName);
+      user.setTripId(tripId);
+      return user;
+   }
+
    public static TripUser getInstance (SQLiteDatabase db, int id)
    {
       Cursor cursor = new DBQueryBuilder(db)

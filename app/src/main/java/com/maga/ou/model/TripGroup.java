@@ -78,6 +78,20 @@ public class TripGroup
       return this.id;
    }
 
+   public void addUsers (SQLiteDatabase db, List<Integer> listUserId)
+   {
+      DBUtil.assertSetId(id);
+      DBUtil.assertSetId(tripId);
+
+      for (Integer userId : listUserId)
+      {
+         ContentValues values = new ContentValues();
+         values.put (TripUserGroup.Column.UserId.name(), userId);
+         values.put (TripUserGroup.Column.GroupId.name(), id);
+         DBUtil.addRow(db, Table.TripUserGroup, values);
+      }
+   }
+
    public int update (SQLiteDatabase db)
    {
       DBUtil.assertSetId(id);
@@ -85,23 +99,35 @@ public class TripGroup
       validate();
 
       ContentValues values = getPopulatedContentValues ();
-      return DBUtil.updateRowById(db, Table.TripUser, id, values);
+      return DBUtil.updateRowById(db, Table.TripGroup, id, values);
+   }
+
+   public int deleteAllUsers (SQLiteDatabase db)
+   {
+      DBUtil.assertSetId(id);
+      DBUtil.assertSetId(tripId);
+
+      return DBUtil.deleteRowByReferenceId(db, Table.TripUserGroup, TripUserGroup.Column.GroupId, id);
    }
 
    public List<TripUser> getUsers (SQLiteDatabase db)
    {
       Cursor cursor = new DBQueryBuilder(db)
-         .select (TripUserGroup.Column.UserId)
-         .from   (Table.TripUserGroup)
-         .where  (TripUserGroup.Column.GroupId + " = " + id)
+         .select (TripUserGroup.Column.UserId, TripUser.Column.NickName)
+         .from   (Table.TripUserGroup, Table.TripUser)
+         .whereAND
+         (
+            TripUserGroup.Column.UserId + " = " + TripUser.Column._id,
+            TripUserGroup.Column.GroupId + " = " + id
+         )
          .query  ();
 
-      List<Integer>  listUserId = DBUtil.getIdColumn(cursor, TripUserGroup.Column.UserId);
-      List<TripUser> listUser = new ArrayList<>();
-      for (Integer userId : listUserId)
-         listUser.add(TripUser.getLiteInstance(db, userId));
+      List<String[]> listData = DBUtil.getRow(cursor);
+      List<TripUser> listTripUser = new ArrayList<>();
+      for (String col[] : listData)
+         listTripUser.add(TripUser.getLiteInstance(col[0], col[1], tripId));
 
-      return listUser;
+      return listTripUser;
    }
 
    private ContentValues getPopulatedContentValues ()
@@ -130,10 +156,10 @@ public class TripGroup
    public static Cursor getTripGroups (SQLiteDatabase db, int tripId)
    {
       return new DBQueryBuilder(db)
-            .from (Table.TripGroup)
-            .where(Column.TripId + " = " + tripId)
-            .orderBy(TripGroup.Column.Name)
-            .query();
+         .from(Table.TripGroup)
+         .where(Column.TripId + " = " + tripId)
+         .orderBy(Column._id)
+         .query();
    }
 
    public static void addUserToGroupOfAll (SQLiteDatabase db, int tripId, TripUser user)

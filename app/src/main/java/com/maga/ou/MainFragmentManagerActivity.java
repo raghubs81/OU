@@ -205,21 +205,33 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void groupClicked(int tripId, int groupId)
    {
-      Log.d(TAG, "UserList - ItemClicked. Activity to invoke next fragment. Received TripId=" + tripId + " GroupId=" + groupId);
+      Log.d(TAG, "GroupList - ItemClicked. Activity to invoke next fragment. Received TripId=" + tripId + " GroupId=" + groupId);
       GroupDetailFragment fragment = new GroupDetailFragment();
       fragment.setTripId(tripId);
       fragment.setGroupId(groupId);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
    }
 
+   @Override
+   public void groupAddClicked(int tripId)
+   {
+      Log.d(TAG, "GroupList - AppBarIcon - AddClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      GroupAddEditFragment fragment = new GroupAddEditFragment();
+      fragment.setOperationType(GroupAddEditFragment.OperationType.Add);
+      fragment.setTripId(tripId);
+      SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
+   }
+
    /* Group Details Fragment */
 
    @Override
-   public void groupEditClicked(int tripId, int userId)
+   public void groupEditClicked(int tripId, int groupId)
    {
-
+      Log.d(TAG, "GroupDetail - ApppBarIcon - EditClicked. Activity to invoke next fragment. Received TripId=" + tripId + " GroupId=" + groupId);
+      GroupAddEditFragment fragment = new GroupAddEditFragment();
+      fragment.setTripId(tripId);
+      fragment.setGroupId(groupId);
+      fragment.setOperationType(GroupAddEditFragment.OperationType.Edit);
+      SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
    }
-
-
-
 }
