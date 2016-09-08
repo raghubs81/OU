@@ -123,7 +123,7 @@ public class TripUser
     */
 
    /**
-    * Delete all thumb_users in <b>listUserId</b> if they do not owe OR are owed by for any thumb_items.
+    * Delete all users in <b>listUserId</b> if they do not owe OR are owed by for any items.
     * <br><b>NOTE :</b> The table schema syntax 'on delete cascade' takes care of auto removing the thumb_users from all groups.
     *
     * @return The number of rows affected, 0 if deletion failed.
@@ -132,9 +132,10 @@ public class TripUser
    {
       try
       {
-         String whereClause =  Column.TripId + " = "   + tripId + " AND " +
-                               Column._id    + " IN (" + TextUtils.join(",", listUserId) + ")";
-         return db.delete(Table.TripUser.name(), whereClause, null);
+//         String whereClause =  Column.TripId + " = "   + tripId + " AND " +
+//                               Column._id    + " IN (" + TextUtils.join(",", listUserId) + ")";
+//         return db.delete(Table.TripUser.name(), whereClause, null);
+         return DBUtil.deleteRowById(db, Table.TripUser, listUserId);
       }
       catch (SQLiteConstraintException e)
       {

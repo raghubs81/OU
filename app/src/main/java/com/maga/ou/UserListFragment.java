@@ -201,14 +201,11 @@ public class UserListFragment extends ListFragment
 
    private class UserMultiChoiceListener extends OUMultiChoiceListener<Integer>
    {
-      private List<Integer> listId;
-
       private SQLiteDatabase db = DBUtil.getDB(activity);
 
       public UserMultiChoiceListener ()
       {
          super(activity, getListView());
-         this.listId = getListId ();
       }
 
       @Override

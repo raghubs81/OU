@@ -22,7 +22,7 @@ public abstract class OUMultiChoiceListener<Result> implements AbsListView.Multi
 
    private ListView listView;
 
-   private List<Integer> listId = new ArrayList<>();
+   protected List<Integer> listId = new ArrayList<>();
 
    public OUMultiChoiceListener(AppCompatActivity activity, ListView listView)
    {
@@ -36,11 +36,6 @@ public abstract class OUMultiChoiceListener<Result> implements AbsListView.Multi
    protected abstract void doAfterTaskCompletionBeforeRestoration(Result result);
 
    protected abstract void doAfterRestoration (Result result);
-
-   public List<Integer> getListId ()
-   {
-      return listId;
-   }
 
    @Override
    public boolean onCreateActionMode (ActionMode mode, Menu menu)

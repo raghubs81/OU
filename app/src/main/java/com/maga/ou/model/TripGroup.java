@@ -102,6 +102,16 @@ public class TripGroup
       return DBUtil.updateRowById(db, Table.TripGroup, id, values);
    }
 
+   /**
+    * Delete all groups present in <b>listGroupId</b> - All users of the group are automatically deleted due to cascade constraint in DB.
+    *
+    * @return The number of rows affected, 0 if deletion failed.
+    */
+   public static int delete (SQLiteDatabase db, List<Integer> listGroupId)
+   {
+      return DBUtil.deleteRowById(db, Table.TripGroup, listGroupId);
+   }
+
    public int deleteAllUsers (SQLiteDatabase db)
    {
       DBUtil.assertSetId(id);
@@ -167,7 +177,7 @@ public class TripGroup
    {
       int userId = user.getId();
       DBUtil.assertSetId(userId);
-      int groupIdOfAll = TripGroup.getIdOfGroupOfAll (db, tripId);
+      int groupIdOfAll = TripGroup.getIdOfGroupOfAll(db, tripId);
 
       // Check if the group 'All' already contains the userId
       // Get groupId for group by name 'All'

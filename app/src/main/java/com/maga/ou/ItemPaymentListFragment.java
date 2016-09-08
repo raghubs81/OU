@@ -231,14 +231,11 @@ public class ItemPaymentListFragment extends ListFragment
 
    private class ItemPaymentMultiChoiceListener extends OUMultiChoiceListener<Integer>
    {
-      private List<Integer> listId;
-
       private SQLiteDatabase db = DBUtil.getDB(activity);
 
       public ItemPaymentMultiChoiceListener ()
       {
          super(activity, getListView());
-         this.listId = getListId ();
       }
 
       @Override

@@ -207,14 +207,11 @@ public class TripListFragment extends ListFragment
 
    private class TripMultiChoiceListener extends OUMultiChoiceListener<Integer>
    {
-      private List<Integer> listId;
-
       private SQLiteDatabase db = DBUtil.getDB(activity);
 
       public TripMultiChoiceListener()
       {
          super(activity, getListView());
-         this.listId = getListId();
       }
 
       @Override

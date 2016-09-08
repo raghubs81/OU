@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,11 +18,15 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.maga.ou.model.TripGroup;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
+import com.maga.ou.util.OUMultiChoiceListener;
 import com.maga.ou.util.UIUtil;
+
+import java.util.List;
 
 public class GroupListFragment extends ListFragment
 {
@@ -39,13 +44,19 @@ public class GroupListFragment extends ListFragment
    private View viewRoot;
 
    /**
+    * Fragment parameters
+    * ___________________________________________________________________________________________________
+    */
+   private int tripId = DBUtil.UNSET_ID;
+
+   /**
     * Member variables
     * ___________________________________________________________________________________________________
     */
 
    private GroupListListener listener;
 
-   private int tripId = DBUtil.UNSET_ID;
+   private int idOfGroupOfAll = DBUtil.UNSET_ID;
 
    /**
     * Constructor
@@ -182,8 +193,10 @@ public class GroupListFragment extends ListFragment
       CursorAdapter cursorAdapter = new GroupCursorAdapter(cursor);
       setListAdapter(cursorAdapter);
 
+      idOfGroupOfAll = TripGroup.getIdOfGroupOfAll(db, tripId);
+
       // Register for long click
-      // getListView().setMultiChoiceModeListener(new GroupMultiChoiceListener());
+      getListView().setMultiChoiceModeListener(new GroupMultiChoiceListener());
    }
 
 
@@ -218,5 +231,64 @@ public class GroupListFragment extends ListFragment
          textDetail.setText(DBUtil.getCell(cursor, TripGroup.Column.Detail));
       }
    }
+
+   private class GroupMultiChoiceListener extends OUMultiChoiceListener<Integer>
+   {
+      private SQLiteDatabase db = DBUtil.getDB(activity);
+
+      public GroupMultiChoiceListener()
+      {
+         super(activity, getListView());
+      }
+
+      @Override
+      public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked)
+      {
+         if (idOfGroupOfAll == (int)id)
+         {
+            if (getListView().isItemChecked(position))
+            {
+               getListView().setItemChecked(position, false);
+               Toast.makeText(context, "Group 'All' cannot be removed.", Toast.LENGTH_LONG).show();
+            }
+            return;
+         }
+         super.onItemCheckedStateChanged(mode, position, id, checked);
+      }
+
+      @Override
+      protected Integer doBackgroundTask()
+      {
+         return listId.isEmpty() ? -1 : TripGroup.delete(db, listId);
+      }
+
+      @Override
+      protected void doAfterTaskCompletionBeforeRestoration(Integer result)
+      {
+         if (result <= 0)
+            return;
+         CursorAdapter cursorAdapter = (CursorAdapter)getListView().getAdapter();
+         cursorAdapter.changeCursor(TripGroup.getTripGroups(db, tripId));
+      }
+
+      @Override
+      protected void doAfterRestoration(Integer result)
+      {
+         String mesg = null;
+
+         if (result == -1)
+            mesg = "No groups to delete";
+         else if (result  == 0)
+            mesg = "No groups deleted";
+         else
+            mesg = result + " groups deleted";
+
+         if (result <= 0)
+            Toast.makeText(context, mesg, Toast.LENGTH_LONG).show();
+         else
+            Toast.makeText(context, mesg, Toast.LENGTH_SHORT).show();
+      }
+   }
+
 
 }
