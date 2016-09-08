@@ -38,6 +38,11 @@ import java.util.*;
  */
 public class ContactListFragment extends ListFragment
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private final String TAG = "ou." + getClass().getSimpleName();
 
    /**
@@ -52,12 +57,23 @@ public class ContactListFragment extends ListFragment
    private View viewRoot;
 
    /**
+    * Fragment Parameters
+    * ___________________________________________________________________________________________________
+    */
+
+   private int tripId = DBUtil.UNSET_ID;
+
+   /**
     * Member variables
     * ___________________________________________________________________________________________________
     */
+
    private Map<Integer,Contact> mapPositionToContact = new TreeMap<>();
 
-   private int tripId = DBUtil.UNSET_ID;
+   /**
+    * Constructor
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <b>Parameters</b>
@@ -67,17 +83,20 @@ public class ContactListFragment extends ListFragment
    {
    }
 
-   public void setTripId (int id)
-   {
-      this.tripId = id;
-   }
-
-
    /**
     * Setters
     * ___________________________________________________________________________________________________
     */
 
+   public void setTripId (int id)
+   {
+      this.tripId = id;
+   }
+
+   /**
+    * Lifecycle methods
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <br/>
@@ -181,7 +200,7 @@ public class ContactListFragment extends ListFragment
    }
 
    /**
-    * Instance methods
+    * Member functions
     * ___________________________________________________________________________________________________
     */
 
@@ -273,7 +292,6 @@ public class ContactListFragment extends ListFragment
       }
       getActivity().onBackPressed();
    }
-
 
    private Cursor getContactsCursor ()
    {

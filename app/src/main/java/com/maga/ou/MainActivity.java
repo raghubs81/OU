@@ -14,11 +14,20 @@ import com.maga.ou.util.UIUtil;
 
 public class MainActivity extends AppCompatActivity
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
    public static String TAG = "ou." + MainActivity.class.getSimpleName();
 
    private static final int REQUEST_CODE_TRIP_ADD  = 101;
 
    private static final int REQUEST_CODE_TRIP_LIST = 100;
+
+   /**
+    * Lifecycle methods
+    * ___________________________________________________________________________________________________
+    */
 
    @Override
    protected void onCreate(Bundle savedInstanceState)

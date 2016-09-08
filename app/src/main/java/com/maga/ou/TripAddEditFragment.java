@@ -28,6 +28,11 @@ import com.maga.ou.util.UIUtil;
  */
 public class TripAddEditFragment extends Fragment implements View.OnClickListener
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private final String TAG = "ou." + getClass().getSimpleName();
 
    /**
@@ -54,6 +59,11 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
    private OperationType operationType = OperationType.Add;
 
    private int tripId = DBUtil.UNSET_ID;
+
+   /**
+    * Constructor
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <b>Parameters</b>

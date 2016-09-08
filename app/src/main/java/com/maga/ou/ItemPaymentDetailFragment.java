@@ -39,7 +39,7 @@ public class ItemPaymentDetailFragment extends Fragment
    private View viewRoot;
 
    /**
-    * Member variables
+    * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
 
@@ -47,7 +47,18 @@ public class ItemPaymentDetailFragment extends Fragment
 
    private int tripId = DBUtil.UNSET_ID;
 
+   /**
+    * Member variables
+    * ___________________________________________________________________________________________________
+    */
+
    private ItemPaymentDetailListener listener = null;
+
+
+   /**
+    * Constructor
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <b>Parameters</b>
@@ -124,7 +135,7 @@ public class ItemPaymentDetailFragment extends Fragment
    }
 
    /**
-    * Other Instance Methods
+    * Member functions
     * ___________________________________________________________________________________________________
     */
 
@@ -155,12 +166,6 @@ public class ItemPaymentDetailFragment extends Fragment
 
       doAddPaidBySegment(db, item);
       doAddSharedBySegment(db, item);
-   }
-
-   private void setAppBarTitle (String title)
-   {
-      if (activity.getSupportActionBar() != null)
-         activity.getSupportActionBar().setTitle(title);
    }
 
    public void doAddPaidBySegment (SQLiteDatabase db, Item item)

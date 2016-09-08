@@ -30,6 +30,11 @@ import java.util.List;
 
 public class GroupListFragment extends ListFragment
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private final String TAG = "ou." + getClass().getSimpleName();
 
    /**
@@ -169,7 +174,7 @@ public class GroupListFragment extends ListFragment
    }
 
    /**
-    * Instance Methods
+    * Member functions
     * ___________________________________________________________________________________________________
     */
 

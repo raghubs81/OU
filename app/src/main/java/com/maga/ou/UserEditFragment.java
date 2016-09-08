@@ -24,7 +24,14 @@ import com.maga.ou.util.UIUtil;
 
 public class UserEditFragment extends Fragment implements View.OnClickListener
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private final String TAG = "ou." + getClass ().getSimpleName();
+
+   private static final int PICK_CONTACT = 101;
 
    /**
     * UI Base Objects
@@ -38,6 +45,13 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
    private AppCompatActivity activity;
 
    /**
+    * UI Components
+    * ___________________________________________________________________________________________________
+    */
+
+   private TextView textContactHelp;
+
+   /**
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
@@ -47,21 +61,11 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
    private int tripId = DBUtil.UNSET_ID;
 
    /**
-    * UI Components
-    * ___________________________________________________________________________________________________
-    */
-
-   private TextView textContactHelp;
-
-
-   /**
     * Member variables
     * ___________________________________________________________________________________________________
     */
 
    private TripUser user;
-
-   private static final int PICK_CONTACT = 101;
 
    /**
     * <b>Parameters</b>

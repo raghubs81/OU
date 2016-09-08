@@ -25,6 +25,11 @@ import java.util.List;
 
 public class GroupAddEditFragment extends Fragment implements View.OnClickListener
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private final String TAG = "ou." + getClass().getSimpleName();
 
    /**
@@ -62,7 +67,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
    private MembersDialogFragment dialogMembers;
 
    /**
-    * Instance variables
+    * Member variables
     * ___________________________________________________________________________________________________
     */
 
@@ -74,6 +79,11 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
     * List of index indicating the TripGroup and TripUser item that were selected.
     */
    private ArrayList<Integer> listChosenUserIndex = new ArrayList<>();
+
+   /**
+    * Constructor
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <b>Parameters</b>
@@ -305,6 +315,4 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
       getActivity().setResult(Activity.RESULT_CANCELED);
       getActivity().onBackPressed();
    }
-
-
 }

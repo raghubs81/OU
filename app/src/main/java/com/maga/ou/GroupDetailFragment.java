@@ -28,6 +28,11 @@ import java.util.List;
  */
 public class GroupDetailFragment  extends Fragment implements View.OnClickListener
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private static final String TAG = "ou." + TripGroup.class.getSimpleName();
 
    /**
@@ -57,9 +62,9 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
 
    private TripGroup group = null;
 
-   private GroupDetailListener listener = null;
-
    private int idOfGroupOfAll = DBUtil.UNSET_ID;
+
+   private GroupDetailListener listener = null;
 
    /**
     * Constructor

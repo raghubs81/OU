@@ -33,14 +33,24 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
 
    private View viewRoot;
 
-   private TripDetailListener listener;
-
    /**
     * Fragment parameters
     * ___________________________________________________________________________________________________
     */
 
    private int tripId = DBUtil.UNSET_ID;
+
+   /**
+    * Member variables
+    * ___________________________________________________________________________________________________
+    */
+
+   private TripDetailListener listener;
+
+   /**
+    * Constructor
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <b>Parameters</b>

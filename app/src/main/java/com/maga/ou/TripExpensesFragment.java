@@ -31,6 +31,11 @@ import java.util.TreeMap;
  */
 public class TripExpensesFragment extends Fragment
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private final String TAG = "ou." + getClass ().getSimpleName();
 
    /**
@@ -45,6 +50,13 @@ public class TripExpensesFragment extends Fragment
    private View viewRoot;
 
    /**
+    * UI Components
+    * ___________________________________________________________________________________________________
+    */
+
+   ExpandableListView accordianListView;
+
+   /**
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
@@ -52,11 +64,9 @@ public class TripExpensesFragment extends Fragment
    private int tripId = DBUtil.UNSET_ID;
 
    /**
-    * UI Components
+    * Constructor
     * ___________________________________________________________________________________________________
     */
-
-   ExpandableListView accordianListView;
 
    /**
     * <b>Parameters</b>
@@ -117,7 +127,7 @@ public class TripExpensesFragment extends Fragment
    }
 
    /**
-    * Instance Methods
+    * Member functions
     * ___________________________________________________________________________________________________
     */
 

@@ -30,6 +30,11 @@ import java.util.Set;
 
 public class ItemPaymentAddEditFragment extends Fragment implements View.OnClickListener
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private final String TAG = "ou." + getClass ().getSimpleName();
 
    /**
@@ -78,7 +83,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
    private int tripId = DBUtil.UNSET_ID;
 
    /**
-    * Instance variables
+    * Member variables
     * ___________________________________________________________________________________________________
     */
 
@@ -93,6 +98,11 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
    private Item item = null;
 
    private int totalAmount = 0;
+
+   /**
+    * Constructor
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <b>Parameters</b>
@@ -172,7 +182,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
    }
 
    /**
-    * Other Instance Methods
+    * Member functions
     * ___________________________________________________________________________________________________
     */
 

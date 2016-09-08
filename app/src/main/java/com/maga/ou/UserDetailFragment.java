@@ -23,6 +23,13 @@ import com.maga.ou.util.UIUtil;
 public class UserDetailFragment  extends Fragment implements View.OnClickListener
 {
    /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
+   private final String TAG = "ou." + getClass ().getSimpleName();
+
+   /**
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -140,7 +147,7 @@ public class UserDetailFragment  extends Fragment implements View.OnClickListene
    }
 
    /**
-    * Instance methods
+    * Member functions
     * ___________________________________________________________________________________________________
     */
 

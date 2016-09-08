@@ -21,6 +21,11 @@ import com.maga.ou.util.UIUtil;
  */
 public class TemplateListFragment extends ListFragment
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private final String TAG = "ou." + getClass().getSimpleName();
 
    /**
@@ -34,7 +39,17 @@ public class TemplateListFragment extends ListFragment
 
    private View viewRoot;
 
+   /**
+    * Member variables
+    * ___________________________________________________________________________________________________
+    */
+
    private TemplateListListener listener;
+
+   /**
+    * Constructor
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <b>Parameters</b>
@@ -43,6 +58,11 @@ public class TemplateListFragment extends ListFragment
    public TemplateListFragment()
    {
    }
+
+   /**
+    * Lifecycle methods
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <br/>
@@ -125,5 +145,4 @@ public class TemplateListFragment extends ListFragment
 
       }
    }
-
 }

@@ -33,6 +33,11 @@ import com.maga.ou.util.UIUtil;
 
 public class ItemPaymentListFragment extends ListFragment
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private final String TAG = "ou." + getClass ().getSimpleName();
 
    /**
@@ -47,13 +52,22 @@ public class ItemPaymentListFragment extends ListFragment
    private View viewRoot;
 
    /**
+    * Fragment Parameters
+    * ___________________________________________________________________________________________________
+    */
+   private int tripId = DBUtil.UNSET_ID;
+
+   /**
     * Member variables
     * ___________________________________________________________________________________________________
     */
 
    private ItemPaymentListListener listener = null;
 
-   private int tripId = DBUtil.UNSET_ID;
+   /**
+    * Constructor
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <b>Parameters</b>
@@ -167,6 +181,11 @@ public class ItemPaymentListFragment extends ListFragment
             return super.onOptionsItemSelected(item);
       }
    }
+
+   /**
+    * Member functions
+    * ___________________________________________________________________________________________________
+    */
 
    private void initMembers ()
    {

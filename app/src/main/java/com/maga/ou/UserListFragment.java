@@ -29,6 +29,11 @@ import java.util.List;
  */
 public class UserListFragment extends ListFragment
 {
+   /**
+    * Constants
+    * ___________________________________________________________________________________________________
+    */
+
    private final String TAG = "ou." + getClass().getSimpleName();
 
    /**
@@ -73,6 +78,12 @@ public class UserListFragment extends ListFragment
    {
       this.tripId = id;
    }
+
+
+   /**
+    * Lifecycle methods
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <br/>
@@ -162,7 +173,7 @@ public class UserListFragment extends ListFragment
    }
 
    /**
-    * Instance Methods
+    * Member functions
     * ___________________________________________________________________________________________________
     */
 
