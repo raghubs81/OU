@@ -2,7 +2,6 @@ package com.maga.ou;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,7 +21,6 @@ import com.maga.ou.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 public class GroupAddEditFragment extends Fragment implements View.OnClickListener
@@ -169,8 +167,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
          DBUtil.assertSetId(groupId);
 
       SQLiteDatabase db = DBUtil.getDB(context);
-      TripGroup group = TripGroup.getInstance(db, groupId);
-      List<TripUser> listUser = group.getUsers(db);
+      List<TripUser> listUser = TripUser.getLiteUsers(db, tripId);
       for (TripUser user : listUser)
       {
          listTripUserId.add(user.getId());
@@ -217,6 +214,13 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
 
       EditText textDetail = (EditText)viewRoot.findViewById(R.id.group_add_edit__detail);
       textDetail.setText(group.getDetail());
+
+      List<TripUser> listUserFromGroup = group.getLiteUsers(db);
+      for (TripUser user : listUserFromGroup)
+      {
+         int indexOfUser = listTripUserId.indexOf(user.getId());
+         listChosenUserIndex.add(indexOfUser);
+      }
    }
 
    private void doSelectMembers ()

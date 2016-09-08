@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-import com.maga.ou.R;
-import com.maga.ou.model.Item;
 import com.maga.ou.model.TripGroup;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
@@ -179,7 +177,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
    public void doAddGroupUserSegment (SQLiteDatabase db)
    {
       GridLayout layoutSegmentContainer  = (GridLayout)viewRoot.findViewById(R.id.group_detail__user_container);
-      List<TripUser> listUser = group.getUsers(db);
+      List<TripUser> listUser = group.getLiteUsers(db);
 
       int bgColor[] = context.getResources().getIntArray(R.array.bgRainbowDark);
       int rowCount = -1;

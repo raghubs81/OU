@@ -110,17 +110,18 @@ public class TripGroup
       return DBUtil.deleteRowByReferenceId(db, Table.TripUserGroup, TripUserGroup.Column.GroupId, id);
    }
 
-   public List<TripUser> getUsers (SQLiteDatabase db)
+   public List<TripUser> getLiteUsers(SQLiteDatabase db)
    {
       Cursor cursor = new DBQueryBuilder(db)
-         .select (TripUserGroup.Column.UserId, TripUser.Column.NickName)
-         .from   (Table.TripUserGroup, Table.TripUser)
+         .select(TripUserGroup.Column.UserId, TripUser.Column.NickName)
+         .from(Table.TripUserGroup, Table.TripUser)
          .whereAND
          (
             TripUserGroup.Column.UserId + " = " + TripUser.Column._id,
             TripUserGroup.Column.GroupId + " = " + id
          )
-         .query  ();
+         .orderBy(TripUser.Column.NickName)
+         .query();
 
       List<String[]> listData = DBUtil.getRow(cursor);
       List<TripUser> listTripUser = new ArrayList<>();

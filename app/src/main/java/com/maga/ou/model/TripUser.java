@@ -9,6 +9,7 @@ import android.util.Log;
 import com.maga.ou.model.util.*;
 import com.maga.ou.model.OUDatabaseHelper.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -116,6 +117,11 @@ public class TripUser
       return DBUtil.updateRowById(db, Table.TripUser, id, values);
    }
 
+   /*
+    * Static methods
+    * ___________________________________________________________________________________________________
+    */
+
    /**
     * Delete all thumb_users in <b>listUserId</b> if they do not owe OR are owed by for any thumb_items.
     * <br><b>NOTE :</b> The table schema syntax 'on delete cascade' takes care of auto removing the thumb_users from all groups.
@@ -138,7 +144,7 @@ public class TripUser
    }
 
    /**
-    * Return a cursor of all trip thumb_users for this trip <b>tripId</b>.
+    * Return a cursor of all trip users for this trip <b>tripId</b>.
     */
    public static Cursor getTripUsers (SQLiteDatabase db, int tripId)
    {
@@ -148,6 +154,24 @@ public class TripUser
          .orderBy(TripUser.Column.NickName)
          .query();
    }
+
+   public static List<TripUser> getLiteUsers(SQLiteDatabase db, int tripId)
+   {
+      Cursor cursor = new DBQueryBuilder(db)
+         .select(Column._id, Column.NickName)
+         .from(Table.TripUser)
+         .where(Column.TripId + " = " + tripId)
+         .orderBy(TripUser.Column.NickName)
+         .query();
+
+      List<String[]> listData = DBUtil.getRow(cursor);
+      List<TripUser> listUser = new ArrayList<>();
+      for (String col[] : listData)
+         listUser.add(TripUser.getLiteInstance(col[0], col[1], tripId));
+
+      return listUser;
+   }
+
 
    public static List<String> getTripUserContactIds (SQLiteDatabase db, int tripId)
    {
