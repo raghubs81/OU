@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +28,8 @@ import java.util.List;
  */
 public class GroupDetailFragment  extends Fragment implements View.OnClickListener
 {
+   private static final String TAG = "ou." + TripGroup.class.getSimpleName();
+
    /**
     * UI Base Objects
     * ___________________________________________________________________________________________________
@@ -55,6 +58,8 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
    private TripGroup group = null;
 
    private GroupDetailListener listener = null;
+
+   private int idOfGroupOfAll = DBUtil.UNSET_ID;
 
    /**
     * Constructor
@@ -108,7 +113,9 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
    @Override
    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater)
    {
-      inflater.inflate(R.menu.appbar_detail_edit, menu);
+      Log.d(TAG, "GroupId=" + groupId + " IdGroupOfAll=" + idOfGroupOfAll);
+      if (groupId != idOfGroupOfAll)
+         inflater.inflate(R.menu.appbar_detail_edit, menu);
       super.onCreateOptionsMenu(menu, inflater);
    }
 
@@ -158,6 +165,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
 
       SQLiteDatabase db = DBUtil.getDB(context);
       group = TripGroup.getInstance(db, groupId);
+      idOfGroupOfAll = TripGroup.getIdOfGroupOfAll(db, tripId);
    }
 
    private void inflateUIComponents ()

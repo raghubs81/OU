@@ -167,22 +167,7 @@ public class TripGroup
    {
       int userId = user.getId();
       DBUtil.assertSetId(userId);
-
-      // Get groupId for group by name 'All'
-      Cursor cursorAllGroupId = new DBQueryBuilder(db)
-         .select(Column._id)
-         .from(Table.TripGroup)
-         .whereAND
-         (
-            Column.TripId + " = " + tripId,
-            Column.Name   + " = " + DBUtil.wrap(TripGroup.All)
-         )
-         .query();
-
-      if (!cursorAllGroupId.moveToFirst())
-         DBUtil.die("Could not get Id of TripGroup cursor for 'All' group");
-
-      int groupIdOfAll = cursorAllGroupId.getInt(0);
+      int groupIdOfAll = TripGroup.getIdOfGroupOfAll (db, tripId);
 
       // Check if the group 'All' already contains the userId
       // Get groupId for group by name 'All'
@@ -208,6 +193,25 @@ public class TripGroup
       values.put(TripUserGroup.Column.GroupId.name(), groupIdOfAll);
       values.put(TripUserGroup.Column.UserId.name(), userId);
       DBUtil.addRow(db, Table.TripUserGroup, values);
+   }
+
+   public static int getIdOfGroupOfAll (SQLiteDatabase db, int tripId)
+   {
+      // Get groupId for group by name 'All'
+      Cursor cursorAllGroupId = new DBQueryBuilder(db)
+         .select(Column._id)
+            .from(Table.TripGroup)
+            .whereAND
+         (
+               Column.TripId + " = " + tripId,
+               Column.Name + " = " + DBUtil.wrap(TripGroup.All)
+         )
+            .query();
+
+      if (!cursorAllGroupId.moveToFirst())
+         DBUtil.die("Could not get Id of TripGroup cursor for 'All' group");
+
+      return cursorAllGroupId.getInt(0);
    }
 
    public static List<Integer> getUsersFromGroups (SQLiteDatabase db, List<Integer> listGroupId)
