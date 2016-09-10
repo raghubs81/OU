@@ -12,7 +12,7 @@ public class SharedByDialogFragment extends DialogFragment
 {
    public enum Arg
    {
-      NameList, ChosenIndexList;
+      NameList, ChosenIndexList, TripGroupSize;
    }
 
    /**
@@ -25,6 +25,8 @@ public class SharedByDialogFragment extends DialogFragment
     */
    private ArrayList<String> listName;
 
+   private int groupSize = 0;
+
    public SharedByDialogFragment ()
    {
 
@@ -36,6 +38,7 @@ public class SharedByDialogFragment extends DialogFragment
       super.setArguments(bundle);
       listName        = bundle.getStringArrayList(Arg.NameList.name());
       listChosenIndex = bundle.getIntegerArrayList(Arg.ChosenIndexList.name());
+      groupSize       = bundle.getInt(Arg.TripGroupSize.name());
    }
 
    public ArrayList<Integer> getChosenIndexList ()

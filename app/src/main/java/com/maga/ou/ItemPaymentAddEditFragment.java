@@ -437,6 +437,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
       Bundle bundle = new Bundle();
       bundle.putStringArrayList (SharedByDialogFragment.Arg.NameList.name(), listGroupAndUser);
       bundle.putIntegerArrayList(SharedByDialogFragment.Arg.ChosenIndexList.name(), listSharedByIndex);
+      bundle.putInt(SharedByDialogFragment.Arg.TripGroupSize.name(), listTripGroupId.size());
       dialogSharedBy.setArguments(bundle);
       dialogSharedBy.show(getFragmentManager(), "dialog_shared_by");
    }
