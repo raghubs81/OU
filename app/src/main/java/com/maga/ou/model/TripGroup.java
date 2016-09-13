@@ -253,6 +253,7 @@ public class TripGroup
       return cursorAllGroupId.getInt(0);
    }
 
+
    public static List<Integer> getUsersFromGroups (SQLiteDatabase db, Collection<Integer> listGroupId)
    {
       Cursor cursor = new DBQueryBuilder(db)
