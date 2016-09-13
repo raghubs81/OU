@@ -177,7 +177,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
          DBUtil.assertSetId(groupId);
 
       SQLiteDatabase db = DBUtil.getDB(context);
-      List<TripUser> listUser = TripUser.getLiteUsers(db, tripId);
+      List<TripUser> listUser = TripUser.getLiteTripUsers(db, tripId);
       for (TripUser user : listUser)
       {
          listTripUserId.add(user.getId());

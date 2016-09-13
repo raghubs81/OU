@@ -29,8 +29,9 @@
 
     <color name="textHint">#502800</color>
 
-    <color name="bgListItemSelected">#60FF8000</color>
-    <color name="bgListItemPressed">#80FF8000</color>
+    <color name="bgUnCheckUser">#606060</color>
+    <color name="bgListItemSelected">#80FF8000</color>
+    <color name="bgListItemPressed">#B0FF8000</color>
 
     <!-- Trip Expenses Details -->
     <color name="textExpenseBeforeSettlementDark">#400080</color>

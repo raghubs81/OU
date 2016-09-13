@@ -234,8 +234,11 @@
       <item name="android:textColor">@color/textTitleDark</item>
    </style>
 
-
    <!-- Shared-By Styles  -->
+   <style name="OU.SharedBy_Group" parent="OU.TextStyle.Medium">
+      <item name="android:textColor">@color/textTitleDark</item>
+   </style>
+
    <style name="OU.SharedBy_User" parent="OU.TextStyle.Medium">
       <item name="android:textColor">@color/textPrimaryLight</item>
    </style>

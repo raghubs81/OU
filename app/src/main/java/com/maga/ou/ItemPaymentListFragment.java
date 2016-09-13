@@ -7,14 +7,12 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.ResourceCursorAdapter;
@@ -22,11 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.maga.ou.model.Item;
 import com.maga.ou.model.util.DBUtil;
-import com.maga.ou.util.OUAsyncTask;
 import com.maga.ou.util.OUCurrencyUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.maga.ou.util.OUMultiChoiceListener;
 import com.maga.ou.util.UIUtil;
@@ -232,7 +226,7 @@ public class ItemPaymentListFragment extends ListFragment
 
       public ItemPaymentCursorAdapter (Cursor cursor, int flags)
       {
-         super(context, R.layout.segment_item_payment_list, cursor, flags);
+         super(context, R.layout.segment_item_list, cursor, flags);
       }
 
       @Override

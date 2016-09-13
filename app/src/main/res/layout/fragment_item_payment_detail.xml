@@ -54,7 +54,7 @@
             android:orientation="vertical"
             android:paddingTop="1dp">
 
-            <!-- Layouts from segment_paid_by_detail.xml have to be dynamically added here -->
+            <!-- Layouts from segment_item_paid_by_detailetail.xml have to be dynamically added here -->
 
          </LinearLayout>
 
@@ -106,7 +106,7 @@
             android:columnCount="2"
             android:background="@color/borderLight">
 
-            <!-- Layouts from segment_shared_by_detail.xml have to be dynamically added here -->
+            <!-- Layouts from segment_item_shared_by_detailetail.xml have to be dynamically added here -->
 
          </GridLayout>
 

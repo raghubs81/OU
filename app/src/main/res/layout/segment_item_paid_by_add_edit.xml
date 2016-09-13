@@ -8,7 +8,7 @@
    android:background="@color/bgLightPrimary">
 
    <Spinner
-      android:id="@+id/segment_paid_by_add_edit__user"
+      android:id="@+id/segment_item_paid_by_add_edit__user"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1.5"
@@ -18,7 +18,7 @@
       />
 
    <EditText
-      android:id="@+id/segment_paid_by_add_edit__amount"
+      android:id="@+id/segment_item_paid_by_add_edit__amount"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:inputType="numberDecimal"
@@ -29,7 +29,7 @@
       />
 
    <ImageButton
-      android:id="@+id/segment_paid_by_add_edit__delete"
+      android:id="@+id/segment_item_paid_by_add_edit__delete"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:src="@drawable/ic_delete_small_dark"

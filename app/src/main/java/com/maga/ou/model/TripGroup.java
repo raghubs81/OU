@@ -63,6 +63,15 @@ public class TripGroup
       return group;
    }
 
+   public static TripGroup getLiteInstance (String id, String name, int tripId)
+   {
+      TripGroup group = new TripGroup();
+      group.id = Integer.valueOf(id);
+      group.setName(name);
+      group.setTripId(tripId);
+      return group;
+   }
+
    /*
     * CURD Operations
     * ___________________________________________________________________________________________________
@@ -173,6 +182,26 @@ public class TripGroup
          .query();
    }
 
+   /**
+    * Return the list of all trip groups (lite) ordered by ID - This ensures the 'All' group tops the list.
+    */
+   public static List<TripGroup> getLiteTripGroups(SQLiteDatabase db, int tripId)
+   {
+      Cursor cursor = new DBQueryBuilder(db)
+            .select(Column._id, Column.Name)
+            .from(Table.TripGroup)
+            .where(Column.TripId + " = " + tripId)
+            .orderBy(Column._id)
+            .query();
+
+      List<String[]> listData = DBUtil.getRow(cursor);
+      List<TripGroup> listGroup = new ArrayList<>();
+      for (String col[] : listData)
+         listGroup.add(TripGroup.getLiteInstance(col[0], col[1], tripId));
+
+      return listGroup;
+   }
+
    public static void addUserToGroupOfAll (SQLiteDatabase db, int tripId, TripUser user)
    {
       int userId = user.getId();
@@ -224,7 +253,7 @@ public class TripGroup
       return cursorAllGroupId.getInt(0);
    }
 
-   public static List<Integer> getUsersFromGroups (SQLiteDatabase db, List<Integer> listGroupId)
+   public static List<Integer> getUsersFromGroups (SQLiteDatabase db, Collection<Integer> listGroupId)
    {
       Cursor cursor = new DBQueryBuilder(db)
          .distinct(true)

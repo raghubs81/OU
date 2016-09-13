@@ -1,7 +1,6 @@
 package com.maga.ou;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,9 +14,7 @@ import com.maga.ou.model.Item;
 import com.maga.ou.model.Trip;
 import com.maga.ou.model.TripGroup;
 import com.maga.ou.model.TripUser;
-import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
-import com.maga.ou.model.OUDatabaseHelper.Table;
 import com.maga.ou.util.OUCurrencyUtil;
 import com.maga.ou.util.OUTextChangeListener;
 import com.maga.ou.util.UIUtil;
@@ -57,14 +54,17 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
    private TextView textTotalAmount;
 
-   private LinearLayout layoutSegmentContainer;
-
-   private SharedByDialogFragment dialogSharedBy;
+   private LinearLayout layoutPaidBySegmentContainer;
 
    /**
-    * List of index indicating the TripGroup and TripUser item that were selected.
+    * List of index indicating the TripGroups that were selected.
     */
-   private ArrayList<Integer> listSharedByIndex = new ArrayList<>();
+   private Set<Integer> setSharedByGroupId = new HashSet<>();
+
+   /**
+    * List of index indicating the TripUsers that were selected.
+    */
+   private Set<Integer> setSharedByUserId = new HashSet<>();
 
    /**
     * Fragment Parameters
@@ -73,7 +73,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
    public enum OperationType
    {
-      Add, Edit;
+      Add, Edit
    }
 
    private OperationType operationType = OperationType.Add;
@@ -87,17 +87,17 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
     * ___________________________________________________________________________________________________
     */
 
+   private List<TripUser> listTripUser = null;
+
    private List<String> listTripUserName = new ArrayList<>();
 
-   private List<String> listTripUserId = new ArrayList<>();
-
-   private List<String> listTripGroupName = new ArrayList<>();
-
-   private List<String> listTripGroupId = new ArrayList<>();
+   private List<TripGroup> listTripGroup = null;
 
    private Item item = null;
 
    private int totalAmount = 0;
+
+   private int idGroupOfAll = 0;
 
    /**
     * Constructor
@@ -171,10 +171,8 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
       if (id == R.id.item_payment_add_edit__paid_by_add)
          doAddSinglePaidBySegment();
-      else if (id == R.id.segment_paid_by_add_edit__delete)
+      else if (id == R.id.segment_item_paid_by_add_edit__delete)
          doDeletePaidBySegment(view);
-      else if (id == R.id.item_payment_add_edit__shared_by)
-         doSelectSharedBy();
       else if (id == R.id.item_payment_add_edit__save)
          doSave ();
       else if (id == R.id.item_payment_add_edit__cancel)
@@ -209,33 +207,12 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
          item = Item.getInstance(db, itemId);
       }
 
-      List<List<String>> listData = null;
-      Cursor cursor;
+      listTripUser = TripUser.getLiteTripUsers(db, tripId);
+      listTripGroup = TripGroup.getLiteTripGroups(db, tripId);
+      idGroupOfAll = TripGroup.getIdOfGroupOfAll(db, tripId);
 
-      // Populate the list of trip users
-      cursor = new DBQueryBuilder(db)
-            .select(TripUser.Column._id, TripUser.Column.NickName)
-            .from(Table.TripUser)
-            .orderBy(TripUser.Column.NickName)
-            .where (TripUser.Column.TripId + " = " + tripId)
-            .query();
-      listData = DBUtil.getColumn(cursor, TripUser.Column._id, TripUser.Column.NickName);
-      listTripUserId = listData.get(0);
-      listTripUserName = listData.get(1);
-
-      // Populate the list of trip groups
-      cursor = new DBQueryBuilder(db)
-            .select(TripGroup.Column._id, TripGroup.Column.Name)
-            .from(Table.TripGroup)
-            .where(TripGroup.Column.TripId + " = " + tripId)
-            .query();
-      listData = DBUtil.getColumn(cursor, TripGroup.Column._id, TripGroup.Column.Name);
-      listTripGroupId = listData.get(0);
-      listTripGroupName = listData.get(1);
-
-      // By default select the first group (All) at index '0'
-      if (operationType == OperationType.Add)
-         listSharedByIndex.add(0);
+      for (TripUser user : listTripUser)
+         listTripUserName.add(user.getNickName());
    }
 
    private void inflateUIComponents()
@@ -255,17 +232,23 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
       textTotalAmount   = (TextView)viewRoot.findViewById(R.id.item_payment_add_edit__total_amount);
 
       // Add paid by segments.
-      layoutSegmentContainer  = (LinearLayout)viewRoot.findViewById(R.id.item_payment_add_edit__paid_by_container);
+      layoutPaidBySegmentContainer = (LinearLayout)viewRoot.findViewById(R.id.item_payment_add_edit__paid_by_container);
+
       if (operationType == OperationType.Add)
+      {
          doAddSinglePaidBySegment();
+         setSharedByGroupId.add(idGroupOfAll);
+      }
 
       // Add button for segment
       Button buttonAddUserAmount = (Button)viewRoot.findViewById(R.id.item_payment_add_edit__paid_by_add);
       buttonAddUserAmount.setOnClickListener(this);
 
-      // Select shared by users
-      Button buttonSharedBy = (Button)viewRoot.findViewById(R.id.item_payment_add_edit__shared_by);
-      buttonSharedBy.setOnClickListener(this);
+      // Add shared by group segments
+      doAddAllSharedByGroupSegments();
+
+      // Add shared by user segments
+      doAddAllSharedByUserSegments();
 
       // Save
       Button buttonSave = (Button)viewRoot.findViewById(R.id.item_payment_add_edit__save);
@@ -274,22 +257,12 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
       // Cancel
       Button buttonCancel = (Button)viewRoot.findViewById(R.id.item_payment_add_edit__cancel);
       buttonCancel.setOnClickListener(this);
-
-      // Ensure that the 'listSharedByIndex' are chosen even if user does not click on 'SharedBy' button.
-      dialogSharedBy = new SharedByDialogFragment();
-      Bundle bundle = new Bundle();
-      bundle.putIntegerArrayList(SharedByDialogFragment.Arg.ChosenIndexList.name(), listSharedByIndex);
-      dialogSharedBy.setArguments(bundle);
    }
 
    private void doSave ()
    {
       // Validate Input
       boolean valid = true;
-      final String lineHR = "--------------------------------------------------------------------------------";
-
-      StringBuilder builder = new StringBuilder();
-      builder.append(DBUtil.NEW_LINE).append(lineHR);
 
       // Item Id
       if (operationType == OperationType.Edit)
@@ -304,37 +277,30 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
       }
 
       // Users
-      if (listTripUserId.isEmpty())
+      if (listTripUser.isEmpty())
       {
          valid = false;
       }
 
-      builder.append("Summary=").append(itemSummary).append(DBUtil.NEW_LINE);
-
       // Item detail
       String itemDetail  = textItemDetail.getText().toString();
-      if (itemDetail == null)
-         itemDetail = "";
-      builder.append("Detail=").append(itemDetail).append(DBUtil.NEW_LINE);
 
       // PaidBy Map - UserId to Amount
       Map<Integer,Integer> mapPaidByUserIdAmount = new HashMap<>();
-      listSharedByIndex = dialogSharedBy.getChosenIndexList();
 
       // Iterate through all the PaidBy segments and populate PaidBy map.
-      int count = layoutSegmentContainer.getChildCount();
+      int count = layoutPaidBySegmentContainer.getChildCount();
       for (int i = 0; i < count; ++i)
       {
-         ViewGroup childLayout = (ViewGroup)layoutSegmentContainer.getChildAt(i);
+         ViewGroup childLayout = (ViewGroup) layoutPaidBySegmentContainer.getChildAt(i);
 
-         Spinner  comboUser = (Spinner)childLayout.findViewById(R.id.segment_paid_by_add_edit__user);
-         EditText txtAmount = (EditText) childLayout.findViewById(R.id.segment_paid_by_add_edit__amount);
+         Spinner  comboUser = (Spinner)childLayout.findViewById(R.id.segment_item_paid_by_add_edit__user);
+         EditText txtAmount = (EditText) childLayout.findViewById(R.id.segment_item_paid_by_add_edit__amount);
 
-         int userId = Integer.valueOf(listTripUserId.get(comboUser.getSelectedItemPosition()));
+         int userId = listTripUser.get(comboUser.getSelectedItemPosition()).getId();
          int userAmount  = OUCurrencyUtil.valueOf(txtAmount.getText().toString());
 
          mapPaidByUserIdAmount.put(userId, userAmount);
-         builder.append("UserId=").append(userId).append(" UserName=").append(listTripUserName.get(comboUser.getSelectedItemPosition())).append(" Amount").append(userAmount).append(DBUtil.NEW_LINE);
 
          if (userAmount == 0)
          {
@@ -342,30 +308,6 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
             valid = false;
          }
       }
-
-      // Use a set of SharedBy users to avoid duplicates.
-      Set<Integer> setSharedByUserId = new HashSet<>();
-      List<Integer> listSharedByGroupId = new ArrayList<>();
-      builder.append("SharedBy=");
-      for (int index : listSharedByIndex)
-      {
-         if (index < listTripGroupId.size())
-         {
-            // Index of a group - Get the groupId from listTripGroupId
-            Integer groupId = Integer.valueOf(listTripGroupId.get(index));
-            builder.append (listTripGroupName.get(index)).append(",");
-            listSharedByGroupId.add(groupId);
-         }
-         else
-         {
-            // Index of a user - Get the userId from listTripUserId. (The index is actually index + group.size, so remove group.size)
-            Integer userId = Integer.valueOf(listTripUserId.get(index - listTripGroupId.size()));
-            builder.append (listTripUserName.get(index - listTripGroupId.size())).append(",");
-            setSharedByUserId.add(userId);
-         }
-      }
-      builder.append(lineHR).append(DBUtil.NEW_LINE);
-      Log.d(TAG, builder.toString());
 
       // End processing if not valid
       if (!valid)
@@ -405,7 +347,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
          // Get users from all SharedBy groups. Add this to set of SharedBy users.
          // We now have a distinct set of SharedBy users.
-         setSharedByUserId.addAll(TripGroup.getUsersFromGroups(db, listSharedByGroupId));
+         setSharedByUserId.addAll(TripGroup.getUsersFromGroups(db, setSharedByGroupId));
          item.setSharedBy(db, setSharedByUserId);
 
          db.setTransactionSuccessful();
@@ -428,20 +370,6 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
       getActivity().onBackPressed();
    }
 
-   private void doSelectSharedBy ()
-   {
-      ArrayList<String> listGroupAndUser = new ArrayList<>();
-      listGroupAndUser.addAll(listTripGroupName);
-      listGroupAndUser.addAll(listTripUserName);
-
-      Bundle bundle = new Bundle();
-      bundle.putStringArrayList (SharedByDialogFragment.Arg.NameList.name(), listGroupAndUser);
-      bundle.putIntegerArrayList(SharedByDialogFragment.Arg.ChosenIndexList.name(), listSharedByIndex);
-      bundle.putInt(SharedByDialogFragment.Arg.TripGroupSize.name(), listTripGroupId.size());
-      dialogSharedBy.setArguments(bundle);
-      dialogSharedBy.show(getFragmentManager(), "dialog_shared_by");
-   }
-
    private void populateUIComponents ()
    {
       if (operationType == OperationType.Add)
@@ -462,42 +390,137 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
          View segmentViewRoot = doAddSinglePaidBySegment ();
          TripUser user  = entry.getKey();
          Integer amount = entry.getValue();
-         Log.d(TAG, "UserId=" + user.getId() + " UserName=" + user.getNickName() + " Amount=" + OUCurrencyUtil.format(amount) + " Index=" + listTripUserId.indexOf(String.valueOf(user.getId())) + " List=" + listTripUserId);
+         Log.d(TAG, "UserId=" + user.getId() + " UserName=" + user.getNickName() + " Amount=" + OUCurrencyUtil.format(amount));
 
-         Spinner     comboUser    = (Spinner)  segmentViewRoot.findViewById(R.id.segment_paid_by_add_edit__user);
-         comboUser.setSelection(listTripUserId.indexOf(String.valueOf(user.getId())));
+         Spinner     comboUser    = (Spinner)  segmentViewRoot.findViewById(R.id.segment_item_paid_by_add_edit__user);
+         comboUser.setSelection(getIndexOfUser(user.getId()));
 
-         EditText txtAmount    = (EditText) segmentViewRoot.findViewById(R.id.segment_paid_by_add_edit__amount);
+         EditText txtAmount    = (EditText) segmentViewRoot.findViewById(R.id.segment_item_paid_by_add_edit__amount);
          txtAmount.setText(OUCurrencyUtil.format(amount));
       }
 
       /* Set shared-by indexes */
-      List<TripUser> listUser = item.getSharedByUsers(db);
+//      List<TripUser> listUser = item.getSharedByUsers(db);
+//
+//      // Find the index of the already chosen user in list of all users
+//      // Add this index to group size the get the actual index in the 'shared-by' list
+//      int groupSize = listTripGroupId.size();
+//      for (TripUser user : listUser)
+//      {
+//         Log.d(TAG, "Shared Trip UserIndex=" + listTripUserId.indexOf(String.valueOf(user.getId())));
+//         listSharedByIndex.add(groupSize + listTripUserId.indexOf(String.valueOf(user.getId())));
+//      }
+   }
 
-      // Find the index of the already chosen user in list of all users
-      // Add this index to group size the get the actual index in the 'shared-by' list
-      int groupSize = listTripGroupId.size();
-      for (TripUser user : listUser)
+   private int getIndexOfUser (int userId)
+   {
+      int index = -1;
+      for (TripUser user : listTripUser)
       {
-         Log.d(TAG, "Shared Trip UserIndex=" + listTripUserId.indexOf(String.valueOf(user.getId())));
-         listSharedByIndex.add(groupSize + listTripUserId.indexOf(String.valueOf(user.getId())));
+         ++index;
+         if (userId == user.getId())
+            return index;
+      }
+      return index;
+   }
+
+   private void doAddAllSharedByGroupSegments ()
+   {
+      ViewGroup layoutSharedByGroupsContainer = (ViewGroup)viewRoot.findViewById(R.id.item_payment_add_edit__groups_container);
+      LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+      int index = -1;
+      for (final TripGroup group : listTripGroup)
+      {
+         final View segmentViewRoot = inflater.inflate(R.layout.segment_item_shared_by_group_add_edit, layoutSharedByGroupsContainer, false);
+         CheckBox checkBox = (CheckBox) segmentViewRoot.findViewById(R.id.segment_item_shared_by_group_add_edit__name);
+         checkBox.setText(group.getName());
+
+         if (operationType == OperationType.Add && idGroupOfAll == group.getId())
+            checkBox.setChecked(true);
+
+         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+         {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+               if (isChecked)
+                  setSharedByGroupId.add(group.getId());
+               else
+                  setSharedByGroupId.remove(Integer.valueOf(group.getId()));
+            }
+         });
+         layoutSharedByGroupsContainer.addView(segmentViewRoot);
+      }
+   }
+
+   private void doAddAllSharedByUserSegments ()
+   {
+      if (operationType == OperationType.Edit)
+      {
+         for (TripUser currSharedByUser : item.getSharedByUsers(DBUtil.getDB(context)))
+            setSharedByUserId.add(currSharedByUser.getId());
+      }
+
+      ViewGroup layoutSharedByUsersContainer = (ViewGroup)viewRoot.findViewById(R.id.item_payment_add_edit__users_container);
+      LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      final int bgColor[] = context.getResources().getIntArray(R.array.bgRainbowDark);
+      final int bgColorUnCheck = context.getResources().getColor(R.color.bgUnCheckUser);
+
+      int index = -1;
+      for (final TripUser user : listTripUser)
+      {
+         final int colorCheck   = bgColor[++index % bgColor.length];
+         final View segmentViewRoot = inflater.inflate(R.layout.segment_item_shared_by_user_add_edit, layoutSharedByUsersContainer, false);
+
+         CheckBox checkBox = (CheckBox) segmentViewRoot.findViewById(R.id.segment_item_shared_by_user_add_edit__name);
+         checkBox.setText(user.getNickName());
+         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+         {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+               if (isChecked)
+               {
+                  setSharedByUserId.add(user.getId());
+                  segmentViewRoot.setBackgroundColor(colorCheck);
+               }
+               else
+               {
+                  setSharedByUserId.remove(Integer.valueOf(user.getId()));
+                  segmentViewRoot.setBackgroundColor(bgColorUnCheck);
+               }
+            }
+         });
+
+         layoutSharedByUsersContainer.addView(segmentViewRoot);
+         if(setSharedByUserId.contains(user.getId()))
+         {
+            checkBox.setChecked(true);
+            segmentViewRoot.setBackgroundColor(colorCheck);
+         }
+         else
+         {
+            checkBox.setChecked(false);
+            segmentViewRoot.setBackgroundColor(bgColorUnCheck);
+         }
       }
    }
 
    /**
-    * Add PaidBy segment {@code R.layout.segment_paid_by_add_edit} to the segment container layout.
+    * Add PaidBy segment {@code R.layout.segment_item_paid_by_add_edit} to the segment container layout.
     *
     * @return The view root of the segment added.
     */
    private View doAddSinglePaidBySegment()
    {
       LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      final View segmentViewRoot = inflater.inflate(R.layout.segment_paid_by_add_edit, layoutSegmentContainer, false);
+      final View segmentViewRoot = inflater.inflate(R.layout.segment_item_paid_by_add_edit, layoutPaidBySegmentContainer, false);
 
-      Spinner     comboUser    = (Spinner)  segmentViewRoot.findViewById(R.id.segment_paid_by_add_edit__user);
+      Spinner     comboUser    = (Spinner)  segmentViewRoot.findViewById(R.id.segment_item_paid_by_add_edit__user);
       UIUtil.setSpinnerList(context, comboUser, listTripUserName);
 
-      final EditText txtAmount    = (EditText) segmentViewRoot.findViewById(R.id.segment_paid_by_add_edit__amount);
+      final EditText txtAmount    = (EditText) segmentViewRoot.findViewById(R.id.segment_item_paid_by_add_edit__amount);
       UIUtil.setTextCurrencyHandler(txtAmount);
       txtAmount.addTextChangedListener(new OUTextChangeListener()
       {
@@ -512,27 +535,27 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
          }
       });
 
-      ImageButton buttonDelete = (ImageButton) segmentViewRoot.findViewById(R.id.segment_paid_by_add_edit__delete);
+      ImageButton buttonDelete = (ImageButton) segmentViewRoot.findViewById(R.id.segment_item_paid_by_add_edit__delete);
       buttonDelete.setOnClickListener(this);
-      layoutSegmentContainer.addView(segmentViewRoot);
+      layoutPaidBySegmentContainer.addView(segmentViewRoot);
 
       return segmentViewRoot;
    }
 
    private void doDeletePaidBySegment (View view)
    {
-      Log.d(TAG, "Segment container child count. Count=" + layoutSegmentContainer.getChildCount());
-      if (layoutSegmentContainer.getChildCount() == 1)
+      Log.d(TAG, "Segment container child count. Count=" + layoutPaidBySegmentContainer.getChildCount());
+      if (layoutPaidBySegmentContainer.getChildCount() == 1)
       {
          Toast.makeText(context, "Atleast one entry is required", Toast.LENGTH_SHORT).show();
          return;
       }
 
-      final EditText txtAmount    = (EditText) ((LinearLayout)view.getParent()).findViewById(R.id.segment_paid_by_add_edit__amount);
+      final EditText txtAmount    = (EditText) ((LinearLayout)view.getParent()).findViewById(R.id.segment_item_paid_by_add_edit__amount);
       int value = OUCurrencyUtil.valueOf(txtAmount.getText().toString());
       totalAmount -= value;
       textTotalAmount.setText(OUCurrencyUtil.format(totalAmount));
 
-      layoutSegmentContainer.removeView((View)view.getParent());
+      layoutPaidBySegmentContainer.removeView((View) view.getParent());
    }
 }

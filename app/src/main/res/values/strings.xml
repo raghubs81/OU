@@ -21,6 +21,8 @@
    <string name="item_detail">Item Details</string>
    <string name="item_paid_by">Paid By</string>
    <string name="item_shared_by">Shared By</string>
+   <string name="item_shared_by_groups">Shared By Groups</string>
+   <string name="item_shared_by_users">Shared By Users</string>
 
    <!-- Trip -->
    <string name="trip_hint_summary">Where are we going?</string>

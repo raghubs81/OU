@@ -156,7 +156,7 @@ public class TripUser
          .query();
    }
 
-   public static List<TripUser> getLiteUsers(SQLiteDatabase db, int tripId)
+   public static List<TripUser> getLiteTripUsers(SQLiteDatabase db, int tripId)
    {
       Cursor cursor = new DBQueryBuilder(db)
          .select(Column._id, Column.NickName)

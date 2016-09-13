@@ -10,13 +10,14 @@
    android:background="#400080">
 
    <TextView
-      android:id="@+id/segment_shared_by_detail__user"
+      android:id="@+id/segment_item_shared_by_detail__user"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:paddingLeft="3dp"
       android:paddingRight="3dp"
       android:gravity="center"
       style="@style/OU.SharedBy_User"
-      android:text="Raghu"/>
+      android:text="Raghu"
+      />
 
 </LinearLayout>

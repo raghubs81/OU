@@ -178,7 +178,7 @@ public class ItemPaymentDetailFragment extends Fragment
       for (TripUser user : mapUserAmount.keySet())
       {
          LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-         final View segmentViewRoot = inflater.inflate(R.layout.segment_paid_by_detail, layoutSegmentContainer, false);
+         final View segmentViewRoot = inflater.inflate(R.layout.segment_item_paid_by_detail, layoutSegmentContainer, false);
 
          // Set paid-by user
          TextView textUser   = (TextView)segmentViewRoot.findViewById(R.id.segment_paid_by_detail__user);
@@ -209,12 +209,12 @@ public class ItemPaymentDetailFragment extends Fragment
       for (final TripUser user : listUser)
       {
          LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-         final View segmentViewRoot = inflater.inflate(R.layout.segment_shared_by_detail, layoutSegmentContainer, false);
+         final View segmentViewRoot = inflater.inflate(R.layout.segment_item_shared_by_detail, layoutSegmentContainer, false);
 
          int color = bgColor[++rowCount % bgColor.length];
          segmentViewRoot.setBackgroundColor(color);
 
-         TextView textUser   = (TextView)segmentViewRoot.findViewById(R.id.segment_shared_by_detail__user);
+         TextView textUser   = (TextView)segmentViewRoot.findViewById(R.id.segment_item_shared_by_detail__user);
          textUser.setText(user.getNickName());
 
          textUser.setOnClickListener
