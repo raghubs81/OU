@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,7 +22,9 @@ import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.UIUtil;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class GroupAddEditFragment extends Fragment implements View.OnClickListener
@@ -60,25 +64,18 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
    private int tripId = DBUtil.UNSET_ID;
 
    /**
-    * UI Components
-    * ___________________________________________________________________________________________________
-    */
-
-   private MembersDialogFragment dialogMembers;
-
-   /**
     * Member variables
     * ___________________________________________________________________________________________________
     */
 
-   private ArrayList<Integer> listTripUserId = new ArrayList<>();
+   private TripGroup group = null;
 
-   private ArrayList<String> listTripUserName = new ArrayList<>();
+   private List<TripUser> listTripUser = new ArrayList<>();
 
    /**
-    * List of index indicating the TripGroup and TripUser item that were selected.
+    * Set of User Ids selected for the group.
     */
-   private ArrayList<Integer> listChosenUserIndex = new ArrayList<>();
+   private Set<Integer> setChosenUserId = new HashSet<>();
 
    /**
     * Constructor
@@ -149,9 +146,8 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
    public void onClick(View view)
    {
       int id = view.getId();
-      if (id == R.id.group_add_edit__members)
-         doSelectMembers ();
-      else if (id == R.id.group_add_edit__save)
+
+      if (id == R.id.group_add_edit__save)
          doSave();
       else if (id == R.id.group_add_edit__cancel)
          doCancel();
@@ -173,15 +169,27 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
    private void initMemberFromModel()
    {
       DBUtil.assertSetId(tripId);
-      if (operationType == OperationType.Edit)
-         DBUtil.assertSetId(groupId);
-
       SQLiteDatabase db = DBUtil.getDB(context);
-      List<TripUser> listUser = TripUser.getLiteTripUsers(db, tripId);
-      for (TripUser user : listUser)
+
+      if (operationType == OperationType.Add)
       {
-         listTripUserId.add(user.getId());
-         listTripUserName.add(user.getNickName());
+         groupId = DBUtil.UNSET_ID;
+         group = new TripGroup();
+      }
+      else if (operationType == OperationType.Edit)
+      {
+         DBUtil.assertSetId(groupId);
+         group = TripGroup.getInstance(db, groupId);
+      }
+
+      // All trip users
+      listTripUser = TripUser.getLiteTripUsers(db, tripId);
+
+      // Add trip users who are part of the group
+      if (operationType == OperationType.Edit)
+      {
+         for (TripUser user : group.getLiteUsers(db))
+            setChosenUserId.add(user.getId());
       }
    }
 
@@ -192,9 +200,8 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
       else
          UIUtil.setAppBarTitle(activity, "Edit Group");
 
-      // Select shared by users
-      Button buttonSharedBy = (Button)viewRoot.findViewById(R.id.group_add_edit__members);
-      buttonSharedBy.setOnClickListener(this);
+      // Add user segments
+      addAllUserSegments ();
 
       // Save
       Button buttonSave = (Button) viewRoot.findViewById(R.id.group_add_edit__save);
@@ -203,12 +210,6 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
       // Cancel
       Button buttonCancel = (Button) viewRoot.findViewById(R.id.group_add_edit__cancel);
       buttonCancel.setOnClickListener(this);
-
-      // Ensure that the 'listChosenUserIndex' are chosen even if user does not click on 'SharedBy' button.
-      dialogMembers = new MembersDialogFragment();
-      Bundle bundle = new Bundle();
-      bundle.putIntegerArrayList(SharedByDialogFragment.Arg.ChosenIndexList.name(), listChosenUserIndex);
-      dialogMembers.setArguments(bundle);
    }
 
    private void populateUIComponents()
@@ -224,22 +225,54 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
 
       EditText textDetail = (EditText)viewRoot.findViewById(R.id.group_add_edit__detail);
       textDetail.setText(group.getDetail());
-
-      List<TripUser> listUserFromGroup = group.getLiteUsers(db);
-      for (TripUser user : listUserFromGroup)
-      {
-         int indexOfUser = listTripUserId.indexOf(user.getId());
-         listChosenUserIndex.add(indexOfUser);
-      }
    }
 
-   private void doSelectMembers ()
+   private void addAllUserSegments ()
    {
-      Bundle bundle = new Bundle();
-      bundle.putStringArrayList (MembersDialogFragment.Arg.NameList.name(), listTripUserName);
-      bundle.putIntegerArrayList(MembersDialogFragment.Arg.ChosenIndexList.name(), listChosenUserIndex);
-      dialogMembers.setArguments(bundle);
-      dialogMembers.show(getFragmentManager(), "dialog_members");
+      ViewGroup layoutSharedByUsersContainer = (ViewGroup)viewRoot.findViewById(R.id.group_add_edit__users_container);
+      LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      final int bgColor[] = context.getResources().getIntArray(R.array.bgRainbowDark);
+      final int bgColorUnCheck = context.getResources().getColor(R.color.bgUnCheckUser);
+
+      int index = -1;
+      for (final TripUser user : listTripUser)
+      {
+         final int colorCheck = bgColor[++index % bgColor.length];
+         final View segmentViewRoot = inflater.inflate(R.layout.segment_group_user_add_edit, layoutSharedByUsersContainer, false);
+
+         CheckBox checkBox = (CheckBox) segmentViewRoot.findViewById(R.id.segment_group_user_add_edit__name);
+         checkBox.setText(user.getNickName());
+         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+         {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+               if (isChecked)
+               {
+                  setChosenUserId.add(user.getId());
+                  segmentViewRoot.setBackgroundColor(colorCheck);
+               }
+               else
+               {
+                  setChosenUserId.remove(Integer.valueOf(user.getId()));
+                  segmentViewRoot.setBackgroundColor(bgColorUnCheck);
+               }
+            }
+         });
+         layoutSharedByUsersContainer.addView(segmentViewRoot);
+
+         // Check the box if the user is already part of the group
+         if(setChosenUserId.contains(user.getId()))
+         {
+            checkBox.setChecked(true);
+            segmentViewRoot.setBackgroundColor(colorCheck);
+         }
+         else
+         {
+            checkBox.setChecked(false);
+            segmentViewRoot.setBackgroundColor(bgColorUnCheck);
+         }
+      }
    }
 
    private void doSave()
@@ -285,14 +318,8 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
             group.deleteAllUsers(db);
          }
 
-         // Convert chosen index to Id
-         listChosenUserIndex = dialogMembers.getChosenIndexList();
-         List<Integer> listChosenUserId = new ArrayList<>();
-         for (Integer currUserIndex : listChosenUserIndex)
-            listChosenUserId.add(listTripUserId.get(currUserIndex));
-
          // Add users with list of IDs to group
-         group.addUsers(db, listChosenUserId);
+         group.addUsers(db, setChosenUserId);
 
          db.setTransactionSuccessful();
          Toast.makeText(context, "Saved successfully", Toast.LENGTH_SHORT).show();

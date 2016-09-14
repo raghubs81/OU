@@ -41,25 +41,41 @@
             style="@style/OU.Dark_Detail1"
             />
 
-         <Button
-            android:id="@+id/group_add_edit__members"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:drawableTop="@drawable/thumb_users"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:textSize="16sp"
-            android:text="@string/group_members"
-            style="@style/OU.Button.Purple"/>
-
          <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/help_group_members"
-            android:gravity="center"
-            style="@style/OU.TextStyle.Help"/>
+            android:layout_marginTop="10dp"
+            style="@style/OU.Heading"
+            android:text="@string/group_members"/>
+
+         <GridLayout
+            android:id="@+id/group_add_edit__users_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:background="@color/borderLight">
+
+            <!-- Layouts from segment_group_user_add_edit.xml have to be dynamically added here
+
+            <include layout="@layout/segment_group_user_add_edit"
+                     android:layout_width="0dp"
+                     android:layout_height="80dp"
+                     android:layout_margin="1dp"
+                     android:layout_columnWeight="1"/>
+
+            <include layout="@layout/segment_group_user_add_edit"
+                     android:layout_width="0dp"
+                     android:layout_height="80dp"
+                     android:layout_margin="1dp"
+                     android:layout_columnWeight="1"/>
+
+            <include layout="@layout/segment_group_user_add_edit"
+                     android:layout_width="0dp"
+                     android:layout_height="80dp"
+                     android:layout_margin="1dp"
+                     android:layout_columnWeight="1"/> -->
+
+         </GridLayout>
 
       </LinearLayout>
 

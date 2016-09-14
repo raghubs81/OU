@@ -86,7 +86,6 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
     * Member variables
     * ___________________________________________________________________________________________________
     */
-
    private List<TripUser> listTripUser = null;
 
    private List<String> listTripUserName = new ArrayList<>();
@@ -197,6 +196,16 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
    {
       DBUtil.assertSetId(tripId);
       SQLiteDatabase db = DBUtil.getDB(context);
+      if (operationType == OperationType.Add)
+      {
+         itemId = DBUtil.UNSET_ID;
+         item = new Item();
+      }
+      else if (operationType == OperationType.Edit)
+      {
+         DBUtil.assertSetId(itemId);
+         item = Item.getInstance(db, itemId);
+      }
 
       // All trip users
       listTripUser = TripUser.getLiteTripUsers(db, tripId);
@@ -211,20 +220,13 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
       // ID of group 'All'
       idGroupOfAll = TripGroup.getIdOfGroupOfAll(db, tripId);
 
-      // Generate a map of GroupId to Users in the group.
+      // Generate a map of GroupId to Users in the group
       for (TripGroup group : listTripGroup)
          mapGroupIdToUsers.put(group.getId(), group.getLiteUsers(db));
 
-      if (operationType == OperationType.Add)
+      // Add trip users who share the item
+      if (operationType == OperationType.Edit)
       {
-         itemId = DBUtil.UNSET_ID;
-         item = new Item();
-      }
-      else if (operationType == OperationType.Edit)
-      {
-         DBUtil.assertSetId(itemId);
-         item = Item.getInstance(db, itemId);
-
          for (TripUser currSharedByUser : item.getSharedByUsers(db))
             setSharedByUserId.add(currSharedByUser.getId());
       }
@@ -428,7 +430,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
    private void doAddAllSharedBySegments ()
    {
       doAddAllSharedByUserSegments();
-      doAddAllSharedByGroupSegments ();
+      doAddAllSharedByGroupSegments();
    }
 
    private void doAddAllSharedByGroupSegments ()
@@ -486,13 +488,11 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
                {
                   setSharedByUserId.add(user.getId());
                   segmentViewRoot.setBackgroundColor(colorCheck);
-                  Log.d(TAG, "Setting to color=" + colorCheck);
                }
                else
                {
                   setSharedByUserId.remove(Integer.valueOf(user.getId()));
                   segmentViewRoot.setBackgroundColor(bgColorUnCheck);
-                  Log.d(TAG, "Setting to bg background color=" + bgColorUnCheck);
                }
             }
          });

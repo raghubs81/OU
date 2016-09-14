@@ -150,7 +150,6 @@
             style="@style/OU.Heading"
             android:text="@string/item_shared_by_users"/>
 
-
          <GridLayout
             android:id="@+id/item_payment_add_edit__users_container"
             android:layout_width="match_parent"

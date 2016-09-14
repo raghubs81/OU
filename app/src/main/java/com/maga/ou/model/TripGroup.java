@@ -87,7 +87,7 @@ public class TripGroup
       return this.id;
    }
 
-   public void addUsers (SQLiteDatabase db, List<Integer> listUserId)
+   public void addUsers (SQLiteDatabase db, Collection<Integer> listUserId)
    {
       DBUtil.assertSetId(id);
       DBUtil.assertSetId(tripId);
