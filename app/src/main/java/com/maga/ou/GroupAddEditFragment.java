@@ -196,9 +196,9 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
    private void inflateUIComponents()
    {
       if (operationType == OperationType.Add)
-         UIUtil.setAppBarTitle(activity, "Add Group");
+         UIUtil.setAppBarTitle(activity, R.string.group_title_add);
       else
-         UIUtil.setAppBarTitle(activity, "Edit Group");
+         UIUtil.setAppBarTitle(activity, R.string.group_title_edit);
 
       // Add user segments
       addAllUserSegments ();
@@ -288,7 +288,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
 
       if (name.equals(""))
       {
-         textName.setError("Please name the group.");
+         textName.setError(UIUtil.getResourceString(context, R.string.group_validation_name));
          valid = false;
       }
 
@@ -322,11 +322,11 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
          group.addUsers(db, setChosenUserId);
 
          db.setTransactionSuccessful();
-         Toast.makeText(context, "Saved successfully", Toast.LENGTH_SHORT).show();
+         UIUtil.doToastSaveSuccess(context);
       }
       catch (Throwable e)
       {
-         Toast.makeText(context, "Error occurred during save", Toast.LENGTH_SHORT).show();
+         UIUtil.doToastSaveFailure(context);
          Log.e(TAG, "Exception saving payment details", e);
       }
       finally

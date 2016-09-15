@@ -144,7 +144,7 @@ public class TripExpensesFragment extends Fragment
 
    private void inflateUIComponents ()
    {
-      UIUtil.setAppBarTitle(activity, "Trip Expenses");
+      UIUtil.setAppBarTitle(activity, R.string.trip_expenses_title);
 
       accordianListView = (ExpandableListView) viewRoot.findViewById(R.id.trip_expenses__accordion);
       SQLiteDatabase db = DBUtil.getDB(context);

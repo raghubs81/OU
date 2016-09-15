@@ -160,7 +160,7 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
 
    private void inflateUIComponents ()
    {
-      UIUtil.setAppBarTitle(activity, "Trip Details");
+      UIUtil.setAppBarTitle(activity, R.string.trip_title_detail);
 
       SQLiteDatabase db = DBUtil.getDB(context);
       Trip trip = Trip.getInstance(db, tripId);

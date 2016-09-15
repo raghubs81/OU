@@ -175,7 +175,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
 
    private void inflateUIComponents ()
    {
-      UIUtil.setAppBarTitle(activity, "Group Details");
+      UIUtil.setAppBarTitle(activity, R.string.group_title_detail);
 
       TextView textName = (TextView) viewRoot.findViewById(R.id.group_detail__name);
       textName.setText(group.getName());

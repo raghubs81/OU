@@ -22,12 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.maga.ou.model.Trip;
-import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.OUMultiChoiceListener;
 import com.maga.ou.util.UIUtil;
-
-import java.util.List;
 
 
 /**
@@ -176,7 +173,7 @@ public class TripListFragment extends ListFragment
 
    private void inflateUIComponents ()
    {
-      UIUtil.setAppBarTitle(activity, "Trips");
+      UIUtil.setAppBarTitle(activity, R.string.trip_title_list);
 
       SQLiteDatabase db = DBUtil.getDB(context);
       Cursor cursor = Trip.getTrips(db);

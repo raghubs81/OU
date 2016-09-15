@@ -34,10 +34,6 @@ public class MainActivity extends AppCompatActivity
    {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
-      Toolbar toolbar = (Toolbar) findViewById(R.id.single_fragment_toolbar);
-      toolbar.setTitle("Owe yoU");
-      toolbar.setSubtitle("Track what you owe and who owes you");
-      setSupportActionBar(toolbar);
 
       findViewById(R.id.main_trip_add).setOnClickListener(new View.OnClickListener()
       {

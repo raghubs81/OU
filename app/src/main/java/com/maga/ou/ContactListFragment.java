@@ -157,7 +157,7 @@ public class ContactListFragment extends ListFragment
          contact.mobile    = Contact.getMobile(activity, String.valueOf(contactId));
          mapPositionToContact.put(objPosition, contact);
       }
-      UIUtil.setAppBarTitle(activity, "Add from contacts (" + mapPositionToContact.size() + ")");
+      UIUtil.setAppBarTitle(activity, R.string.contact_title_add, mapPositionToContact.size());
       Log.d(TAG, "Contact = " + contact);
       ((CursorAdapter)l.getAdapter()).notifyDataSetChanged();
    }
@@ -217,7 +217,7 @@ public class ContactListFragment extends ListFragment
 
    private void inflateUIComponents ()
    {
-      UIUtil.setAppBarTitle(activity, "Add from contacts");
+      UIUtil.setAppBarTitle(activity, R.string.contact_title_add, 0);
 
       Cursor cursor = getContactsCursor();
 

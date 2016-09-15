@@ -1,20 +1,20 @@
 ###################################################################################################
-Who Owes Whom 
+Who Owes Whom (Done)
    - Have borrower to lenders breakup as well.
 
 ###################################################################################################
-Who Owes Whom 
+Who Owes Whom (Done)
 
 Provide a menu to
-   - Add user from contacts
-   - Add user manually
-   - Add user from previous trip
+   - Add user from contacts        DONE 
+   - Add user manually             (Not providing)
+   - Add user from previous trip   (Not done)
 
 ###################################################################################################
-Who Owes Whom - Make it look better
+Who Owes Whom - Make it look better (Done)
 
 ###################################################################################################
-Trip Details
+Trip Details (Done)
 
 Add a button with Trip Expenses
 -------------------------------------------
@@ -35,7 +35,7 @@ Raghu                        8000.00
 
 
 ###################################################################################################
-Members List
+Members List (Done)
 
 -------------------------------------------
 Raghu                                Call
@@ -43,30 +43,10 @@ Raghunandan Seshadri                Button
 -------------------------------------------
 
 ###################################################################################################
-Member Details
-
--------------------------------------------
-
-Raghu
--------------------------------------------
-
-
-
-Photo
-
-
-
-
--------------------------------------------
-Raghunandan Seshadri
-
--------------------------------------------
-         |
-  Call   |   WhatsApp   |  Message | Email
--------------------------------------------
+Member Details (Done)
 
 ###################################################################################################
-Add Trip
+Add Trip (Done)
    - Add a suitable background. Perhaps from Kashmir trip
 
 

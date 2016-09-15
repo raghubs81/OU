@@ -1,7 +1,5 @@
 package com.maga.ou;
 
-// TODO : Create a group 'All' with new Trip. Add member to 'All' when new member is added.
-
 import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,11 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.maga.ou.model.Trip;
 import com.maga.ou.model.TripGroup;
-import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.UIUtil;
 
@@ -151,9 +147,9 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
    private void inflateUIComponents()
    {
       if (operationType == OperationType.Add)
-         UIUtil.setAppBarTitle(activity, "Add Trip");
+         UIUtil.setAppBarTitle(activity, R.string.trip_title_add);
       else
-         UIUtil.setAppBarTitle(activity, "Edit Trip");
+         UIUtil.setAppBarTitle(activity, R.string.trip_title_edit);
 
       // Save
       Button buttonSave = (Button) viewRoot.findViewById(R.id.trip_add_edit__save);
@@ -193,7 +189,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
 
       if (name.equals(""))
       {
-         textName.setError("You got to say something");
+         textName.setError(UIUtil.getResourceString(context, R.string.trip_validation_name));
          valid = false;
       }
 
@@ -227,12 +223,12 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
             trip.update(db);
 
          db.setTransactionSuccessful();
-         Toast.makeText(context, "Saved successfully", Toast.LENGTH_SHORT).show();
+         UIUtil.doToastSaveSuccess(context);
       }
       catch (Throwable e)
       {
-         Toast.makeText(context, "Error occurred during save", Toast.LENGTH_SHORT).show();
          Log.e(TAG, "Exception saving payment details", e);
+         UIUtil.doToastSaveFailure(context);
       }
       finally
       {

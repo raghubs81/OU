@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
@@ -179,7 +178,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
 
    private void inflateUIComponents()
    {
-      UIUtil.setAppBarTitle(activity, "Edit User");
+      UIUtil.setAppBarTitle(activity, R.string.user_title_edit);
 
       // Relink contact
       Button buttonRelinkContact = (Button)viewRoot.findViewById(R.id.user_edit__relink_contact);
@@ -226,7 +225,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
 
       if (nickName.equals(""))
       {
-         textNickName.setError("Nick name is required.");
+         textNickName.setError(UIUtil.getResourceString(context, R.string.user_validation_name));
          valid = false;
       }
       // End processing if not valid
@@ -246,12 +245,12 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
          user.update(db);
 
          db.setTransactionSuccessful();
-         Toast.makeText(context, "Saved successfully", Toast.LENGTH_SHORT).show();
+         UIUtil.doToastSaveSuccess(context);
       }
       catch (Throwable e)
       {
-         Toast.makeText(context, "Error occurred during save", Toast.LENGTH_SHORT).show();
          Log.e(TAG, "Exception saving payment details", e);
+         UIUtil.doToastSaveFailure(context);
       }
       finally
       {

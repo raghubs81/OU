@@ -194,7 +194,7 @@ public class ItemPaymentListFragment extends ListFragment
 
    private void inflateUIComponents ()
    {
-      UIUtil.setAppBarTitle(activity, "Items");
+      UIUtil.setAppBarTitle(activity, R.string.item_title_list);
 
       SQLiteDatabase db = DBUtil.getDB(context);
       Cursor cursor = Item.getItemPaymentSummary(db, tripId);

@@ -22,7 +22,6 @@ import com.maga.ou.util.UIUtil;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.util.OUMultiChoiceListener;
-import java.util.List;
 
 /**
  * Created by rbseshad on 09-Aug-16.
@@ -190,7 +189,7 @@ public class UserListFragment extends ListFragment
 
    private void inflateUIComponents ()
    {
-      UIUtil.setAppBarTitle(activity, "Members List");
+      UIUtil.setAppBarTitle(activity, R.string.user_title_list);
 
       SQLiteDatabase db = DBUtil.getDB(context);
       Cursor cursor = TripUser.getTripUsers(db, tripId);

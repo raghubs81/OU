@@ -235,9 +235,9 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
    private void inflateUIComponents()
    {
       if (operationType == OperationType.Add)
-         UIUtil.setAppBarTitle(activity, "Add Item");
+         UIUtil.setAppBarTitle(activity, R.string.item_title_add);
       else
-         UIUtil.setAppBarTitle(activity, "Edit Item");
+         UIUtil.setAppBarTitle(activity, R.string.item_title_edit);
 
       // Summary Text
       textItemSummary   = (EditText)viewRoot.findViewById(R.id.item_payment_add_edit__summary);
@@ -283,7 +283,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
       String itemSummary = textItemSummary.getText().toString();
       if (itemSummary.equals(""))
       {
-         textItemSummary.setError("Please fill item summmary");
+         textItemSummary.setError(UIUtil.getResourceString(context, R.string.item_validation_summary));
          valid = false;
       }
 
@@ -315,14 +315,14 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
          if (userAmount == 0)
          {
-            txtAmount.setError("Please fill amount more than zero");
+            txtAmount.setError(UIUtil.getResourceString(context, R.string.item_validation_paid_by));
             valid = false;
          }
       }
 
       if (setSharedByUserId.isEmpty())
       {
-         Toast.makeText(context, "At least one user MUST share the item", Toast.LENGTH_SHORT).show();
+         UIUtil.doToastError(context, R.string.item_validation_shared_by);
          valid = false;
       }
 
@@ -366,12 +366,12 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
          item.setSharedBy(db, setSharedByUserId);
 
          db.setTransactionSuccessful();
-         Toast.makeText(context, "Saved successfully", Toast.LENGTH_SHORT).show();
+         UIUtil.doToastSaveSuccess(context);
       }
       catch (Throwable e)
       {
-         Toast.makeText(context, "Error occurred during save", Toast.LENGTH_SHORT).show();
          Log.e(TAG, "Exception saving payment details", e);
+         UIUtil.doToastSaveFailure(context);
       }
       finally
       {

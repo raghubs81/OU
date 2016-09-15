@@ -153,7 +153,7 @@ public class ItemPaymentDetailFragment extends Fragment
 
    private void inflateUIComponents()
    {
-      UIUtil.setAppBarTitle(activity, "Item Details");
+      UIUtil.setAppBarTitle(activity, R.string.item_title_detail);
 
       SQLiteDatabase db = DBUtil.getDB(context);
       Item item = Item.getInstance(db, itemId);

@@ -168,7 +168,7 @@ public class UserDetailFragment  extends Fragment implements View.OnClickListene
 
    private void inflateUIComponents ()
    {
-      UIUtil.setAppBarTitle(activity, "Member Details");
+      UIUtil.setAppBarTitle(activity, R.string.user_title_detail);
 
       TextView textNickName = (TextView)viewRoot.findViewById(R.id.user_detail__nick_name);
       textNickName.setText(user.getNickName());
