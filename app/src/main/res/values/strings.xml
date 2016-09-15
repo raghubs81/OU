@@ -19,6 +19,10 @@
    <string name="main_trip_list">My Trips</string>
    <string name="main_one_liner">Share trip expenses, track who owes whom.</string>
 
+   <!-- Deletion of list item -->
+   <string name="list_item_del">%1$d %1$s deleted</string>
+   <string name="list_item_del_none">No %1$s to delete</string>
+
    <!-- Trip -->
    <string name="trip_title_list">Trips</string>
    <string name="trip_title_detail">Trip Details</string>
@@ -46,6 +50,8 @@
    <string name="user_relink_contact">Relink contact</string>
    <string name="user_validation_name">Please fill user name</string>
 
+   <string name="user_del_constraint">Delete aborted! Please remove users from items they have paid for or share.</string>
+
    <!-- Group -->
    <string name="group_title_list">Groups</string>
    <string name="group_title_detail">Group Details</string>
@@ -53,11 +59,11 @@
    <string name="group_title_edit">Edit Group</string>
 
    <string name="group_validation_name">Please fill group name</string>
+   <string name="group_validation_group_of_all">Cannot remove default group 'All'</string>
 
    <string name="group_members">Members</string>
    <string name="group_name">Group Name</string>
    <string name="group_detail">Group Details</string>
-
 
    <!-- Item -->
    <string name="item_title_list">Items</string>
@@ -66,7 +72,8 @@
    <string name="item_title_edit">Edit Item</string>
 
    <string name="item_validation_summary">Please fill item summary</string>
-   <string name="item_validation_paid_by">Please fill amount more than zero</string>
+   <string name="item_validation_paid_by_amount">Please fill amount more than zero</string>
+   <string name="item_validation_paid_by_count">At least one entry is required</string>
    <string name="item_validation_shared_by">At least one user must share the item</string>
 
    <string name="item_summary">Item Summary</string>
@@ -87,7 +94,9 @@
    <string name="user_full_name">Full Name</string>
 
    <!-- Contacts -->
-   <string name="contact_title_add">Add from contacts (%1$s)</string>
+   <string name="contact_title_add">Add from contacts (%1$d)</string>
+   <string name="contact_validation_count">At least one contact is required</string>
+   <string name="contact_add">Added %1$d new contacts</string>
 
    <!-- Trip Expenses -->
    <string name="trip_expenses_title">Trip Expenses</string>

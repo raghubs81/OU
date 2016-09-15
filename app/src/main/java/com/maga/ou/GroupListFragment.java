@@ -251,7 +251,7 @@ public class GroupListFragment extends ListFragment
             if (getListView().isItemChecked(position))
             {
                getListView().setItemChecked(position, false);
-               Toast.makeText(context, "Group 'All' cannot be removed.", Toast.LENGTH_LONG).show();
+               UIUtil.doToastError(context, R.string.group_validation_group_of_all);
             }
             return;
          }
@@ -276,19 +276,10 @@ public class GroupListFragment extends ListFragment
       @Override
       protected void doAfterRestoration(Integer result)
       {
-         String mesg = null;
-
-         if (result == -1)
-            mesg = "No groups to delete";
-         else if (result  == 0)
-            mesg = "No groups deleted";
-         else
-            mesg = result + " groups deleted";
-
          if (result <= 0)
-            Toast.makeText(context, mesg, Toast.LENGTH_LONG).show();
+            UIUtil.doToastError(context, R.string.list_item_del_none, "groups");
          else
-            Toast.makeText(context, mesg, Toast.LENGTH_SHORT).show();
+            UIUtil.doToastSuccess(context, R.string.list_item_del, result, "groups");
       }
    }
 

@@ -64,9 +64,14 @@ public class UIUtil
       Toast.makeText(context, getResourceString(context, R.string.toast_save_failure), Toast.LENGTH_SHORT).show();
    }
 
-   public static void doToastError (Context context, int stringId)
+   public static void doToastSuccess (Context context, int stringId, Object... arg)
    {
-      Toast.makeText(context, getResourceString(context, stringId), Toast.LENGTH_SHORT).show();
+      Toast.makeText(context, getResourceString(context, stringId, arg), Toast.LENGTH_SHORT).show();
+   }
+
+   public static void doToastError (Context context, int stringId, Object... arg)
+   {
+      Toast.makeText(context, getResourceString(context, stringId, arg), Toast.LENGTH_SHORT).show();
    }
 
    public static String getResourceString (Context context, int id, Object... arg)

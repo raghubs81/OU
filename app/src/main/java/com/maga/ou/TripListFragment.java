@@ -245,8 +245,10 @@ public class TripListFragment extends ListFragment
       @Override
       protected void doAfterRestoration(Integer result)
       {
-         String mesg = ((result == 0) ? "No" : String.valueOf(result)) + " trips deleted";
-         Toast.makeText(context, mesg, Toast.LENGTH_SHORT).show();
+         if (result <= 0)
+            UIUtil.doToastError(context, R.string.list_item_del_none, "trips");
+         else
+            UIUtil.doToastSuccess(context, R.string.list_item_del, result, "trips");
       }
    }
 }

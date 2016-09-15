@@ -315,7 +315,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
          if (userAmount == 0)
          {
-            txtAmount.setError(UIUtil.getResourceString(context, R.string.item_validation_paid_by));
+            txtAmount.setError(UIUtil.getResourceString(context, R.string.item_validation_paid_by_amount));
             valid = false;
          }
       }
@@ -554,7 +554,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
       Log.d(TAG, "Segment container child count. Count=" + layoutPaidBySegmentContainer.getChildCount());
       if (layoutPaidBySegmentContainer.getChildCount() == 1)
       {
-         Toast.makeText(context, "Atleast one entry is required", Toast.LENGTH_SHORT).show();
+         UIUtil.doToastError(context, R.string.item_validation_paid_by_count);
          return;
       }
 

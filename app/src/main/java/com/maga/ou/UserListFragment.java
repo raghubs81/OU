@@ -238,16 +238,11 @@ public class UserListFragment extends ListFragment
       {
          String mesg = null;
          if (result == -1)
-            mesg = "No items to delete";
+            UIUtil.doToastError(context, R.string.list_item_del_none, "members");
          else if (result  == 0)
-            mesg = "Delete aborted! Please remove users from items they have paid for or share.";
+            UIUtil.doToastError(context, R.string.user_del_constraint);
          else
-            mesg = result + " user deleted";
-
-         if (result <= 0)
-            Toast.makeText(context, mesg, Toast.LENGTH_LONG).show();
-         else
-            Toast.makeText(context, mesg, Toast.LENGTH_SHORT).show();
+            UIUtil.doToastError(context, R.string.list_item_del, result, "members");
       }
    }
 

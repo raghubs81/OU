@@ -248,7 +248,7 @@ public class ContactListFragment extends ListFragment
    {
       if (mapPositionToContact.size() == 0)
       {
-         Toast.makeText(context, "No contact added", Toast.LENGTH_SHORT).show();
+         UIUtil.doToastError(context, R.string.contact_validation_count);
          return;
       }
 
@@ -279,11 +279,11 @@ public class ContactListFragment extends ListFragment
          }
 
          db.setTransactionSuccessful();
-         Toast.makeText(context, String.format("Added %d new contacts", contactCountToAdd), Toast.LENGTH_SHORT).show();
+         UIUtil.doToastSuccess(context, R.string.contact_add, contactCountToAdd);
       }
       catch (Throwable e)
       {
-         Toast.makeText(context, "Error occurred during save", Toast.LENGTH_SHORT).show();
+         UIUtil.doToastSaveFailure(context);
          Log.e(TAG, "Exception saving contact details", e);
       }
       finally
