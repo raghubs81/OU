@@ -20,7 +20,7 @@
    <string name="main_one_liner">Share trip expenses, track who owes whom.</string>
 
    <!-- Deletion of list item -->
-   <string name="list_item_del">%1$d %1$s deleted</string>
+   <string name="list_item_del">%1$d %2$s deleted</string>
    <string name="list_item_del_none">No %1$s to delete</string>
 
    <!-- Trip -->
@@ -59,7 +59,7 @@
    <string name="group_title_edit">Edit Group</string>
 
    <string name="group_validation_name">Please fill group name</string>
-   <string name="group_validation_group_of_all">Cannot remove default group 'All'</string>
+   <string name="group_validation_group_of_all">Cannot remove default group "All"</string>
 
    <string name="group_members">Members</string>
    <string name="group_name">Group Name</string>
