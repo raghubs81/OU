@@ -64,8 +64,6 @@
 
    </LinearLayout>
 
-
-
    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="0dp"
@@ -80,7 +78,7 @@
          android:id="@+id/main_trip_add"
          android:layout_width="match_parent"
          android:layout_height="match_parent"
-         android:textSize="24sp"
+         android:textSize="32sp"
          android:textColor="#800000"
          android:textStyle="bold"
          android:text="@string/main_trip_add"
@@ -106,12 +104,12 @@
          android:id="@+id/main_trip_list"
          android:layout_width="match_parent"
          android:layout_height="match_parent"
-         android:textSize="24sp"
+         android:textSize="32sp"
          android:textColor="#004000"
          android:textStyle="bold"
          android:text="@string/main_trip_list"
          android:gravity="top|center_horizontal"
-         android:paddingTop="25dp"
+         android:paddingTop="60dp"
          android:background="@drawable/bg_nature_mountain"
          android:textAllCaps="false"
          />
