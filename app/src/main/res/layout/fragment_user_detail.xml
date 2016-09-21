@@ -19,7 +19,7 @@
       style="@style/OU.Dark_Title1"
       android:text="Raghu"/>
 
-   <View style="@style/OU.Separator.H1"/>
+   <View style="@style/OU.Separator.Title"/>
 
    <TextView
       android:id="@+id/user_detail__full_name"

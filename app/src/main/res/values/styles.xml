@@ -69,6 +69,13 @@
      ___________________________________________________________________________________________________
     -->
 
+   <style name="OU.Separator.Title">
+      <item name="android:layout_width">match_parent</item>
+      <item name="android:layout_height">10dp</item>
+      <item name="android:background">@drawable/hr</item>
+      <item name="android:layout_marginBottom">3dp</item>
+   </style>
+
    <style name="OU.Separator.H1">
       <item name="android:layout_height">3dp</item>
       <item name="android:background">@color/colorPrimary</item>
@@ -186,10 +193,6 @@
    <style name="OU.Button.Op.Negative">
       <item name="android:background">@drawable/button_negative</item>
       <item name="android:textColor">@color/textNegativeDark</item>
-   </style>
-
-   <style name="OU.BorderBlue">
-      <item name="android:drawable">@drawable/border_blue</item>
    </style>
 
    <!--

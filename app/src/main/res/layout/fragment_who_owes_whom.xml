@@ -23,7 +23,7 @@
          android:text="@string/wow_lenders_title"
          />
 
-      <View style="@style/OU.Separator.H1"/>
+      <View style="@style/OU.Separator.Title"/>
 
       <TextView
          android:id="@+id/who_owes_whom__detail"

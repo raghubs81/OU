@@ -32,7 +32,8 @@
             style="@style/OU.Dark_Title1"
             android:text="Boys Group"/>
 
-         <View style="@style/OU.Separator.H1"/>
+         <View
+            style="@style/OU.Separator.Title" />
 
          <TextView
             android:id="@+id/group_detail__detail"

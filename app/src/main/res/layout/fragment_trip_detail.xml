@@ -31,7 +31,7 @@
             style="@style/OU.Dark_Title1"
             android:text="Coorg Trip"/>
 
-         <View style="@style/OU.Separator.H1"/>
+         <View style="@style/OU.Separator.Title"/>
 
          <TextView
             android:id="@+id/trip_detail__detail"
@@ -47,7 +47,7 @@
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:textSize="18sp"
-            style="@style/OU.Button.Blue"
+            style="@style/OU.Button.Green"
             android:text="@string/trip_users"
             android:drawableLeft="@drawable/thumb_users"
             android:paddingLeft="40dp"
@@ -61,9 +61,9 @@
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:textSize="18sp"
-            style="@style/OU.Button.Green"
+            style="@style/OU.Button.Blue"
             android:text="@string/trip_groups"
-            android:drawableLeft="@drawable/thumb_users"
+            android:drawableLeft="@drawable/thumb_group"
             android:paddingLeft="40dp"
             android:drawablePadding="-40dp"
             />
@@ -76,7 +76,7 @@
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:textSize="18sp"
-            style="@style/OU.Button.Purple"
+            style="@style/OU.Button.Green"
             android:text="@string/trip_items"
             android:drawableLeft="@drawable/thumb_items"
             android:paddingLeft="40dp"
@@ -104,7 +104,7 @@
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:textSize="18sp"
-            style="@style/OU.Button.Green"
+            style="@style/OU.Button.Purple"
             android:text="@string/trip_wow"
             android:drawableLeft="@drawable/thumb_balance"
             android:paddingLeft="40dp"

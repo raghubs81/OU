@@ -31,7 +31,7 @@
             style="@style/OU.Dark_Title1"
             android:text="Breakfast"/>
 
-         <View style="@style/OU.Separator.H1"/>
+         <View style="@style/OU.Separator.Title"/>
 
          <TextView
             android:id="@+id/item_payment_detail__detail"
