@@ -18,6 +18,8 @@
    <string name="main_trip_add">New Trip!</string>
    <string name="main_trip_list">My Trips</string>
    <string name="main_one_liner">Share trip expenses, track who owes whom.</string>
+   <string name="main_permissions_grant_success">Granted permissions</string>
+   <string name="main_permissions_grant_error">Sorry, the app cannot function without permissions</string>
 
    <!-- Deletion of list item -->
    <string name="list_item_del">%1$d %2$s deleted</string>
