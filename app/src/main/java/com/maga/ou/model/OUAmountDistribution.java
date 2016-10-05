@@ -1,15 +1,21 @@
 package com.maga.ou.model;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.maga.ou.R;
 import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.model.OUDatabaseHelper.Table;
 import com.maga.ou.util.OUCurrencyUtil;
 import com.maga.ou.util.UIUtil;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -54,11 +60,20 @@ public class OUAmountDistribution
     */
    private int tripId = DBUtil.UNSET_ID;
 
+   /**
+    * Reference to database
+    */
    private SQLiteDatabase db;
 
-   public OUAmountDistribution (SQLiteDatabase db, int tripId)
+   /**
+    * App context
+    */
+   private Context context;
+
+   public OUAmountDistribution (Context context, int tripId)
    {
-      this.db = db;
+      this.context = context;
+      this.db = DBUtil.getDB(context);
       this.tripId = tripId;
 
       Cursor cursorUser = TripUser.getTripUsers(db, tripId);
@@ -171,6 +186,25 @@ public class OUAmountDistribution
       }
    }
 
+   /**
+    * Create a Map of userIds to the amount each user owes.
+    *
+    * <pre>
+    * If the amount is
+    *    Positive number : The user has a +ve balance. He needs to get amount from others.
+    *    Negative number : The user has a -ve balance. He needs to pay amount to   others.
+    *
+    * Note:
+    * The sum of all positive and negative user balances must add up to zero!
+    *
+    * For each item that exists for the trip
+    *    - For each user who has paid for the item ==> Add the amount paid by the user to his balance.
+    *    - Find 'totalAmountPaid'      ==> Amount by all the users who paid for the item.
+    *    - Find 'amountSharePerUser'   ==> Amount that needs to be paid by users who share the item.
+    *    - Find 'remainderAfterShare'  ==> When 'x' amount is divided among 'n' users there can be a non-zero remainder 'r' (r < n).
+    *                                      This will be shared by a subset of n users.
+    * </pre>
+    */
    private void doMapUserIdToOweAmount()
    {
       // Map UserId to Amount (+ve is amount to get, -ve is amount to be paid)
@@ -182,11 +216,16 @@ public class OUAmountDistribution
       List<Item> listItem = Item.getItems (db, tripId);
       Log.d(TAG, "Items :" + listItem);
 
+      PrintWriter out = getReportWriter ();
       for (Item currItem : listItem)
       {
          Log.d(TAG, UIUtil.LOG_HR);
          Log.d(TAG, "Item=" + currItem);
+         out.println (UIUtil.LOG_HR);
+         out.println ("Item=" + currItem);
          int totalAmountPaid = 0;
+
+         // For each user who has paid for the item ==> Add the amount paid by the user to his balance.
          Map<TripUser,Integer> mapPaidByUserToAmount = currItem.getPaidByUsers(db);
          for (Map.Entry<TripUser,Integer> entry : mapPaidByUserToAmount.entrySet())
          {
@@ -194,7 +233,8 @@ public class OUAmountDistribution
             int  amountPaid = entry.getValue();
             totalAmountPaid += amountPaid;
 
-            Log.d(TAG, "User=" + userId + " Amount=" + OUCurrencyUtil.format(amountPaid) + " NickName=" + listAllUserName.get(listAllUserId.indexOf(userId)));
+            Log.d (TAG,  "User=" + userId + " Amount=" + OUCurrencyUtil.format(amountPaid) + " NickName=" + listAllUserName.get(listAllUserId.indexOf(userId)));
+            out.println ("User=" + userId + " Amount=" + OUCurrencyUtil.format(amountPaid) + " NickName=" + listAllUserName.get(listAllUserId.indexOf(userId)));
 
             int amountExisting = mapUserIdToOweAmount.get(userId);
             int amountResult   = amountExisting + amountPaid;
@@ -208,13 +248,15 @@ public class OUAmountDistribution
             mapLenderToItems.put(userId, list);
          }
 
-         Log.d(TAG, "After Credit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName) + " TotalAmountPaid=" + OUCurrencyUtil.format(totalAmountPaid));
+         Log.d (TAG, "After Credit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName) + " TotalAmountPaid=" + OUCurrencyUtil.format(totalAmountPaid));
+         out.println("After Credit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName) + " TotalAmountPaid=" + OUCurrencyUtil.format(totalAmountPaid));
 
          List<TripUser> listSharedByUser = currItem.getSharedByUsers(db);
          int sharedByUserCount =  listSharedByUser.size();
          int amountSharePerUser = totalAmountPaid / sharedByUserCount;
          int remainderAfterShare = totalAmountPaid % sharedByUserCount;
-         Log.d(TAG, "Shared By    :" + listSharedByUser + " AmountSharePerUser=" + OUCurrencyUtil.format(amountSharePerUser) + " remainderAfterShare=" + remainderAfterShare);
+         Log.d (TAG, "Shared By    :" + listSharedByUser + " AmountSharePerUser=" + OUCurrencyUtil.format(amountSharePerUser) + " remainderAfterShare=" + remainderAfterShare);
+         out.println("Shared By    :" + listSharedByUser + " AmountSharePerUser=" + OUCurrencyUtil.format(amountSharePerUser) + " remainderAfterShare=" + remainderAfterShare);
 
          for (TripUser currUser : listSharedByUser)
          {
@@ -228,8 +270,28 @@ public class OUAmountDistribution
             }
             mapUserIdToOweAmount.put(userId, amountResult);
          }
-         Log.d(TAG, "After Debit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName));
+         Log.d (TAG,  "After Debit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName));
+         out.println ("After Debit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName));
       }
+      out.close();
+   }
+
+   private PrintWriter getReportWriter ()
+   {
+      PrintWriter out = null;
+
+      try
+      {
+         String filename = "TripReport_" + Trip.getLiteInstance(db, tripId).getName().replaceAll(" ", "_") + ".txt";
+         out = new PrintWriter(new FileWriter(new File(context.getFilesDir(), filename)));
+      }
+      catch (IOException e)
+      {
+         UIUtil.doToastError(context, R.string.wow_error_report_gen);
+         Log.e(TAG, "Error generating report", e);
+      }
+
+      return out;
    }
 
    private String getOweMap (Map<Integer,Integer> mapUserAmount, List<Integer> listAllUserId, List<String>  listAllUserName)

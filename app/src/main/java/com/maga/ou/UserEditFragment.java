@@ -23,7 +23,7 @@ import com.maga.ou.util.UIUtil;
 
 public class UserEditFragment extends Fragment implements View.OnClickListener
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
@@ -32,7 +32,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
 
    private static final int PICK_CONTACT = 101;
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -43,14 +43,14 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
 
    private AppCompatActivity activity;
 
-   /**
+   /*
     * UI Components
     * ___________________________________________________________________________________________________
     */
 
    private TextView textContactHelp;
 
-   /**
+   /*
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
@@ -59,7 +59,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
@@ -79,7 +79,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
 
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -94,7 +94,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
       this.tripId = id;
    }
 
-   /**
+   /*
     * Lifecycle methods
     * ___________________________________________________________________________________________________
     */
@@ -134,7 +134,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
       }
    }
 
-   /**
+   /*
     * Event Handler
     * ___________________________________________________________________________________________________
     */
@@ -151,7 +151,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
          doRelinkContact ();
    }
 
-   /**
+   /*
     * Instance Methods
     * ___________________________________________________________________________________________________
     */

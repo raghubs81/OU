@@ -32,14 +32,14 @@ import com.maga.ou.util.UIUtil;
  */
 public class TripListFragment extends ListFragment
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
 
    private final String TAG = "ou." + getClass().getSimpleName();
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -50,14 +50,14 @@ public class TripListFragment extends ListFragment
 
    private View viewRoot;
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
 
    private TripListListener listener;
 
-   /**
+   /*
     * Constructor
     * ___________________________________________________________________________________________________
     */
@@ -70,7 +70,7 @@ public class TripListFragment extends ListFragment
    {
    }
 
-   /**
+   /*
     * Lifecycle methods
     * ___________________________________________________________________________________________________
     */
@@ -161,7 +161,7 @@ public class TripListFragment extends ListFragment
       }
    }
 
-   /**
+   /*
     * Member functions
     * ___________________________________________________________________________________________________
     */

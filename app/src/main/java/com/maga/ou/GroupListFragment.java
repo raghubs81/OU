@@ -27,14 +27,14 @@ import com.maga.ou.util.UIUtil;
 
 public class GroupListFragment extends ListFragment
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
 
    private final String TAG = "ou." + getClass().getSimpleName();
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -45,13 +45,13 @@ public class GroupListFragment extends ListFragment
 
    private View viewRoot;
 
-   /**
+   /*
     * Fragment parameters
     * ___________________________________________________________________________________________________
     */
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
@@ -60,7 +60,7 @@ public class GroupListFragment extends ListFragment
 
    private int idOfGroupOfAll = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Constructor
     * ___________________________________________________________________________________________________
     */
@@ -73,7 +73,7 @@ public class GroupListFragment extends ListFragment
    {
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -170,7 +170,7 @@ public class GroupListFragment extends ListFragment
       }
    }
 
-   /**
+   /*
     * Member functions
     * ___________________________________________________________________________________________________
     */

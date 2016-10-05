@@ -24,14 +24,14 @@ import com.maga.ou.util.UIUtil;
  */
 public class TripAddEditFragment extends Fragment implements View.OnClickListener
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
 
    private final String TAG = "ou." + getClass().getSimpleName();
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -42,7 +42,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
 
    private AppCompatActivity activity;
 
-   /**
+   /*
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
@@ -56,7 +56,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Constructor
     * ___________________________________________________________________________________________________
     */
@@ -74,7 +74,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
 
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -89,7 +89,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
       this.tripId = id;
    }
 
-   /**
+   /*
     * Lifecycle methods
     * ___________________________________________________________________________________________________
     */
@@ -111,7 +111,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
       initMembers();
    }
 
-   /**
+   /*
     * Event Handler
     * ___________________________________________________________________________________________________
     */
@@ -126,7 +126,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
          doCancel();
    }
 
-   /**
+   /*
     * Members methods
     * ___________________________________________________________________________________________________
     */

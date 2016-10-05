@@ -31,14 +31,14 @@ import java.util.TreeMap;
  */
 public class TripExpensesFragment extends Fragment
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
 
    private final String TAG = "ou." + getClass ().getSimpleName();
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -49,21 +49,21 @@ public class TripExpensesFragment extends Fragment
 
    private View viewRoot;
 
-   /**
+   /*
     * UI Components
     * ___________________________________________________________________________________________________
     */
 
    ExpandableListView accordianListView;
 
-   /**
+   /*
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Constructor
     * ___________________________________________________________________________________________________
     */
@@ -79,7 +79,7 @@ public class TripExpensesFragment extends Fragment
       // Required empty public constructor
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -89,7 +89,7 @@ public class TripExpensesFragment extends Fragment
       this.tripId = id;
    }
 
-   /**
+   /*
     * Lifecycle methods
     * ___________________________________________________________________________________________________
     */
@@ -126,7 +126,7 @@ public class TripExpensesFragment extends Fragment
       initMembers();
    }
 
-   /**
+   /*
     * Member functions
     * ___________________________________________________________________________________________________
     */
@@ -147,8 +147,7 @@ public class TripExpensesFragment extends Fragment
       UIUtil.setAppBarTitle(activity, R.string.trip_expenses_title);
 
       accordianListView = (ExpandableListView) viewRoot.findViewById(R.id.trip_expenses__accordion);
-      SQLiteDatabase db = DBUtil.getDB(context);
-      OUAmountDistribution amountDistribution = new OUAmountDistribution(db, tripId);
+      OUAmountDistribution amountDistribution = new OUAmountDistribution(context, tripId);
       amountDistribution.doFindWhoOwesWhom();
 
       accordianListView.setAdapter(new TripExpensesAdapter(amountDistribution));

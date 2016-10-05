@@ -27,14 +27,14 @@ import java.util.Set;
 
 public class ItemPaymentAddEditFragment extends Fragment implements View.OnClickListener
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
 
    private final String TAG = "ou." + getClass ().getSimpleName();
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -45,7 +45,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
    private AppCompatActivity activity;
 
-   /**
+   /*
     * UI Components
     * ___________________________________________________________________________________________________
     */
@@ -66,7 +66,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
     */
    private Map<Integer,CheckBox> mapUserIdToCheckBox = new HashMap<>();
 
-   /**
+   /*
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
@@ -82,7 +82,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
@@ -100,7 +100,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
    private int idGroupOfAll = 0;
 
-   /**
+   /*
     * Constructor
     * ___________________________________________________________________________________________________
     */
@@ -118,7 +118,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -138,7 +138,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
       this.tripId = id ;
    }
 
-   /**
+   /*
     * Life cycle methods
     * ___________________________________________________________________________________________________
     */
@@ -160,7 +160,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
       initMembers();
    }
 
-   /**
+   /*
     * Event handlers
     * ___________________________________________________________________________________________________
     */
@@ -180,7 +180,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
          doCancel ();
    }
 
-   /**
+   /*
     * Member functions
     * ___________________________________________________________________________________________________
     */

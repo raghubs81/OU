@@ -29,7 +29,7 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
 {
    private final String TAG = "ou." + getClass ().getSimpleName();
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -40,14 +40,14 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
 
    private View viewRoot;
 
-   /**
+   /*
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * UI Components
     * ___________________________________________________________________________________________________
     */
@@ -67,7 +67,7 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
       // Required empty public constructor
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -77,7 +77,7 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
       this.tripId = id;
    }
 
-   /**
+   /*
     * Lifecycle methods
     * ___________________________________________________________________________________________________
     */
@@ -114,7 +114,7 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
       initMembers();
    }
 
-   /**
+   /*
     * Instance Methods
     * ___________________________________________________________________________________________________
     */
@@ -139,15 +139,14 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
       ToggleButton toggleButton = (ToggleButton)viewRoot.findViewById(R.id.who_owes_whom__toggle);
       toggleButton.setOnClickListener(this);
 
-      SQLiteDatabase db = DBUtil.getDB(context);
-      OUAmountDistribution amountDistribution = new OUAmountDistribution(db, tripId);
+      OUAmountDistribution amountDistribution = new OUAmountDistribution(context, tripId);
       amountDistribution.doFindWhoOwesWhom();
       adapterLenderToBorrowers = new WhoOwesWhomListAdapter(amountDistribution.getMapLenderToBorrowers(), amountDistribution.getListAllUserId(), amountDistribution.getListAllUserName());
       adapterBorrowerToLenders = new WhoOwesWhomListAdapter(amountDistribution.getMapBorrowerToLenders(), amountDistribution.getListAllUserId(), amountDistribution.getListAllUserName());
       accordianListView.setAdapter(adapterLenderToBorrowers);
    }
 
-   /**
+   /*
     * Event Handler
     * ___________________________________________________________________________________________________
     */
@@ -160,7 +159,7 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
          doToggleLenderBorrower(((ToggleButton)view).isChecked());
    }
 
-   /**
+   /*
     * Instance Methods
     * ___________________________________________________________________________________________________
     */

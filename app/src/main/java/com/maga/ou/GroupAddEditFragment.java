@@ -29,14 +29,14 @@ import java.util.Set;
 
 public class GroupAddEditFragment extends Fragment implements View.OnClickListener
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
 
    private final String TAG = "ou." + getClass().getSimpleName();
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -47,7 +47,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
 
    private AppCompatActivity activity;
 
-   /**
+   /*
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
@@ -63,7 +63,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
@@ -77,7 +77,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
     */
    private Set<Integer> setChosenUserId = new HashSet<>();
 
-   /**
+   /*
     * Constructor
     * ___________________________________________________________________________________________________
     */
@@ -95,7 +95,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
 
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -115,7 +115,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
       this.groupId = id;
    }
 
-   /**
+   /*
     * Lifecycle methods
     * ___________________________________________________________________________________________________
     */
@@ -137,7 +137,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
       initMembers();
    }
 
-   /**
+   /*
     * Event Handler
     * ___________________________________________________________________________________________________
     */
@@ -154,7 +154,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
    }
 
 
-   /**
+   /*
     * Members methods
     * ___________________________________________________________________________________________________
     */

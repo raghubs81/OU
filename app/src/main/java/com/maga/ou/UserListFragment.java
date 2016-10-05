@@ -28,14 +28,14 @@ import com.maga.ou.util.OUMultiChoiceListener;
  */
 public class UserListFragment extends ListFragment
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
 
    private final String TAG = "ou." + getClass().getSimpleName();
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -46,7 +46,7 @@ public class UserListFragment extends ListFragment
 
    private View viewRoot;
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
@@ -55,7 +55,7 @@ public class UserListFragment extends ListFragment
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Constructor
     * ___________________________________________________________________________________________________
     */
@@ -68,7 +68,7 @@ public class UserListFragment extends ListFragment
    {
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -79,7 +79,7 @@ public class UserListFragment extends ListFragment
    }
 
 
-   /**
+   /*
     * Lifecycle methods
     * ___________________________________________________________________________________________________
     */
@@ -171,7 +171,7 @@ public class UserListFragment extends ListFragment
       }
    }
 
-   /**
+   /*
     * Member functions
     * ___________________________________________________________________________________________________
     */

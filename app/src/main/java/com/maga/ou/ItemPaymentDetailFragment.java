@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class ItemPaymentDetailFragment extends Fragment
 {
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -38,7 +38,7 @@ public class ItemPaymentDetailFragment extends Fragment
 
    private View viewRoot;
 
-   /**
+   /*
     * Fragment Parameters
     * ___________________________________________________________________________________________________
     */
@@ -47,7 +47,7 @@ public class ItemPaymentDetailFragment extends Fragment
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
@@ -55,7 +55,7 @@ public class ItemPaymentDetailFragment extends Fragment
    private ItemPaymentDetailListener listener = null;
 
 
-   /**
+   /*
     * Constructor
     * ___________________________________________________________________________________________________
     */
@@ -72,7 +72,7 @@ public class ItemPaymentDetailFragment extends Fragment
 
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -87,7 +87,7 @@ public class ItemPaymentDetailFragment extends Fragment
       this.tripId = id;
    }
 
-   /**
+   /*
     * Life cycle methods
     * ___________________________________________________________________________________________________
     */
@@ -134,7 +134,7 @@ public class ItemPaymentDetailFragment extends Fragment
       }
    }
 
-   /**
+   /*
     * Member functions
     * ___________________________________________________________________________________________________
     */

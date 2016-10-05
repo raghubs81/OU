@@ -28,14 +28,14 @@ import java.util.List;
  */
 public class GroupDetailFragment  extends Fragment implements View.OnClickListener
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
 
    private static final String TAG = "ou." + TripGroup.class.getSimpleName();
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -46,7 +46,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
 
    private View viewRoot;
 
-   /**
+   /*
     * Fragment parameters
     * ___________________________________________________________________________________________________
     */
@@ -55,7 +55,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
@@ -66,7 +66,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
 
    private GroupDetailListener listener = null;
 
-   /**
+   /*
     * Constructor
     * ___________________________________________________________________________________________________
     */
@@ -76,7 +76,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
       // Required empty public constructor
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -91,7 +91,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
       this.groupId = id;
    }
 
-   /**
+   /*
     * Life cycle methods
     * ___________________________________________________________________________________________________
     */
@@ -140,7 +140,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
       }
    }
 
-   /**
+   /*
     * Event handlers
     * ___________________________________________________________________________________________________
     */
@@ -152,7 +152,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
 
    }
 
-   /**
+   /*
     * Instance methods
     * ___________________________________________________________________________________________________
     */

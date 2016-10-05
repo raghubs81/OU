@@ -22,7 +22,7 @@ import com.maga.ou.util.UIUtil;
 
 public class TripDetailFragment extends Fragment implements View.OnClickListener
 {
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -33,21 +33,21 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
 
    private View viewRoot;
 
-   /**
+   /*
     * Fragment parameters
     * ___________________________________________________________________________________________________
     */
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
 
    private TripDetailListener listener;
 
-   /**
+   /*
     * Constructor
     * ___________________________________________________________________________________________________
     */
@@ -63,7 +63,7 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
 
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -73,7 +73,7 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
       this.tripId = id;
    }
 
-   /**
+   /*
     * Life cycle methods
     * ___________________________________________________________________________________________________
     */
@@ -120,7 +120,7 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
       }
    }
 
-   /**
+   /*
     * Event handlers
     * ___________________________________________________________________________________________________
     */
@@ -142,7 +142,7 @@ public class TripDetailFragment extends Fragment implements View.OnClickListener
          onClickTripExpenses();
    }
 
-   /**
+   /*
     * Member functions
     * ___________________________________________________________________________________________________
     */

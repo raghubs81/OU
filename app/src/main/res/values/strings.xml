@@ -114,6 +114,8 @@
    <string name="wow_switch_to_lenders_list">Switch to lenders list</string>
    <string name="wow_switch_to_borrowers_list">Switch to borrowers list</string>
 
+   <string name="wow_error_report_gen">Error saving report file</string>
+
    <!-- Help -->
    <string name="help_shared_by">All members of the trip group share the item\'s cost, by default.</string>
    <string name="help_contact_with_id">Contact Id = %s</string>

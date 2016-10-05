@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
    private static final int REQUEST_CODE_TRIP_ADD  = 202;
 
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
    private GrantType grantStatus = GrantType.UNSET;
 
-   /**
+   /*
     * Lifecycle methods
     * ___________________________________________________________________________________________________
     */
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
    }
 
 
-   /**
+   /*
     * Event handlers
     * ___________________________________________________________________________________________________
     */
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       // startActivity(new Intent(v.getContext(), AndroidDatabaseManager.class));
    }
 
-   /**
+   /*
     * Member functions
     * ___________________________________________________________________________________________________
     */

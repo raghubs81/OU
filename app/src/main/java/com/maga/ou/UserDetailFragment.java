@@ -22,14 +22,14 @@ import com.maga.ou.util.UIUtil;
 
 public class UserDetailFragment  extends Fragment implements View.OnClickListener
 {
-   /**
+   /*
     * Constants
     * ___________________________________________________________________________________________________
     */
 
    private final String TAG = "ou." + getClass ().getSimpleName();
 
-   /**
+   /*
     * UI Base Objects
     * ___________________________________________________________________________________________________
     */
@@ -40,7 +40,7 @@ public class UserDetailFragment  extends Fragment implements View.OnClickListene
 
    private View viewRoot;
 
-   /**
+   /*
     * Fragment parameters
     * ___________________________________________________________________________________________________
     */
@@ -49,7 +49,7 @@ public class UserDetailFragment  extends Fragment implements View.OnClickListene
 
    private int tripId = DBUtil.UNSET_ID;
 
-   /**
+   /*
     * Member variables
     * ___________________________________________________________________________________________________
     */
@@ -69,7 +69,7 @@ public class UserDetailFragment  extends Fragment implements View.OnClickListene
 
    }
 
-   /**
+   /*
     * Setters
     * ___________________________________________________________________________________________________
     */
@@ -84,7 +84,7 @@ public class UserDetailFragment  extends Fragment implements View.OnClickListene
       this.userId = id;
    }
 
-   /**
+   /*
     * Life cycle methods
     * ___________________________________________________________________________________________________
     */
@@ -131,7 +131,7 @@ public class UserDetailFragment  extends Fragment implements View.OnClickListene
       }
    }
 
-   /**
+   /*
     * Event handlers
     * ___________________________________________________________________________________________________
     */
@@ -146,7 +146,7 @@ public class UserDetailFragment  extends Fragment implements View.OnClickListene
 
    }
 
-   /**
+   /*
     * Member functions
     * ___________________________________________________________________________________________________
     */
