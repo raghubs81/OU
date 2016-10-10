@@ -195,7 +195,7 @@ public class TripAddEditFragment extends Fragment implements View.OnClickListene
 
       if (!valid)
       {
-         Log.d(TAG, "Validation failed");
+         Log.i(TAG, "Validation failed");
          return;
       }
 

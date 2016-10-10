@@ -33,7 +33,7 @@ public class OUDatabaseHelper extends SQLiteOpenHelper
    {
       super(context, DB_NAME, null, DB_VERSION);
       this.context = context;
-      Log.d(TAG, "OUDatabaseHelper constuctor");
+      Log.i(TAG, "OUDatabaseHelper constuctor");
    }
 
    @Override
@@ -57,7 +57,7 @@ public class OUDatabaseHelper extends SQLiteOpenHelper
 
    private void updateMyDatabase (SQLiteDatabase db, int oldVersion, int newVersion)
    {
-      Log.d(TAG, "DB upgrade. oldVersion=" + oldVersion + " newVersion=" + newVersion);
+      Log.i(TAG, "DB upgrade. oldVersion=" + oldVersion + " newVersion=" + newVersion);
 
       // Only fresh installs will have oldVersion < 1
       if (oldVersion < 1)
@@ -68,9 +68,9 @@ public class OUDatabaseHelper extends SQLiteOpenHelper
 
    private void performDB1Changes (SQLiteDatabase db)
    {
-      Log.d(TAG, "Started creating tables");
+      Log.i(TAG, "Started creating tables");
       createTables(db);
-      Log.d(TAG, "Finished creating tables");
+      Log.i(TAG, "Finished creating tables");
    }
 
    /**
@@ -80,10 +80,10 @@ public class OUDatabaseHelper extends SQLiteOpenHelper
     */
    private void createTables (SQLiteDatabase db)
    {
-      String fileTableCreation = "/oudb.sql";
+      final String fileTableCreation = "oudb.sql";
       try
       {
-         BufferedReader in = new BufferedReader(new InputStreamReader(context.getAssets().open("oudb.sql")));
+         BufferedReader in = new BufferedReader(new InputStreamReader(context.getAssets().open(fileTableCreation)));
          StringBuilder builder = new StringBuilder();
          String line = null;
          while ((line = in.readLine()) != null)
@@ -99,7 +99,7 @@ public class OUDatabaseHelper extends SQLiteOpenHelper
          for (String currSql : sql)
          {
             currSql = currSql + ";";
-            Log.d(TAG, "Executing SQL=" + currSql);
+            Log.i(TAG, "Executing SQL=" + currSql);
             db.execSQL(currSql);
          }
       }
@@ -142,14 +142,14 @@ public class OUDatabaseHelper extends SQLiteOpenHelper
          }
          return alc;
       } catch(SQLException sqlEx){
-         Log.d("printing exception", sqlEx.getMessage());
+         Log.i("printing exception", sqlEx.getMessage());
          //if any exceptions are triggered save the error message to cursor an return the arraylist
          Cursor2.addRow(new Object[] { ""+sqlEx.getMessage() });
          alc.set(1,Cursor2);
          return alc;
       } catch(Exception ex){
 
-         Log.d("printing exception", ex.getMessage());
+         Log.i("printing exception", ex.getMessage());
 
          //if any exceptions are triggered save the error message to cursor an return the arraylist
          Cursor2.addRow(new Object[] { ""+ex.getMessage() });

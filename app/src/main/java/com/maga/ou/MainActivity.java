@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
    {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
-      Log.d(TAG, "Init members");
+      Log.i(TAG, "Init members");
       initMembers();
    }
 
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
       {
-         Log.d(TAG, "Invoke request permission");
+         Log.i(TAG, "Invoke request permission");
          requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
          //After this point we wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
       }

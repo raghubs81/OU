@@ -230,8 +230,8 @@ public class TripExpensesFragment extends Fragment
             mapUserIdToGroupMeta.put(userId, new Integer[]{beforeSettlement, afterSettlement});
          }
 
-         Log.d(TAG, "MapUserIdToGroupMeta=" + mapUserIdToGroupMeta);
-         Log.d(TAG, "MapLenderToItems=" + mapLenderToItems);
+         Log.i(TAG, "MapUserIdToGroupMeta=" + mapUserIdToGroupMeta);
+         Log.i(TAG, "MapLenderToItems=" + mapLenderToItems);
       }
 
       @Override

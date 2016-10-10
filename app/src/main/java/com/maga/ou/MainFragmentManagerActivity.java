@@ -30,7 +30,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    protected void onCreate(Bundle savedInstanceState)
    {
       String fragmentName = getIntent().getStringExtra(Arg.ON_START_FRAGMENT.name());
-      Log.d(TAG, "OnStartFragment=" + fragmentName);
+      Log.i(TAG, "OnStartFragment=" + fragmentName);
 
       if (fragmentName == null || fragmentName.equals(TripListFragment.class.getSimpleName()))
          onStartFragment = new TripListFragment();
@@ -54,7 +54,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void itemPaymentClicked (int tripId, int itemId)
    {
-      Log.d(TAG, "ItemPaymentList - ItemClicked. Activity to invoke next fragment. Received TripId=" + tripId + "ItemId=" + itemId);
+      Log.i(TAG, "ItemPaymentList - ItemClicked. Activity to invoke next fragment. Received TripId=" + tripId + "ItemId=" + itemId);
       ItemPaymentDetailFragment fragment = new ItemPaymentDetailFragment();
       fragment.setTripId(tripId);
       fragment.setItemId(itemId);
@@ -64,7 +64,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void itemPaymentAddClicked(int tripId)
    {
-      Log.d(TAG, "ItemPaymentList - AppBarIcon - AddClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      Log.i(TAG, "ItemPaymentList - AppBarIcon - AddClicked. Activity to invoke next fragment. Received TripId=" + tripId);
       ItemPaymentAddEditFragment fragment = new ItemPaymentAddEditFragment();
       fragment.setTripId(tripId);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
@@ -75,7 +75,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void itemPaymentEditClicked(int tripId, int itemId)
    {
-      Log.d(TAG, "ItemPaymentDetail - AppBarIcon - EditClicked. Activity to invoke next fragment. Received TripId=" + tripId + "ItemId=" + itemId);
+      Log.i(TAG, "ItemPaymentDetail - AppBarIcon - EditClicked. Activity to invoke next fragment. Received TripId=" + tripId + "ItemId=" + itemId);
       ItemPaymentAddEditFragment fragment = new ItemPaymentAddEditFragment();
       fragment.setTripId(tripId);
       fragment.setItemId(itemId);
@@ -86,7 +86,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void goToUserDetailClicked(int tripId, int userId)
    {
-      Log.d(TAG, "ItemPaymentDetail - TextView - SharedByUserClicked. Activity to invoke next fragment. Received TripId=" + tripId + " UserId=" + userId);
+      Log.i(TAG, "ItemPaymentDetail - TextView - SharedByUserClicked. Activity to invoke next fragment. Received TripId=" + tripId + " UserId=" + userId);
       userClicked(tripId, userId);
    }
 
@@ -95,7 +95,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void tripClicked(int tripId)
    {
-      Log.d(TAG, "TripList - ItemClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      Log.i(TAG, "TripList - ItemClicked. Activity to invoke next fragment. Received TripId=" + tripId);
       TripDetailFragment fragment = new TripDetailFragment();
       fragment.setTripId(tripId);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
@@ -104,7 +104,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void tripAddClicked()
    {
-      Log.d(TAG, "TripList - AppBarIcon - AddClicked. Activity to invoke next fragment");
+      Log.i(TAG, "TripList - AppBarIcon - AddClicked. Activity to invoke next fragment");
       TripAddEditFragment fragment = new TripAddEditFragment();
       fragment.setOperationType(TripAddEditFragment.OperationType.Add);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
@@ -115,7 +115,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void goToTripUsersClicked(int tripId)
    {
-      Log.d(TAG, "TripDetails - Button - TripUsersClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      Log.i(TAG, "TripDetails - Button - TripUsersClicked. Activity to invoke next fragment. Received TripId=" + tripId);
       UserListFragment fragment = new UserListFragment();
       fragment.setTripId(tripId);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
@@ -124,7 +124,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void goToTripGroupsClicked(int tripId)
    {
-      Log.d(TAG, "TripDetails - Button - TripGroupsClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      Log.i(TAG, "TripDetails - Button - TripGroupsClicked. Activity to invoke next fragment. Received TripId=" + tripId);
       GroupListFragment fragment = new GroupListFragment();
       fragment.setTripId(tripId);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
@@ -133,7 +133,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void goToTripItemsClicked(int tripId)
    {
-      Log.d(TAG, "TripDetails - Button - TripItemsClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      Log.i(TAG, "TripDetails - Button - TripItemsClicked. Activity to invoke next fragment. Received TripId=" + tripId);
       ItemPaymentListFragment fragment = new ItemPaymentListFragment();
       fragment.setTripId(tripId);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
@@ -142,7 +142,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void gotoTripExpenses(int tripId)
    {
-      Log.d(TAG, "TripDetails - Button - TripWOWClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      Log.i(TAG, "TripDetails - Button - TripWOWClicked. Activity to invoke next fragment. Received TripId=" + tripId);
       TripExpensesFragment fragment = new TripExpensesFragment();
       fragment.setTripId(tripId);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
@@ -151,7 +151,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void goToTripWOWClicked(int tripId)
    {
-      Log.d(TAG, "TripDetails - Button - TripWOWClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      Log.i(TAG, "TripDetails - Button - TripWOWClicked. Activity to invoke next fragment. Received TripId=" + tripId);
       WhoOwesWhomFragment fragment = new WhoOwesWhomFragment();
       fragment.setTripId(tripId);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
@@ -160,7 +160,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void tripEditClicked(int tripId)
    {
-      Log.d(TAG, "TripDetails - AppBarIcon - EditClicked. Activity to invoke next fragment Received TripId=" + tripId);
+      Log.i(TAG, "TripDetails - AppBarIcon - EditClicked. Activity to invoke next fragment Received TripId=" + tripId);
       TripAddEditFragment fragment = new TripAddEditFragment();
       fragment.setOperationType(TripAddEditFragment.OperationType.Edit);
       fragment.setTripId(tripId);
@@ -172,7 +172,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void userClicked(int tripId, int userId)
    {
-      Log.d(TAG, "UserList - ItemClicked. Activity to invoke next fragment. Received TripId=" + tripId + " UserId=" + userId);
+      Log.i(TAG, "UserList - ItemClicked. Activity to invoke next fragment. Received TripId=" + tripId + " UserId=" + userId);
       UserDetailFragment fragment = new UserDetailFragment();
       fragment.setTripId(tripId);
       fragment.setUserId(userId);
@@ -182,7 +182,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void userAddClicked(int tripId)
    {
-      Log.d(TAG, "UserList - AppBarIcon - AddClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      Log.i(TAG, "UserList - AppBarIcon - AddClicked. Activity to invoke next fragment. Received TripId=" + tripId);
       ContactListFragment fragment = new ContactListFragment();
       fragment.setTripId(tripId);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
@@ -193,7 +193,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void userEditClicked(int tripId, int userId)
    {
-      Log.d(TAG, "UserDetails - AppBarIcon - EditClicked. Activity to invoke next fragment. Received TripId=" + tripId + " UserId=" + userId);
+      Log.i(TAG, "UserDetails - AppBarIcon - EditClicked. Activity to invoke next fragment. Received TripId=" + tripId + " UserId=" + userId);
       UserEditFragment fragment = new UserEditFragment();
       fragment.setTripId(tripId);
       fragment.setUserId(userId);
@@ -205,7 +205,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void groupClicked(int tripId, int groupId)
    {
-      Log.d(TAG, "GroupList - ItemClicked. Activity to invoke next fragment. Received TripId=" + tripId + " GroupId=" + groupId);
+      Log.i(TAG, "GroupList - ItemClicked. Activity to invoke next fragment. Received TripId=" + tripId + " GroupId=" + groupId);
       GroupDetailFragment fragment = new GroupDetailFragment();
       fragment.setTripId(tripId);
       fragment.setGroupId(groupId);
@@ -215,7 +215,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void groupAddClicked(int tripId)
    {
-      Log.d(TAG, "GroupList - AppBarIcon - AddClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      Log.i(TAG, "GroupList - AppBarIcon - AddClicked. Activity to invoke next fragment. Received TripId=" + tripId);
       GroupAddEditFragment fragment = new GroupAddEditFragment();
       fragment.setOperationType(GroupAddEditFragment.OperationType.Add);
       fragment.setTripId(tripId);
@@ -227,7 +227,7 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
    @Override
    public void groupEditClicked(int tripId, int groupId)
    {
-      Log.d(TAG, "GroupDetail - ApppBarIcon - EditClicked. Activity to invoke next fragment. Received TripId=" + tripId + " GroupId=" + groupId);
+      Log.i(TAG, "GroupDetail - ApppBarIcon - EditClicked. Activity to invoke next fragment. Received TripId=" + tripId + " GroupId=" + groupId);
       GroupAddEditFragment fragment = new GroupAddEditFragment();
       fragment.setTripId(tripId);
       fragment.setGroupId(groupId);

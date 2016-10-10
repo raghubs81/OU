@@ -7,11 +7,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.maga.ou.model.util.AbstractColumn;
+import com.maga.ou.model.util.CoreUtil;
 import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.model.OUDatabaseHelper.Table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,7 +50,7 @@ public class Trip
             .query();
 
       if (!cursor.moveToFirst())
-         DBUtil.die("Could not get first row of trip cursor");
+         CoreUtil.die("Could not get first row of trip cursor");
 
       Trip trip = new Trip ();
       trip.id = Integer.valueOf(DBUtil.getCell(cursor, Column._id));
@@ -66,7 +66,7 @@ public class Trip
          .query();
 
       if (!cursor.moveToFirst())
-         DBUtil.die("Could not get first row of trip cursor");
+         CoreUtil.die("Could not get first row of trip cursor");
 
       Trip trip = new Trip ();
       trip.id = Integer.valueOf(DBUtil.getCell(cursor, Column._id));
@@ -87,7 +87,7 @@ public class Trip
       validate();
 
       ContentValues values = getPopulatedContentValues ();
-      Log.d(TAG, "INSERT " + Table.Trip + " " + values + " VALUES " + values);
+      Log.i(TAG, "INSERT " + Table.Trip + " " + values + " VALUES " + values);
       int result = (int) db.insert(Table.Trip.name(), null, values);
       DBUtil.assertNotEquals(result, -1, "Table=Trip, Addition failed");
       this.id = result;
@@ -193,7 +193,7 @@ public class Trip
    public void setName(String name)
    {
       if (name == null || name.isEmpty())
-         DBUtil.die("Trip name is empty");
+         CoreUtil.die("Trip name is empty");
       this.name = name;
    }
 

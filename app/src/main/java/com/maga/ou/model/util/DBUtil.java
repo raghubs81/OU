@@ -128,13 +128,13 @@ public class DBUtil
    public static void assertEquals (int actual, int expected, String mesg)
    {
       if (actual != expected)
-         die ("Actual is NOT same as expected. Actual=" + actual + " Expected=" + expected + " Error=" + mesg);
+         CoreUtil.die("Actual is NOT same as expected. Actual=" + actual + " Expected=" + expected + " Error=" + mesg);
    }
 
    public static void assertNotEquals (int actual, int expected, String mesg)
    {
       if (actual == expected)
-         die ("Actual is same as expected. Actual=Expected=" + actual + " Error=" + mesg);
+         CoreUtil.die("Actual is same as expected. Actual=Expected=" + actual + " Error=" + mesg);
    }
 
    public static void assertNonEmpty (Object value, String mesg)
@@ -145,7 +145,7 @@ public class DBUtil
          isEmpty = ((String)value).isEmpty();
 
       if (isEmpty)
-         die ("Non emtpy assertion failed. Value=" + value + " Error=" + mesg);
+         CoreUtil.die("Non emtpy assertion failed. Value=" + value + " Error=" + mesg);
    }
 
    /**
@@ -154,7 +154,7 @@ public class DBUtil
    public static void assertUnsetId (int id)
    {
       if (id != UNSET_ID)
-         die ("ID already exists. ID=" + id);
+         CoreUtil.die("ID already exists. ID=" + id);
    }
 
    /**
@@ -163,7 +163,7 @@ public class DBUtil
    public static void assertSetId (int id)
    {
       if (id == UNSET_ID)
-         die ("ID is not set. ID=" + id);
+         CoreUtil.die("ID is not set. ID=" + id);
    }
 
    /*
@@ -173,7 +173,7 @@ public class DBUtil
 
    public static int addRow (SQLiteDatabase db, AbstractTable table, ContentValues values)
    {
-      Log.d(TAG, "INSERT " + table + " " + values + " VALUES " + values);
+      Log.i(TAG, "INSERT " + table + " " + values + " VALUES " + values);
       int result = (int) db.insert(table.name(), null, values);
       DBUtil.assertNotEquals(result, -1, "Table=" + table.name() + ", Addition failed");
       return result;
@@ -183,7 +183,7 @@ public class DBUtil
    {
       String whereClause = "_id = ?";
       String whereValues[] = new String [] {String.valueOf(id)};
-      Log.d(TAG, "UPDATE " + table + " " + values + " WHERE " + whereClause + " WHERE-VALUE " + TextUtils.join(", ", whereValues));
+      Log.i(TAG, "UPDATE " + table + " " + values + " WHERE " + whereClause + " WHERE-VALUE " + TextUtils.join(", ", whereValues));
       int result = db.update(table.name(), values, whereClause, whereValues);
       DBUtil.assertNotEquals(result, 0, "Table=Item, No row updated");
       return result;
@@ -213,7 +213,7 @@ public class DBUtil
    {
       String whereClause = refColumn + " = ?";
       String whereValues[] = new String [] {String.valueOf(id)};
-      Log.d(TAG, "DELETE " + table + " WHERE " + whereClause + " WHERE-VALUE " + TextUtils.join(", ", whereValues));
+      Log.i(TAG, "DELETE " + table + " WHERE " + whereClause + " WHERE-VALUE " + TextUtils.join(", ", whereValues));
       return db.delete(table.name(), whereClause, whereValues);
    }
 
@@ -223,7 +223,7 @@ public class DBUtil
          return 0;
 
       String whereClause = refColumn + " IN (" + TextUtils.join(",", listId) + ")";
-      Log.d(TAG, "DELETE " + table + " WHERE " + whereClause);
+      Log.i(TAG, "DELETE " + table + " WHERE " + whereClause);
       return db.delete(table.name(), whereClause, null);
    }
 
@@ -236,21 +236,4 @@ public class DBUtil
    {
       return "'" + value + "'";
    }
-
-   /*
-    * Fatal exit
-    * ___________________________________________________________________________________________________
-    */
-
-   public static void die (String mesg)
-   {
-      die(mesg, null);
-   }
-
-   public static void die (String mesg, Throwable e)
-   {
-      Log.e(TAG, mesg, e);
-      throw new IllegalStateException(mesg, e);
-   }
-
 }

@@ -294,7 +294,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
 
       if (!valid)
       {
-         Log.d(TAG, "Validation failed");
+         Log.i(TAG, "Validation failed");
          return;
       }
 

@@ -34,7 +34,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity
    @Override
    public void onBackPressed()
    {
-      // Log.d(TAG, "BackStackEntryCount=" + getFragmentManager().getBackStackEntryCount());
+      // Log.i(TAG, "BackStackEntryCount=" + getFragmentManager().getBackStackEntryCount());
       if (getFragmentManager().getBackStackEntryCount() == 0)
       {
          super.onBackPressed();

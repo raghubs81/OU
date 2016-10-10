@@ -128,7 +128,7 @@ public class UserListFragment extends ListFragment
    @Override
    public void onListItemClick(ListView l, View v, int position, long id)
    {
-      Log.d(TAG, "List item clicked. position=" + position + " id=" + id + " listenerExists=" + (listener != null));
+      Log.i(TAG, "List item clicked. position=" + position + " id=" + id + " listenerExists=" + (listener != null));
       if (listener == null)
          return;
       listener.userClicked(tripId, (int) id);

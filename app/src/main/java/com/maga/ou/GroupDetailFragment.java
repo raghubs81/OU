@@ -118,7 +118,7 @@ public class GroupDetailFragment  extends Fragment implements View.OnClickListen
    @Override
    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater)
    {
-      Log.d(TAG, "GroupId=" + groupId + " IdGroupOfAll=" + idOfGroupOfAll);
+      Log.i(TAG, "GroupId=" + groupId + " IdGroupOfAll=" + idOfGroupOfAll);
       if (groupId != idOfGroupOfAll)
          inflater.inflate(R.menu.appbar_detail_edit, menu);
       super.onCreateOptionsMenu(menu, inflater);

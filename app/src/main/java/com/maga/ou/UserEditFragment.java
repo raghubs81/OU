@@ -231,7 +231,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener
       // End processing if not valid
       if (!valid)
       {
-         Log.d(TAG, "Validation failed");
+         Log.i(TAG, "Validation failed");
          return;
       }
 

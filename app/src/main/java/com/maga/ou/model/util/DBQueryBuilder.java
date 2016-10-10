@@ -5,8 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.maga.ou.util.UIUtil;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -158,7 +156,7 @@ public class DBQueryBuilder
    public Cursor query ()
    {
       if (listTable.isEmpty())
-         DBUtil.die("No table selected");
+         CoreUtil.die("No table selected");
 
       String tokenTable    = TextUtils.join(",", listTable);
       String tokenColumn[] = listColumn.isEmpty()  ? null : listColumn.toArray(new String[0]);
@@ -189,7 +187,7 @@ public class DBQueryBuilder
       if (limit != null)
          builder.append ("LIMIT " + limit);
 
-      Log.d(TAG, builder.toString());
+      Log.i(TAG, builder.toString());
 
       return db.query(distinct, tokenTable, tokenColumn, tokenWhere, whereValue, tokenGroupBy, having, tokenOrderBy, limit);
    }
@@ -197,6 +195,6 @@ public class DBQueryBuilder
    private void validateNonEmpty(Object obj[])
    {
       if (obj == null || obj.length == 0)
-         DBUtil.die("At least one entry is required");
+         CoreUtil.die("At least one entry is required");
    }
 }

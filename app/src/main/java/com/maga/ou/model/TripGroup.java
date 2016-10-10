@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.maga.ou.model.util.AbstractColumn;
+import com.maga.ou.model.util.CoreUtil;
 import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.model.OUDatabaseHelper.*;
@@ -52,7 +53,7 @@ public class TripGroup
          .query();
 
       if (!cursor.moveToFirst())
-         DBUtil.die("Query empty. Id=" + id + " Table=" + Table.TripGroup);
+         CoreUtil.die("Query empty. Id=" + id + " Table=" + Table.TripGroup);
 
       TripGroup group = new TripGroup();
       group.id = id;
@@ -223,7 +224,7 @@ public class TripGroup
       // This user already exists in 'All'
       if (cursorUserInAll.getCount() > 0)
       {
-         Log.d(TAG, "User is already a part of Group All with Id=" + groupIdOfAll + ". Not adding to TripUserGroup table again!");
+         Log.i(TAG, "User is already a part of Group All with Id=" + groupIdOfAll + ". Not adding to TripUserGroup table again!");
          return;
       }
 
@@ -248,7 +249,7 @@ public class TripGroup
             .query();
 
       if (!cursorAllGroupId.moveToFirst())
-         DBUtil.die("Could not get Id of TripGroup cursor for 'All' group");
+         CoreUtil.die("Could not get Id of TripGroup cursor for 'All' group");
 
       return cursorAllGroupId.getInt(0);
    }
@@ -279,7 +280,7 @@ public class TripGroup
             .query();
 
       for (boolean isDone = cursor.moveToFirst(); isDone; isDone = cursor.moveToNext())
-         Log.d(TAG, "FullName=" + cursor.getString(0) + " Name=" + cursor.getString(1));
+         Log.i(TAG, "FullName=" + cursor.getString(0) + " Name=" + cursor.getString(1));
    }
 
    /*

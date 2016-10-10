@@ -33,7 +33,7 @@ public class OUCurrencyHandler implements InputFilter, View.OnFocusChangeListene
    public CharSequence filter (CharSequence source, int start, int end, Spanned dest, int dstart, int dend)
    {
       String strToTest = "" + dest.subSequence(0, dstart) + source.subSequence(start, end) + dest.subSequence(dend, dest.length());
-      // Log.d(TAG, "ToTest=" + strToTest + " Source=" + source +  " Dest=" + dest + " Matches=" + pattern.matcher(strToTest).matches());
+      // Log.i(TAG, "ToTest=" + strToTest + " Source=" + source +  " Dest=" + dest + " Matches=" + pattern.matcher(strToTest).matches());
 
       Matcher matcher = pattern.matcher(strToTest);
       if (!matcher.matches())

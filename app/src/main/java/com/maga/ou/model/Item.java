@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.maga.ou.model.util.AbstractColumn;
+import com.maga.ou.model.util.CoreUtil;
 import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.model.OUDatabaseHelper.Table;
@@ -50,7 +51,7 @@ public class Item
             .query();
 
       if (!cursor.moveToFirst())
-         DBUtil.die("Could not get first row of Item cursor");
+         CoreUtil.die("Could not get first row of Item cursor");
 
       Item Item = new Item();
       Item.setId(DBUtil.getCell(cursor, Column._id));
@@ -66,7 +67,7 @@ public class Item
             .query();
 
       if (!cursor.moveToFirst())
-         DBUtil.die("Could not get first row of Item cursor");
+         CoreUtil.die("Could not get first row of Item cursor");
 
       return createItemFromCursor(cursor);
    }

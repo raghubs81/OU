@@ -4,14 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
 import android.util.Log;
 import com.maga.ou.model.util.*;
 import com.maga.ou.model.OUDatabaseHelper.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by rbseshad on 24-Jun-16.
@@ -53,7 +51,7 @@ public class TripUser
          .query();
 
       if (!cursor.moveToFirst())
-         DBUtil.die("Query empty. Id=" + id + " Table=" + Table.TripUser);
+         CoreUtil.die("Query empty. Id=" + id + " Table=" + Table.TripUser);
 
       TripUser user = new TripUser();
       user.id = Integer.valueOf(DBUtil.getCell(cursor, Column._id));
@@ -80,7 +78,7 @@ public class TripUser
             .query();
 
       if (!cursor.moveToFirst())
-         DBUtil.die("Could not get first row of TripUser cursor");
+         CoreUtil.die("Could not get first row of TripUser cursor");
 
       TripUser user = new TripUser();
       user.id = Integer.valueOf(DBUtil.getCell(cursor, Column._id));
@@ -197,7 +195,7 @@ public class TripUser
          .query();
 
       if (!cursor.moveToFirst())
-         DBUtil.die("Could not get first row of TripUser counting cursor");
+         CoreUtil.die("Could not get first row of TripUser counting cursor");
 
       return cursor.getInt(0);
    }

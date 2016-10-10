@@ -405,7 +405,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
          View segmentViewRoot = doAddSinglePaidBySegment ();
          TripUser user  = entry.getKey();
          Integer amount = entry.getValue();
-         Log.d(TAG, "UserId=" + user.getId() + " UserName=" + user.getNickName() + " Amount=" + OUCurrencyUtil.format(amount));
+         Log.i(TAG, "UserId=" + user.getId() + " UserName=" + user.getNickName() + " Amount=" + OUCurrencyUtil.format(amount));
 
          Spinner     comboUser    = (Spinner)  segmentViewRoot.findViewById(R.id.segment_item_paid_by_add_edit__user);
          comboUser.setSelection(getIndexOfUser(user.getId()));
@@ -534,7 +534,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
          @Override
          public void onTextChanged(String oldText, String newText)
          {
-            Log.d(TAG, " OldText=" + oldText + " NewText=" + newText);
+            Log.i(TAG, " OldText=" + oldText + " NewText=" + newText);
             int oldValue = OUCurrencyUtil.valueOf(oldText);
             int newValue = OUCurrencyUtil.valueOf(newText);
             totalAmount = totalAmount - oldValue + newValue;
@@ -551,7 +551,7 @@ public class ItemPaymentAddEditFragment extends Fragment implements View.OnClick
 
    private void doDeletePaidBySegment (View view)
    {
-      Log.d(TAG, "Segment container child count. Count=" + layoutPaidBySegmentContainer.getChildCount());
+      Log.i(TAG, "Segment container child count. Count=" + layoutPaidBySegmentContainer.getChildCount());
       if (layoutPaidBySegmentContainer.getChildCount() == 1)
       {
          UIUtil.doToastError(context, R.string.item_validation_paid_by_count);

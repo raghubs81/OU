@@ -158,7 +158,7 @@ public class ContactListFragment extends ListFragment
          mapPositionToContact.put(objPosition, contact);
       }
       UIUtil.setAppBarTitle(activity, R.string.contact_title_add, mapPositionToContact.size());
-      Log.d(TAG, "Contact = " + contact);
+      Log.i(TAG, "Contact = " + contact);
       ((CursorAdapter)l.getAdapter()).notifyDataSetChanged();
    }
 
@@ -265,7 +265,7 @@ public class ContactListFragment extends ListFragment
             if (listContactId.contains(contact.contactId))
             {
                contactCountToAdd--;
-               Log.d(TAG, "Contact " + contact + " already exists");
+               Log.i(TAG, "Contact " + contact + " already exists");
                continue;
             }
             TripUser user = new TripUser ();

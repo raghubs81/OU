@@ -5,16 +5,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.maga.ou.R;
-import com.maga.ou.model.util.DBQueryBuilder;
 import com.maga.ou.model.util.DBUtil;
-import com.maga.ou.model.OUDatabaseHelper.Table;
+import com.maga.ou.model.util.ReportGenerator;
 import com.maga.ou.util.OUCurrencyUtil;
 import com.maga.ou.util.UIUtil;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -46,12 +44,12 @@ public class OUAmountDistribution
    private Map<Integer,Integer> mapUserIdToOweAmount = new TreeMap<>();
 
    /**
-    * List of all user IDs
+    * List of all user IDs - Sorted by user name
     */
    private List<Integer> listAllUserId = new ArrayList<>();
 
    /**
-    * List of all user names
+    * List of all user names - Sorted
     */
    private List<String> listAllUserName = new ArrayList<>();
 
@@ -70,6 +68,11 @@ public class OUAmountDistribution
     */
    private Context context;
 
+   /**
+    * Utility for generating HTML report
+    */
+   private ReportGenerator reportGenerator;
+
    public OUAmountDistribution (Context context, int tripId)
    {
       this.context = context;
@@ -79,6 +82,8 @@ public class OUAmountDistribution
       Cursor cursorUser = TripUser.getTripUsers(db, tripId);
       listAllUserId   = DBUtil.getIdColumn(cursorUser, TripUser.Column._id);
       listAllUserName = DBUtil.getColumn  (cursorUser, TripUser.Column.NickName).get(0);
+
+      this.reportGenerator = new ReportGenerator(context, tripId, listAllUserId, listAllUserName);
    }
 
    public static void main (String arg[])
@@ -86,8 +91,8 @@ public class OUAmountDistribution
       OUAmountDistribution distrib = new OUAmountDistribution(null, 0);
       distrib.mapUserIdToOweAmount = genUserAmountList(new Integer[]{50078, 9921, 10001, -33354, -10121, -9921, -2104, -7000, -7500});
       distrib.doFindWhoOwesWhom();
-      Log.d(TAG, "Lender    = " + distrib.getMapLenderToBorrowers());
-      Log.d(TAG, "Borrowers = " + distrib.getMapBorrowerToLenders());
+      Log.i(TAG, "Lender    = " + distrib.getMapLenderToBorrowers());
+      Log.i(TAG, "Borrowers = " + distrib.getMapBorrowerToLenders());
    }
 
    private static Map<Integer,Integer> genUserAmountList(Integer amount[])
@@ -129,8 +134,8 @@ public class OUAmountDistribution
       }
       Collections.sort(listLenderUA);
       Collections.sort(listBorrowerUA);
-      Log.d(TAG, "Lenders=" + listLenderUA);
-      Log.d(TAG, "Borrowers=" + listBorrowerUA);
+      Log.i(TAG, "Lenders=" + listLenderUA);
+      Log.i(TAG, "Borrowers=" + listBorrowerUA);
 
       if (sum != 0)
          throw new IllegalArgumentException("The lender and borrower amounts don't add up to zero. Sum=" + sum + " UserAmount=" + mapUserIdToOweAmount);
@@ -143,15 +148,15 @@ public class OUAmountDistribution
          int borrowerId = -1;
          Integer borrowerAmount = -1;
 
-         Log.d(TAG, UIUtil.LOG_HR);
-         Log.d(TAG, "Lender   : Id=" + lenderId + " Amount=" + OUCurrencyUtil.format(lenderAmount));
+         Log.i(TAG, UIUtil.LOG_HR);
+         Log.i(TAG, "Lender   : Id=" + lenderId + " Amount=" + OUCurrencyUtil.format(lenderAmount));
 
          for (Iterator<UserAmount> iter = listBorrowerUA.iterator(); iter.hasNext(); )
          {
             UserAmount borrowerQA = iter.next();
             borrowerId = borrowerQA.id;
             borrowerAmount = Math.abs(borrowerQA.amount);
-            Log.d(TAG, "Borrower : Id=" + borrowerId + " Amount=" + OUCurrencyUtil.format(borrowerAmount));
+            Log.i(TAG, "Borrower : Id=" + borrowerId + " Amount=" + OUCurrencyUtil.format(borrowerAmount));
             iter.remove();
 
             if (lenderAmount > borrowerAmount)
@@ -159,7 +164,7 @@ public class OUAmountDistribution
                mapLenderToBorrowers.get(lenderId).add(new UserAmount(borrowerId, borrowerAmount));
                mapBorrowerToLenders.get(borrowerId).add(new UserAmount(lenderId, borrowerAmount));
                lenderAmount -= borrowerAmount;
-               Log.d(TAG, "Borrower : Id=" + borrowerId + " Amount=" + OUCurrencyUtil.format(borrowerAmount) + " RemainingLenderAmount=" + OUCurrencyUtil.format(lenderAmount));
+               Log.i(TAG, "Borrower : Id=" + borrowerId + " Amount=" + OUCurrencyUtil.format(borrowerAmount) + " RemainingLenderAmount=" + OUCurrencyUtil.format(lenderAmount));
                borrowerAmount = 0;
             }
             else
@@ -168,7 +173,7 @@ public class OUAmountDistribution
                mapBorrowerToLenders.get(borrowerId).add (new UserAmount(lenderId, lenderAmount));
 
                borrowerAmount -= lenderAmount;
-               Log.d(TAG, "Borrower : Id=" + borrowerId + " Amount=" + OUCurrencyUtil.format(lenderAmount) + " RemainingBorrowerAmount=" + OUCurrencyUtil.format(borrowerAmount));
+               Log.i(TAG, "Borrower : Id=" + borrowerId + " Amount=" + OUCurrencyUtil.format(lenderAmount) + " RemainingBorrowerAmount=" + OUCurrencyUtil.format(borrowerAmount));
                lenderAmount = 0;
                break;
             }
@@ -181,7 +186,7 @@ public class OUAmountDistribution
          {
             listBorrowerUA.add(new UserAmount(borrowerId, borrowerAmount));
             Collections.sort(listBorrowerUA);
-            Log.d(TAG, "Revised BorrowerSet=" + listBorrowerUA);
+            Log.i(TAG, "Revised BorrowerSet=" + listBorrowerUA);
          }
       }
    }
@@ -211,30 +216,35 @@ public class OUAmountDistribution
       for (Integer userId : listAllUserId)
          mapUserIdToOweAmount.put(userId, 0);
 
-      Log.d(TAG, "Start stage. User and owe amount :" + mapUserIdToOweAmount);
+      Log.i(TAG, "Start stage. User and owe amount :" + mapUserIdToOweAmount);
 
       List<Item> listItem = Item.getItems (db, tripId);
-      Log.d(TAG, "Items :" + listItem);
+      Log.i(TAG, "Items :" + listItem);
 
-      PrintWriter out = getReportWriter ();
+      reportGenerator.openReportWriter();
+      reportGenerator.doWriteTripHeading();
+      reportGenerator.doWriteTableExpenseBegin();
+
       for (Item currItem : listItem)
       {
-         Log.d(TAG, UIUtil.LOG_HR);
-         Log.d(TAG, "Item=" + currItem);
-         out.println (UIUtil.LOG_HR);
-         out.println ("Item=" + currItem);
+         Log.i(TAG, UIUtil.LOG_HR);
+         Log.i(TAG, "Item=" + currItem);
+
          int totalAmountPaid = 0;
 
          // For each user who has paid for the item ==> Add the amount paid by the user to his balance.
          Map<TripUser,Integer> mapPaidByUserToAmount = currItem.getPaidByUsers(db);
+
+         // Report: Row having amount paid by each user
+         reportGenerator.doWritePaidByAmount (currItem, mapPaidByUserToAmount);
+
          for (Map.Entry<TripUser,Integer> entry : mapPaidByUserToAmount.entrySet())
          {
             Integer userId = entry.getKey().getId();
             int  amountPaid = entry.getValue();
             totalAmountPaid += amountPaid;
 
-            Log.d (TAG,  "User=" + userId + " Amount=" + OUCurrencyUtil.format(amountPaid) + " NickName=" + listAllUserName.get(listAllUserId.indexOf(userId)));
-            out.println ("User=" + userId + " Amount=" + OUCurrencyUtil.format(amountPaid) + " NickName=" + listAllUserName.get(listAllUserId.indexOf(userId)));
+            Log.i(TAG, "User=" + userId + " Amount=" + OUCurrencyUtil.format(amountPaid) + " NickName=" + listAllUserName.get(listAllUserId.indexOf(userId)));
 
             int amountExisting = mapUserIdToOweAmount.get(userId);
             int amountResult   = amountExisting + amountPaid;
@@ -248,15 +258,17 @@ public class OUAmountDistribution
             mapLenderToItems.put(userId, list);
          }
 
-         Log.d (TAG, "After Credit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName) + " TotalAmountPaid=" + OUCurrencyUtil.format(totalAmountPaid));
-         out.println("After Credit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName) + " TotalAmountPaid=" + OUCurrencyUtil.format(totalAmountPaid));
+         // Report: Balance after Paid-by credit
+         Log.i(TAG, "After Credit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName) + " TotalAmountPaid=" + OUCurrencyUtil.format(totalAmountPaid));
+         reportGenerator.doWritePaidByAmountBalance(mapUserIdToOweAmount);
 
          List<TripUser> listSharedByUser = currItem.getSharedByUsers(db);
          int sharedByUserCount =  listSharedByUser.size();
          int amountSharePerUser = totalAmountPaid / sharedByUserCount;
          int remainderAfterShare = totalAmountPaid % sharedByUserCount;
-         Log.d (TAG, "Shared By    :" + listSharedByUser + " AmountSharePerUser=" + OUCurrencyUtil.format(amountSharePerUser) + " remainderAfterShare=" + remainderAfterShare);
-         out.println("Shared By    :" + listSharedByUser + " AmountSharePerUser=" + OUCurrencyUtil.format(amountSharePerUser) + " remainderAfterShare=" + remainderAfterShare);
+
+         Log.i(TAG, "Shared By    :" + listSharedByUser + " AmountSharePerUser=" + OUCurrencyUtil.format(amountSharePerUser) + " remainderAfterShare=" + remainderAfterShare);
+         reportGenerator.doWriteSharedByAmount(listSharedByUser, amountSharePerUser, remainderAfterShare);
 
          for (TripUser currUser : listSharedByUser)
          {
@@ -270,28 +282,13 @@ public class OUAmountDistribution
             }
             mapUserIdToOweAmount.put(userId, amountResult);
          }
-         Log.d (TAG,  "After Debit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName));
-         out.println ("After Debit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName));
-      }
-      out.close();
-   }
 
-   private PrintWriter getReportWriter ()
-   {
-      PrintWriter out = null;
-
-      try
-      {
-         String filename = "TripReport_" + Trip.getLiteInstance(db, tripId).getName().replaceAll(" ", "_") + ".txt";
-         out = new PrintWriter(new FileWriter(new File(context.getFilesDir(), filename)));
-      }
-      catch (IOException e)
-      {
-         UIUtil.doToastError(context, R.string.wow_error_report_gen);
-         Log.e(TAG, "Error generating report", e);
+         Log.i(TAG, "After Debit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName));
+         reportGenerator.doWriteSharedByAmountBalance(mapUserIdToOweAmount);
       }
 
-      return out;
+      reportGenerator.doWriteTableExpenseEnd();
+      reportGenerator.closeReportWriter();
    }
 
    private String getOweMap (Map<Integer,Integer> mapUserAmount, List<Integer> listAllUserId, List<String>  listAllUserName)
