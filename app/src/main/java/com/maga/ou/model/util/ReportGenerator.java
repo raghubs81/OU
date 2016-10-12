@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.maga.ou.R;
 import com.maga.ou.model.Item;
+import com.maga.ou.model.OUAmountDistribution;
 import com.maga.ou.model.Trip;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.util.OUCurrencyUtil;
@@ -19,6 +20,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by rbseshad on 07-Oct-16.
@@ -104,25 +106,27 @@ public class ReportGenerator
    {
       String tripName = Trip.getInstance(db, tripId).getName();
       doWrite ("<h1>Payment Report - %s </h1>", tripName);
-      doWrite (tab + "<hr/>");
       doWrite (tab + "<p/>");
    }
 
    public void doWriteTableExpenseBegin ()
    {
       doWrite ("<h2> Report of expense computation</h2>");
+
+      // Begin Table
       doWrite ("<table class='grid'>");
       tab = tab + TAB;
 
-      // Heading
+      // Begin Table Heading
       doWrite ("<tr>");
       tab = tab + TAB;
 
       doWrite ("<th>Item</th>");
       doWrite ("<th>Transaction</th>");
       for (String currUser : listAllUserName)
-         doWrite ("<th>%s</th>", currUser);
+         doWrite("<th>%s</th>", currUser);
 
+      // End Table Heading
       tab = tab.substring(TAB.length());
       doWrite ("</tr>");
    }
@@ -137,7 +141,7 @@ public class ReportGenerator
       // Write the amount for each user
       doWrite("<td>%s</td>", ROW_HEADING_PAID_BY);
       for (int userAmount : getAmount(mapPaidByUserToAmount))
-         doWrite("<td class='amount'>%s</td>", (userAmount == 0) ? "" : OUCurrencyUtil.format(userAmount));
+         doWriteCellAmount(userAmount);
 
       tab = tab.substring(TAB.length());
       doWrite("</tr>");
@@ -165,7 +169,7 @@ public class ReportGenerator
 
       doWrite("<td>%s</td>", ROW_HEADING_SHARED_BY);
       for (int currAmount : amount)
-         doWrite("<td class='amount'>%s</td>", (currAmount == 0) ? "" : OUCurrencyUtil.format(currAmount));
+         doWriteCellAmount (currAmount);
 
       tab = tab.substring(TAB.length());
       doWrite("</tr>");
@@ -178,18 +182,110 @@ public class ReportGenerator
 
    private void doWriteAmountBalance (Map<Integer,Integer> mapUserIdToOweAmount, String rowHeading)
    {
-      doWrite ("<tr class='highlight'>");
+      if (rowHeading.equals(ROW_HEADING_PAID_BY_BALANCE))
+         doWrite ("<tr class='highlightCredit'>");
+      else
+         doWrite ("<tr class='highlightDebit'>");
       tab = tab + TAB;
 
       doWrite("<td>%s</td>", rowHeading);
       for (int userId : listAllUserId)
-      {
-         int userAmount = mapUserIdToOweAmount.get(userId);
-         doWrite("<td class='amount'>%s</td>", OUCurrencyUtil.format(userAmount));
-      }
+         doWriteCellAmount(mapUserIdToOweAmount.get(userId));
 
       tab = tab.substring(TAB.length());
       doWrite("</tr>");
+   }
+
+   public void doWriteTableExpenseEnd()
+   {
+      // End Table
+      tab = tab.substring(TAB.length());
+      doWrite ("</table>");
+   }
+
+   public void doWriteTableWOW (Map<Integer,List<OUAmountDistribution.UserAmount>> mapLenderToBorrowers, Set<Integer> setBorrower)
+   {
+      List<Integer> listBorrower = new ArrayList<>(setBorrower);
+      doWriteTableWOWBegin(listBorrower);
+
+      for (Map.Entry<Integer,List<OUAmountDistribution.UserAmount>> entry : mapLenderToBorrowers.entrySet())
+      {
+         Integer lenderId = entry.getKey();
+         List<OUAmountDistribution.UserAmount> listBorrowerAmount = entry.getValue();
+
+         // Begin Table Row
+         doWrite ("<tr>");
+         tab = tab + TAB;
+
+         // Lender Name
+         doWrite ("<th>%s</th>", getUserName(lenderId));
+
+         // Borrower Amount
+         int amount[] = new int[listBorrower.size()];
+         for (OUAmountDistribution.UserAmount borrowerAmount : listBorrowerAmount)
+         {
+            int borrowerIndex = listBorrower.indexOf(borrowerAmount.getId());
+            amount[borrowerIndex] = borrowerAmount.getAmount();
+         }
+
+         int totalAmount = 0;
+         for (int currAmount : amount)
+         {
+            doWriteCellAmount(currAmount);
+            totalAmount += currAmount;
+         }
+         doWriteCellTotalAmount(totalAmount);
+
+         // End Table Row
+         tab = tab.substring(TAB.length());
+         doWrite("</tr>");
+      }
+      doWriteTableWOWEnd();
+   }
+
+   private void doWriteTableWOWBegin (List<Integer> listBorrower)
+   {
+      doWrite ("<h2> Report of who owes whom</h2>");
+
+      // Begin Table
+      doWrite ("<table class='grid'>");
+      tab = tab + TAB;
+
+      // Begin Table Row Heading- Top Row
+      doWrite ("<tr>");
+      tab = tab + TAB;
+
+      // Emtpy Cell
+      doWrite ("<th rowspan='2'></th>");
+
+      // Span borrower names
+      doWrite ("<th colspan='%d'>Borrowers - Members who owe</th>", listBorrower.size());
+
+      // Total
+      doWrite ("<th rowspan='2'>Total</th>");
+      tab = tab.substring(TAB.length());
+
+      // End Table Row Heading- Top Row
+      doWrite ("</tr>");
+
+      // Begin Table Row
+      doWrite ("<tr>");
+      tab = tab + TAB;
+
+      // Table Row Heading - Borrower Names
+      for (Integer currBorrowerId : listBorrower)
+         doWrite("<th>%s</th>", getUserName(currBorrowerId));
+
+      // End Table Row
+      tab = tab.substring(TAB.length());
+      doWrite ("</tr>");
+   }
+
+   private void doWriteTableWOWEnd ()
+   {
+      // End Table
+      tab = tab.substring(TAB.length());
+      doWrite("</table>");
    }
 
    private int[] getAmount (Map<TripUser,Integer> mapPaidByUserToAmount)
@@ -205,10 +301,30 @@ public class ReportGenerator
       return amount;
    }
 
-   public void doWriteTableExpenseEnd()
+   private void doWriteCellTotalAmount (int amount)
    {
-      tab = tab.substring(TAB.length());
-      doWrite ("</table>");
+      if (amount == 0)
+         doWrite("<th class='empty'></th>");
+      else
+         doWrite("<th class='amount highlight'>%s</th>", OUCurrencyUtil.format(amount));
+   }
+
+   private void doWriteCellAmount (int amount)
+   {
+      if (amount == 0)
+         doWrite("<td class='amount empty'></td>");
+      else
+         doWrite("<td class='amount'>%s</td>", OUCurrencyUtil.format(amount));
+   }
+
+   private int getUserIndex(Integer userId)
+   {
+      return listAllUserId.indexOf(userId);
+   }
+
+   private String getUserName(Integer userId)
+   {
+      return listAllUserName.get(getUserIndex(userId));
    }
 
    public void openReportWriter()

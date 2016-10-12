@@ -105,8 +105,11 @@ public class OUAmountDistribution
 
    public void doFindWhoOwesWhom ()
    {
+      reportGenerator.openReportWriter();
+      reportGenerator.doWriteTripHeading();
       doMapUserIdToOweAmount();
       doMapLendersAndBorrowers();
+      reportGenerator.closeReportWriter();
    }
 
    private void doMapLendersAndBorrowers()
@@ -189,6 +192,9 @@ public class OUAmountDistribution
             Log.i(TAG, "Revised BorrowerSet=" + listBorrowerUA);
          }
       }
+
+      // Generate report of who owes whom
+      reportGenerator.doWriteTableWOW (mapLenderToBorrowers, mapBorrowerToLenders.keySet());
    }
 
    /**
@@ -218,11 +224,9 @@ public class OUAmountDistribution
 
       Log.i(TAG, "Start stage. User and owe amount :" + mapUserIdToOweAmount);
 
-      List<Item> listItem = Item.getItems (db, tripId);
+      List<Item> listItem = Item.getItems(db, tripId);
       Log.i(TAG, "Items :" + listItem);
 
-      reportGenerator.openReportWriter();
-      reportGenerator.doWriteTripHeading();
       reportGenerator.doWriteTableExpenseBegin();
 
       for (Item currItem : listItem)
@@ -288,7 +292,6 @@ public class OUAmountDistribution
       }
 
       reportGenerator.doWriteTableExpenseEnd();
-      reportGenerator.closeReportWriter();
    }
 
    private String getOweMap (Map<Integer,Integer> mapUserAmount, List<Integer> listAllUserId, List<String>  listAllUserName)
