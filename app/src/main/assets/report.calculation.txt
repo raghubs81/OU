@@ -1,0 +1,22 @@
+      <h3>Calculation
+         <span class='toggleText'>
+            <a href="#" onclick='toggle(this, "info");'>Show</a>
+         </span>
+      </h3>
+
+      <div id='info' class='hide'>
+         Each user starts with a balance of zero.<br/>
+         For each purchased item<br/>
+         <ul>
+            <li>The amount paid by the member is credited to his/her balance</li>
+            <li>Each member's share is calculated by dividing the total amount spent by the number of members who share the item</li>
+            <li>A member might not be have paid-for an item and/or shared an item. The corresponding table cell shall be empty</li>
+            <li>At times total amount cannot be evenly divided, in such case, the least denomination (0.01) is divided among the first few members who share the item</li>
+            <li>Each member's share is debited from his/her balance</li>
+         </ul>
+         If the balance is</br>
+         <ul>
+            <li>Positive - The member is owed the specified amount.</li>
+            <li>Negative - The member owes the specified amount.</li>
+         </ul>
+      </div>

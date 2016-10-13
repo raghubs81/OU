@@ -42,6 +42,8 @@ public class ReportGenerator
     */
    private static final String fileReportBegin = "report.begin.txt";
 
+   private static final String fileReportCalculation = "report.calculation.txt";
+
    private static final String fileReportEnd   = "report.end.txt";
 
    private static final String TAB = "   ";
@@ -105,46 +107,55 @@ public class ReportGenerator
    public void doWriteTripHeading()
    {
       String tripName = Trip.getInstance(db, tripId).getName();
-      doWrite ("<h1>Payment Report - %s </h1>", tripName);
-      doWrite (tab + "<p/>");
+      writeln("<h1>Report - %s </h1>", tripName);
+      writeln(tab + "<p/>");
+
    }
 
    public void doWriteTableExpenseBegin ()
    {
-      doWrite ("<h2> Report of expense computation</h2>");
+      writeln("<h2>Report of trip expenses");
+      writeln("<span class='toggleText'><a href='#' onclick='toggle(this, \"reportExpense\");'>Hide</a></span>");
+      writeln("</h2>");
+
+      // Begin Div - TripExpense
+      writeln("<div id='reportExpense'>");
+
+      // Append the calculation file details
+      appendReportFile (fileReportCalculation);
 
       // Begin Table
-      doWrite ("<table class='grid'>");
+      writeln("<table class='grid'>");
       tab = tab + TAB;
 
       // Begin Table Heading
-      doWrite ("<tr>");
+      writeln("<tr>");
       tab = tab + TAB;
 
-      doWrite ("<th>Item</th>");
-      doWrite ("<th>Transaction</th>");
+      writeln("<th>Item</th>");
+      writeln("<th>Transaction</th>");
       for (String currUser : listAllUserName)
-         doWrite("<th>%s</th>", currUser);
+         writeln("<th>%s</th>", currUser);
 
       // End Table Heading
       tab = tab.substring(TAB.length());
-      doWrite ("</tr>");
+      writeln("</tr>");
    }
 
    public void doWritePaidByAmount (Item item, Map<TripUser,Integer> mapPaidByUserToAmount)
    {
-      doWrite ("<tr>");
+      writeln("<tr>");
       tab = tab + TAB;
 
-      doWrite("<td colspan='1' rowspan='4'>%s</td>", item.getSummary());
+      writeln("<td colspan='1' rowspan='4'>%s</td>", item.getSummary());
 
       // Write the amount for each user
-      doWrite("<td>%s</td>", ROW_HEADING_PAID_BY);
+      writeln("<td>%s</td>", ROW_HEADING_PAID_BY);
       for (int userAmount : getAmount(mapPaidByUserToAmount))
          doWriteCellAmount(userAmount);
 
       tab = tab.substring(TAB.length());
-      doWrite("</tr>");
+      writeln("</tr>");
    }
 
    public void doWritePaidByAmountBalance (Map<Integer,Integer> mapUserIdToOweAmount)
@@ -154,7 +165,7 @@ public class ReportGenerator
 
    public void doWriteSharedByAmount (List<TripUser>listSharedByUser, int amountSharePerUser, int remainderAfterShare)
    {
-      doWrite ("<tr>");
+      writeln("<tr>");
       tab = tab + TAB;
 
       int amount[] = new int [listAllUserId.size()];
@@ -167,12 +178,12 @@ public class ReportGenerator
             --remainderAfterShare;
       }
 
-      doWrite("<td>%s</td>", ROW_HEADING_SHARED_BY);
+      writeln("<td>%s</td>", ROW_HEADING_SHARED_BY);
       for (int currAmount : amount)
          doWriteCellAmount (currAmount);
 
       tab = tab.substring(TAB.length());
-      doWrite("</tr>");
+      writeln("</tr>");
    }
 
    public void doWriteSharedByAmountBalance (Map<Integer,Integer> mapUserIdToOweAmount)
@@ -183,24 +194,27 @@ public class ReportGenerator
    private void doWriteAmountBalance (Map<Integer,Integer> mapUserIdToOweAmount, String rowHeading)
    {
       if (rowHeading.equals(ROW_HEADING_PAID_BY_BALANCE))
-         doWrite ("<tr class='highlightCredit'>");
+         writeln("<tr class='highlightCredit'>");
       else
-         doWrite ("<tr class='highlightDebit'>");
+         writeln("<tr class='highlightDebit'>");
       tab = tab + TAB;
 
-      doWrite("<td>%s</td>", rowHeading);
+      writeln("<td>%s</td>", rowHeading);
       for (int userId : listAllUserId)
-         doWriteCellAmount(mapUserIdToOweAmount.get(userId));
+         doWriteCellAmount(mapUserIdToOweAmount.get(userId), false);
 
       tab = tab.substring(TAB.length());
-      doWrite("</tr>");
+      writeln("</tr>");
    }
 
    public void doWriteTableExpenseEnd()
    {
       // End Table
       tab = tab.substring(TAB.length());
-      doWrite ("</table>");
+      writeln("</table>");
+
+      // End Div - Trip Expense
+      writeln("</div>");
    }
 
    public void doWriteTableWOW (Map<Integer,List<OUAmountDistribution.UserAmount>> mapLenderToBorrowers, Set<Integer> setBorrower)
@@ -214,11 +228,11 @@ public class ReportGenerator
          List<OUAmountDistribution.UserAmount> listBorrowerAmount = entry.getValue();
 
          // Begin Table Row
-         doWrite ("<tr>");
+         writeln("<tr>");
          tab = tab + TAB;
 
          // Lender Name
-         doWrite ("<th>%s</th>", getUserName(lenderId));
+         writeln("<th>%s</th>", getUserName(lenderId));
 
          // Borrower Amount
          int amount[] = new int[listBorrower.size()];
@@ -238,54 +252,63 @@ public class ReportGenerator
 
          // End Table Row
          tab = tab.substring(TAB.length());
-         doWrite("</tr>");
+         writeln("</tr>");
       }
       doWriteTableWOWEnd();
    }
 
    private void doWriteTableWOWBegin (List<Integer> listBorrower)
    {
-      doWrite ("<h2> Report of who owes whom</h2>");
+      writeln("<h2> Report of who owes whom");
+      writeln("<span class='toggleText'><a href='#' onclick='toggle(this, \"reportWOW\");'>Hide</a></span>");
+      writeln("</h2>");
+
+      // Begin Div - TripExpense
+      writeln("<div id='reportWOW'>");
+      tab = tab + TAB;
 
       // Begin Table
-      doWrite ("<table class='grid'>");
+      writeln("<table class='grid'>");
       tab = tab + TAB;
 
       // Begin Table Row Heading- Top Row
-      doWrite ("<tr>");
+      writeln("<tr>");
       tab = tab + TAB;
 
       // Emtpy Cell
-      doWrite ("<th rowspan='2'></th>");
+      writeln("<th rowspan='2'></th>");
 
       // Span borrower names
-      doWrite ("<th colspan='%d'>Borrowers - Members who owe</th>", listBorrower.size());
+      writeln("<th colspan='%d'>Borrowers - Members who owe</th>", listBorrower.size());
 
       // Total
-      doWrite ("<th rowspan='2'>Total</th>");
+      writeln("<th rowspan='2'>Total</th>");
       tab = tab.substring(TAB.length());
 
       // End Table Row Heading- Top Row
-      doWrite ("</tr>");
+      writeln("</tr>");
 
       // Begin Table Row
-      doWrite ("<tr>");
+      writeln("<tr>");
       tab = tab + TAB;
 
       // Table Row Heading - Borrower Names
       for (Integer currBorrowerId : listBorrower)
-         doWrite("<th>%s</th>", getUserName(currBorrowerId));
+         writeln("<th>%s</th>", getUserName(currBorrowerId));
 
       // End Table Row
       tab = tab.substring(TAB.length());
-      doWrite ("</tr>");
+      writeln("</tr>");
    }
 
    private void doWriteTableWOWEnd ()
    {
       // End Table
       tab = tab.substring(TAB.length());
-      doWrite("</table>");
+      writeln("</table>");
+
+      // End Div - WOW
+      writeln("</div>");
    }
 
    private int[] getAmount (Map<TripUser,Integer> mapPaidByUserToAmount)
@@ -304,17 +327,22 @@ public class ReportGenerator
    private void doWriteCellTotalAmount (int amount)
    {
       if (amount == 0)
-         doWrite("<th class='empty'></th>");
+         writeln("<th class='empty highlight'></th>");
       else
-         doWrite("<th class='amount highlight'>%s</th>", OUCurrencyUtil.format(amount));
+         writeln("<th class='amount highlight'>%s</th>", OUCurrencyUtil.format(amount));
    }
 
    private void doWriteCellAmount (int amount)
    {
-      if (amount == 0)
-         doWrite("<td class='amount empty'></td>");
+      doWriteCellAmount (amount, true);
+   }
+
+   private void doWriteCellAmount (int amount, boolean isEmptyOnZero)
+   {
+      if (isEmptyOnZero && amount == 0)
+         writeln("<td class='empty'></td>");
       else
-         doWrite("<td class='amount'>%s</td>", OUCurrencyUtil.format(amount));
+         writeln("<td class='amount'>%s</td>", OUCurrencyUtil.format(amount));
    }
 
    private int getUserIndex(Integer userId)
@@ -345,6 +373,21 @@ public class ReportGenerator
       }
    }
 
+   private void appendReportFile (String fileReportMid)
+   {
+      try
+      {
+         out.close();
+         CoreUtil.copy(context.getAssets().open(fileReportMid), new FileOutputStream(fileReport, true));
+         out = new PrintWriter(new FileWriter(fileReport, true));
+      }
+      catch (IOException e)
+      {
+         UIUtil.doToastError(context, R.string.wow_error_report_gen);
+         Log.e(TAG, "Error generating report", e);
+      }
+   }
+
    public void closeReportWriter ()
    {
       try
@@ -359,7 +402,7 @@ public class ReportGenerator
       }
    }
 
-   private void doWrite (String format, Object... arg)
+   private void writeln (String format, Object... arg)
    {
       out.println (String.format(tab + format, arg));
    }
