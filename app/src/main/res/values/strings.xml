@@ -1,18 +1,19 @@
 <resources>
 
    <!-- General -->
-   <string name="app_name">OU</string>
-   <string name="ok">Ok</string>
+   <string name="action_settings">Settings</string>
    <string name="add">Add</string>
-   <string name="save">Save</string>
+   <string name="app_name">OU</string>
    <string name="cancel">Cancel</string>
    <string name="delete">Delete</string>
-   <string name="edit">Edit</string>
    <string name="done">Done</string>
+   <string name="edit">Edit</string>
+   <string name="ok">Ok</string>
+   <string name="save">Save</string>
    <string name="search">Search</string>
-   <string name="action_settings">Settings</string>
-   <string name="toast_save_success">Saved successfully.</string>
+   <string name="share">Share</string>
    <string name="toast_save_failure">Save failed!</string>
+   <string name="toast_save_success">Saved successfully.</string>
 
    <!-- Main Activity -->
    <string name="main_trip_add">New Trip!</string>
@@ -113,8 +114,12 @@
    <string name="wow_borrowers_detail">List of borrowers and the amount they have to pay. Click on each borrower to see who they owe.</string>
    <string name="wow_switch_to_lenders_list">Switch to lenders list</string>
    <string name="wow_switch_to_borrowers_list">Switch to borrowers list</string>
-
    <string name="wow_error_report_gen">Error saving report file</string>
+
+   <!-- Trip Report -->
+   <string name="report_show">View Report</string>
+   <string name="report_details">A report detailing trip expense calculation along with details of who owes whom</string>
+   <string name="report_share">Share report with members</string>
 
    <!-- Help -->
    <string name="help_shared_by">All members of the trip group share the item\'s cost, by default.</string>

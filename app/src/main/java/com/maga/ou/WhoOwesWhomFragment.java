@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -55,6 +58,18 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
    private ExpandableListView accordianListView;
 
    private WhoOwesWhomListAdapter adapterLenderToBorrowers, adapterBorrowerToLenders;
+
+   /*
+    * Member variables
+    * ___________________________________________________________________________________________________
+    */
+
+   private WhoOwesWhomListener listener;
+
+   /*
+    * Constructor
+    * ___________________________________________________________________________________________________
+    */
 
    /**
     * <b>Parameters</b>
@@ -110,8 +125,32 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
 
       this.viewRoot = getView();
       this.activity = (AppCompatActivity)getActivity();
+      this.listener = (WhoOwesWhomListener)getActivity();
 
       initMembers();
+   }
+
+   @Override
+   public void onCreateOptionsMenu (Menu menu, MenuInflater inflater)
+   {
+      inflater.inflate(R.menu.appbar_report, menu);
+      super.onCreateOptionsMenu(menu, inflater);
+   }
+
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item)
+   {
+      switch (item.getItemId())
+      {
+         case R.id.appbar_report_share:
+            listener.goToTripReportClicked(tripId);
+            return true;
+
+         default:
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            return super.onOptionsItemSelected(item);
+      }
    }
 
    /*
@@ -298,5 +337,10 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
       {
          return true;
       }
+   }
+
+   public interface WhoOwesWhomListener
+   {
+      void goToTripReportClicked  (int tripId);
    }
 }

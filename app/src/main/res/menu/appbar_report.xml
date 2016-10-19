@@ -1,0 +1,14 @@
+<menu
+   xmlns:tools="http://schemas.android.com/tools"
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto">
+
+   <!-- Delete button -->
+   <item
+      android:id="@+id/appbar_report_share"
+      android:icon="@drawable/ic_share_light"
+      android:title="@string/share"
+      app:showAsAction="always"
+      tools:ignore="AlwaysShowAction" />
+
+</menu>

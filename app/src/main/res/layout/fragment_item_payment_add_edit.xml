@@ -57,11 +57,11 @@
 
             <!-- Layouts from segment_paid_by_add_add.xml have to be dynamically added here -->
             <!--
-            <include layout="@layout/segment_item_paid_by_add_edit" />
+            <include layout="@layout/segment_report" />
 
-            <include layout="@layout/segment_item_paid_by_add_edit" />
+            <include layout="@layout/segment_report" />
 
-            <include layout="@layout/segment_item_paid_by_add_edit" />
+            <include layout="@layout/segment_report" />
              -->
 
          </LinearLayout>

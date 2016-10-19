@@ -11,12 +11,14 @@ import com.maga.ou.UserListFragment.UserListListener;
 import com.maga.ou.UserDetailFragment.UserDetailListener;
 import com.maga.ou.GroupListFragment.GroupListListener;
 import com.maga.ou.GroupDetailFragment.GroupDetailListener;
+import com.maga.ou.WhoOwesWhomFragment.WhoOwesWhomListener;
 
 public class MainFragmentManagerActivity extends SingleFragmentActivity implements
       ItemPaymentListListener, ItemPaymentDetailListener,
       TripListListener, TripDetailListener,
       UserListListener, UserDetailListener,
-      GroupListListener, GroupDetailListener
+      GroupListListener, GroupDetailListener,
+      WhoOwesWhomListener
 {
 
    public enum Arg
@@ -232,6 +234,17 @@ public class MainFragmentManagerActivity extends SingleFragmentActivity implemen
       fragment.setTripId(tripId);
       fragment.setGroupId(groupId);
       fragment.setOperationType(GroupAddEditFragment.OperationType.Edit);
+      SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
+   }
+
+   /* Who Owes Whom Fragment */
+
+   @Override
+   public void goToTripReportClicked(int tripId)
+   {
+      Log.i(TAG, "WhoOwesWhom - ApppBarIcon - ReportClicked. Activity to invoke next fragment. Received TripId=" + tripId);
+      TripReportFragment fragment = new TripReportFragment();
+      fragment.setTripId(tripId);
       SingleFragmentActivity.replaceFrameWithFragment(fragment, this);
    }
 }

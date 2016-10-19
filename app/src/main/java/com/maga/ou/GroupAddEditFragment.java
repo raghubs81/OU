@@ -83,11 +83,11 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
     */
 
    /**
-    * <b>Parameters</b>
+    * <b>Parameters set using setters</b>
     * <ul>
-    * <li>operationType : (Add|Edit) Optional. Default is 'Add'</li>
-    * <li>tripId        : Mandatory. </li>
-    * <li>userId        : Optional if operationType is 'Add'   </li>
+    *    <li>operationType : (Add|Edit) Optional. Default is 'Add'</li>
+    *    <li>tripId        : Mandatory. </li>
+    *    <li>userId        : Optional if operationType is 'Add'   </li>
     * </ul>
     */
    public GroupAddEditFragment()
@@ -237,7 +237,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
       int index = -1;
       for (final TripUser user : listTripUser)
       {
-         final int colorCheck = bgColor[++index % bgColor.length];
+         final int bgColorCheck = bgColor[++index % bgColor.length];
          final View segmentViewRoot = inflater.inflate(R.layout.segment_group_user_add_edit, layoutSharedByUsersContainer, false);
 
          CheckBox checkBox = (CheckBox) segmentViewRoot.findViewById(R.id.segment_group_user_add_edit__name);
@@ -250,7 +250,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
                if (isChecked)
                {
                   setChosenUserId.add(user.getId());
-                  segmentViewRoot.setBackgroundColor(colorCheck);
+                  segmentViewRoot.setBackgroundColor(bgColorCheck);
                }
                else
                {
@@ -265,7 +265,7 @@ public class GroupAddEditFragment extends Fragment implements View.OnClickListen
          if(setChosenUserId.contains(user.getId()))
          {
             checkBox.setChecked(true);
-            segmentViewRoot.setBackgroundColor(colorCheck);
+            segmentViewRoot.setBackgroundColor(bgColorCheck);
          }
          else
          {
