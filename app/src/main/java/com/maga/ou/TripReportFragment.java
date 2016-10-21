@@ -2,7 +2,9 @@ package com.maga.ou;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +20,12 @@ import android.widget.TextView;
 import com.maga.ou.model.Trip;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
+import com.maga.ou.model.util.ReportGenerator;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -125,10 +132,6 @@ public class TripReportFragment extends Fragment implements View.OnClickListener
          doShareReport();
    }
 
-   private void doShowReport ()
-   {
-
-   }
 
    /*
     * Members methods
@@ -159,8 +162,13 @@ public class TripReportFragment extends Fragment implements View.OnClickListener
       SQLiteDatabase db = DBUtil.getDB(context);
       Trip trip = Trip.getInstance(db, tripId);
 
+      // Summary text
       TextView textSummary = (TextView)viewRoot.findViewById(R.id.trip_report__summary);
       textSummary.setText("Report - " + trip.getName());
+
+      // Show button
+      Button buttonShowReport = (Button)viewRoot.findViewById(R.id.trip_report__show);
+      buttonShowReport.setOnClickListener(this);
 
       // Add user segments
       addAllUserSegments();
@@ -218,9 +226,34 @@ public class TripReportFragment extends Fragment implements View.OnClickListener
       }
    }
 
+
+   private void doShowReport ()
+   {
+      Log.i(TAG, "Users selected for share = " + setChosenUserId);
+      File fileReport = ReportGenerator.getReportFile(context, tripId);
+//      try
+//      {
+//         BufferedReader in = new BufferedReader(new FileReader(fileReport));
+//         String line = null;
+//         while ((line = in.readLine()) != null)
+//            Log.i(TAG, line);
+//         in.close();
+//      }
+//      catch (IOException e)
+//      {
+//         e.printStackTrace();
+//      }
+
+      Intent intentOpenUsingBrowser = new Intent(Intent.ACTION_VIEW)
+            .setType("text/html")
+            .setClassName("com.android.browser", "com.android.browser.BrowserActivity")
+            .setData(Uri.fromFile(fileReport));
+      startActivity(intentOpenUsingBrowser);
+   }
+
    // TODO
    private void doShareReport()
    {
-      Log.d(TAG, "Users selected for share = " + setChosenUserId);
+
    }
 }

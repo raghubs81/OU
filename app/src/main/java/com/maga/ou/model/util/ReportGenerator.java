@@ -2,8 +2,8 @@ package com.maga.ou.model.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.util.Log;
-
 import com.maga.ou.R;
 import com.maga.ou.model.Item;
 import com.maga.ou.model.OUAmountDistribution;
@@ -11,11 +11,12 @@ import com.maga.ou.model.Trip;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.util.OUCurrencyUtil;
 import com.maga.ou.util.UIUtil;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +41,11 @@ public class ReportGenerator
    /**
     * File having HTML report prefix
     */
-   private static final String fileReportBegin = "report.begin.txt";
+   private static final String FILENAME_REPORT_BEGIN = "report.begin.txt";
 
-   private static final String fileReportCalculation = "report.calculation.txt";
+   private static final String FILENAME_REPORT_CALCULATION = "report.calculation.txt";
 
-   private static final String fileReportEnd   = "report.end.txt";
+   private static final String FILENAME_REPORT_END = "report.end.txt";
 
    private static final String TAB = "   ";
 
@@ -98,10 +99,34 @@ public class ReportGenerator
       this.tripId  = tripId;
       this.listAllUserId = listAllUserId;
       this.listAllUserName = listAllUserName;
-      this.db = DBUtil.getDB(context);
+      this.db = DBUtil.getDB (context);
 
-      String filename = "TripReport_" + Trip.getLiteInstance(db, tripId).getName().replaceAll(" ", "_") + ".html";
-      fileReport = new File (context.getFilesDir(), filename);
+      fileReport = getReportFile(context, tripId);
+   }
+
+   /**
+    * Return file that shall contain the HTML report.
+    *
+    * @param tripId TripId of the current trip.
+    * @return filename that shall contain the HTML report.
+    */
+   public static File getReportFile (Context context, int tripId)
+   {
+      File file = null;
+      try
+      {
+         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+            throw new IOException("External storage not available");
+
+         String filename = "Report" + String.format("%03d", tripId) + ".html";
+         file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename);
+      }
+      catch (IOException e)
+      {
+         UIUtil.doToastError(context, R.string.wow_error_report_gen);
+         Log.i(TAG, "Error generating report", e);
+      }
+      return file;
    }
 
    public void doWriteTripHeading()
@@ -122,7 +147,7 @@ public class ReportGenerator
       writeln("<div id='reportExpense'>");
 
       // Append the calculation file details
-      appendReportFile (fileReportCalculation);
+      appendReportFile (FILENAME_REPORT_CALCULATION);
 
       // Begin Table
       writeln("<table class='grid'>");
@@ -362,14 +387,20 @@ public class ReportGenerator
 
       try
       {
-         CoreUtil.copy (context.getAssets().open(fileReportBegin), new FileOutputStream(fileReport, false));
-         out = new PrintWriter(new FileWriter(fileReport, true));
+         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+            throw new IOException ("External storage not available");
+
+         InputStream  streamSrc  = context.getAssets().open(FILENAME_REPORT_BEGIN);
+         OutputStream streamDest = new FileOutputStream(fileReport, false);
+         CoreUtil.copy (streamSrc, streamDest);
+
+         out = new PrintWriter(new FileWriter(fileReport, true), true);
          Log.i(TAG, "Report File Path = " + fileReport.getAbsolutePath());
       }
       catch (IOException e)
       {
+         Log.i(TAG, "Error generating report", e);
          UIUtil.doToastError(context, R.string.wow_error_report_gen);
-         Log.e(TAG, "Error generating report", e);
       }
    }
 
@@ -379,12 +410,12 @@ public class ReportGenerator
       {
          out.close();
          CoreUtil.copy(context.getAssets().open(fileReportMid), new FileOutputStream(fileReport, true));
-         out = new PrintWriter(new FileWriter(fileReport, true));
+         out = new PrintWriter(new FileWriter(fileReport, true), true);
       }
       catch (IOException e)
       {
+         Log.i(TAG, "Error generating report", e);
          UIUtil.doToastError(context, R.string.wow_error_report_gen);
-         Log.e(TAG, "Error generating report", e);
       }
    }
 
@@ -392,13 +423,15 @@ public class ReportGenerator
    {
       try
       {
+         out.flush();
          out.close();
-         CoreUtil.copy(context.getAssets().open(fileReportEnd), new FileOutputStream(fileReport, true));
+         Log.i(TAG, "Closing the report writer");
+         CoreUtil.copy(context.getAssets().open(FILENAME_REPORT_END), new FileOutputStream(fileReport, true));
       }
       catch (IOException e)
       {
+         Log.i(TAG, "Error generating report", e);
          UIUtil.doToastError(context, R.string.wow_error_report_gen);
-         Log.e(TAG, "Error generating report", e);
       }
    }
 

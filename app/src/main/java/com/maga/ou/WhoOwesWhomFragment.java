@@ -15,7 +15,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.model.OUAmountDistribution;
 import com.maga.ou.util.OUCurrencyUtil;
@@ -107,6 +106,7 @@ public class WhoOwesWhomFragment extends Fragment implements View.OnClickListene
    {
       // Inflate the layout for this fragment
       context = inflater.getContext();
+      setHasOptionsMenu(true);
       return inflater.inflate(R.layout.fragment_who_owes_whom, container, false);
    }
 

@@ -68,6 +68,7 @@
             android:background="@color/borderLight">
 
             <!-- Layouts from segment_paid_by_add_add.xml have to be dynamically added here -->
+            <!--
             <include layout="@layout/segment_report"
                      android:layout_width="0dp"
                      android:layout_height="80dp"
@@ -85,7 +86,7 @@
                      android:layout_height="80dp"
                      android:layout_columnWeight="1"
                      android:layout_margin="1dp"/>
-
+            -->
          </GridLayout>
 
       </LinearLayout>
