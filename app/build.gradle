@@ -42,4 +42,6 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.vstechlab.easyfonts:easyfonts:1.0.0'
+    compile 'com.itextpdf:itextg:5.5.10'
+    compile 'com.itextpdf.tool:xmlworker:5.5.10'
 }

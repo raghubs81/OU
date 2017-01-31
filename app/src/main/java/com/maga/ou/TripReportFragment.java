@@ -16,20 +16,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-
 import com.maga.ou.model.Trip;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
 import com.maga.ou.model.util.ReportGenerator;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -226,34 +218,28 @@ public class TripReportFragment extends Fragment implements View.OnClickListener
       }
    }
 
-
    private void doShowReport ()
    {
-      Log.i(TAG, "Users selected for share = " + setChosenUserId);
-      File fileReport = ReportGenerator.getReportFile(context, tripId);
-//      try
-//      {
-//         BufferedReader in = new BufferedReader(new FileReader(fileReport));
-//         String line = null;
-//         while ((line = in.readLine()) != null)
-//            Log.i(TAG, line);
-//         in.close();
-//      }
-//      catch (IOException e)
-//      {
-//         e.printStackTrace();
-//      }
+      Log.i(TAG, "Users selected for share == " + setChosenUserId);
+      File fileReport = ReportGenerator.getPDFReportFile(context, tripId);
 
-      Intent intentOpenUsingBrowser = new Intent(Intent.ACTION_VIEW)
-            .setType("text/html")
-            .setClassName("com.android.browser", "com.android.browser.BrowserActivity")
-            .setData(Uri.fromFile(fileReport));
-      startActivity(intentOpenUsingBrowser);
+      Intent intentOpenPdf = new Intent(Intent.ACTION_VIEW)
+         .setType("application/pdf")
+         .setData(Uri.fromFile(fileReport));
+
+      startActivity(Intent.createChooser(intentOpenPdf, "Open PDF Report"));
    }
 
-   // TODO
    private void doShareReport()
    {
+      File fileReport = ReportGenerator.getPDFReportFile(context, tripId);
 
+      Intent intentShare = new Intent()
+         .setAction(Intent.ACTION_SEND)
+         .setType("application/pdf")
+            .putExtra(Intent.EXTRA_TEXT, "Share Report")
+         .putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileReport));
+
+      startActivity(Intent.createChooser(intentShare, "Share PDF Report"));
    }
 }

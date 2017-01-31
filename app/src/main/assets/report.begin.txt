@@ -1,12 +1,12 @@
 <!doctype html>
 <html>
 <head>
-   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
    <title>Report</title>
    <style type="text/css">
 
       html { font-size: 62.5%; }
-      body { margin: 0.5em; font-family: Verdana; font-size: 1.3em; }
+      body { margin: 0.5em; font-family: Verdana; font-size: 1.3em; -webkit-print-color-adjust: exact; }
 
       /* Heading */
       h1 { font-family: Garamond; font-style:italic; font-size:28px; color:rgb(64,0,128); }
@@ -18,8 +18,8 @@
       ul { margin-top: 3px;   }
 
       /* Table - Regular */
-      table.grid    { margin: 10px auto 10px 10px; font-size: inherit; border-collapse: separate; background-color: #6b8a0f;}
-      table.grid th, table.grid td { padding: 3px 5px; font-size: inherit; }
+      table.grid    { margin: 10px auto 10px 10px; font-size: inherit; border-collapse: collapse; border-width: 1px 0px 0px 1px; border-style:solid; border-color:#6b8a0f; }
+      table.grid th, table.grid td { padding: 3px 5px; font-size: inherit; border-width:0px 1px 1px 0px; border-style:solid; border-color:#6b8a0f; }
       table.grid th { background-color: #e3eec4; }
       table.grid td { background-color: White;   }
 

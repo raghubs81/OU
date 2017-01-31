@@ -4,7 +4,7 @@
          </span>
       </h3>
 
-      <div id='info' class='hide'>
+      <div id='info' class='show'>
          Each user starts with a balance of zero.<br/>
          For each purchased item<br/>
          <ul>
@@ -14,7 +14,8 @@
             <li>At times total amount cannot be evenly divided, in such case, the least denomination (0.01) is divided among the first few members who share the item</li>
             <li>Each member's share is debited from his/her balance</li>
          </ul>
-         If the balance is</br>
+
+         If the balance is<br/>
          <ul>
             <li>Positive - The member is owed the specified amount.</li>
             <li>Negative - The member owes the specified amount.</li>

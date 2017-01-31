@@ -101,7 +101,12 @@ public class ReportGenerator
       this.listAllUserName = listAllUserName;
       this.db = DBUtil.getDB (context);
 
-      fileReport = getReportFile(context, tripId);
+      fileReport = getHtmlReportFile(context, tripId);
+   }
+
+   public static File getPDFReportFile (Context context, int tripId)
+   {
+      return PDFGenerator.toPdf(getHtmlReportFile(context, tripId));
    }
 
    /**
@@ -110,7 +115,7 @@ public class ReportGenerator
     * @param tripId TripId of the current trip.
     * @return filename that shall contain the HTML report.
     */
-   public static File getReportFile (Context context, int tripId)
+   public static File getHtmlReportFile(Context context, int tripId)
    {
       File file = null;
       try
@@ -118,10 +123,13 @@ public class ReportGenerator
          if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
             throw new IOException("External storage not available");
 
-         String filename = "Report" + String.format("%03d", tripId) + ".html";
+         String tripName = Trip.getInstance(DBUtil.getDB (context), tripId).getName();
+         tripName = tripName.trim().replaceAll("\\s+", "_");
+         String filename = tripName + ".html";
+
          file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename);
       }
-      catch (IOException e)
+      catch (Exception e)
       {
          UIUtil.doToastError(context, R.string.wow_error_report_gen);
          Log.i(TAG, "Error generating report", e);
@@ -134,7 +142,6 @@ public class ReportGenerator
       String tripName = Trip.getInstance(db, tripId).getName();
       writeln("<h1>Report - %s </h1>", tripName);
       writeln(tab + "<p/>");
-
    }
 
    public void doWriteTableExpenseBegin ()

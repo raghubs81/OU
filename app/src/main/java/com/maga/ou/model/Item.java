@@ -210,13 +210,13 @@ public class Item
    public static List<Item> getItems(SQLiteDatabase db, int tripId)
    {
       Cursor cursor = new DBQueryBuilder(db)
-         .from(Table.TripItem, Table.Item)
-         .whereAND
-               (
-                     TripItem.Column.ItemId + " = " + Column._id,
-                     TripItem.Column.TripId + " = " + tripId
-               )
-         .query();
+            .from(Table.TripItem, Table.Item)
+            .whereAND
+                  (
+                        TripItem.Column.ItemId + " = " + Column._id,
+                        TripItem.Column.TripId + " = " + tripId
+                  )
+            .query();
 
       List<Item> listItem = new ArrayList<>();
       boolean isDone = false;
