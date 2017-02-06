@@ -1,0 +1,141 @@
+<html>
+<head>
+   <title>Report</title>
+   <style type="text/css">
+
+      html { font-size: 62.5%; }
+      body { margin: 0.5em; font-family: Verdana; font-size: 12px; -webkit-print-color-adjust: exact; }
+
+      /* Heading */
+      h1 { font-family: Garamond; font-style:italic; font-size:28px; color:rgb(64,0,128); -webkit-print-color-adjust: exact; }
+      h2 { font-family: Tahoma; font-weight:normal; padding-left: 3px; color:rgb(0,153,204); margin-top:10px; margin-bottom: 2px; }
+      h3 { font-family: Tahoma; font-size:17px;     padding-left: 3px; margin-top:10px; }
+      h3 { font-family: Tahoma; font-size:15px;     padding-left: 3px; margin-top:10px; }
+
+      /* List */
+      ul { margin-top: 3px;   }
+
+      /* Table - Regular */
+      table.grid    { margin: 10px auto 10px 10px; font-size: inherit; border-collapse: separate; border-spacing:1px; width:75%; }
+      table.grid th, table.grid td { padding: 3px 5px; font-size: inherit; border:1px solid #6b8a0f; vertical-align:middle; }
+      table.grid th { background-color: #e3eec4; text-align: center; }
+      table.grid td { background-color: White; }
+
+      /* Amount */
+      table.grid td.amount, table.grid th.amount { text-align: right; color:rgb(0,0,0); min-width:75px;   }
+      table.grid td.empty  { background-color:rgba(255,255,255,0.7); }
+
+      /* OU */
+      .ou      { font: bold 30px "Tahoma"; }
+      .ou span { margin:0px; padding: 0px; }
+      .ouBegin { color:rgb(0,153,204); }
+      .ouMid   { color:rgb(64,0,128);  font-weight:normal;}
+      .ouEnd   { color:rgb(102,153,0); }
+      div.ouLiner {font: bold italic 1.4em "Garamond"; color:rgb(0,96,192); }
+
+      /* Horizontal Rule */
+      hr.ouTest  { background-color:rgb(102,153,0); height: 3px; margin-top:4px; margin-bottom: 2px; padding:0px; }
+      hr.ouBegin { background-color:rgb(0,153,204); height: 3px; margin-top:4px; margin-bottom: 4px; padding:0px; }
+      hr.ouEnd   { background-color:rgb(102,153,0); height: 3px; margin-top:2px; margin-bottom: 3px; padding:0px; }
+
+      /* Toggle */
+      .toggleText { font:bold 8px Verdana; margin-left:10px; color:Blue; }
+      .hide { display:none;  }
+      .show { display:block; }
+
+      /* Blocks */
+      #info { font: normal 12px "Consolas"; background-color:rgb(230,230,250); padding-left:20px; }
+
+   </style>
+
+</head>
+<body>
+
+   <div class='ou'>
+      <span class='ouBegin'>O</span><span class='ouMid'>we yo</span><span class='ouEnd'>U</span>
+   </div>
+   <hr class='ouBegin'/>
+   <hr class='ouEnd'  />
+
+   <div class='ouLiner'>
+      Share trip expenses, track who owes whom.
+   </div>
+
+   <h1>Summary</h1>
+   <div>A positive OU indicates the amount your friends owe you. A negative value indicates the amount you owe. </div>
+   <p/>
+   <table class='grid'>
+      <tr>
+         <th>Name</th>
+         <th>Amount&nbsp;Spent<br/>(A)</th>
+         <th>Trip&nbsp;Expense<br/>(B)</th>
+         <th>Owe&nbsp;You<br/>(OU=A-B)</th>
+      </tr>
+      <tr>
+         <td class='amount'>Pavi</td>
+         <td class='amount'>0.00</td>
+         <td class='amount'>886.18</td>
+         <td class='amount'>-886.18</td>
+      </tr>
+      <tr>
+         <td class='amount'>Raghu</td>
+         <td class='amount'>1793.50</td>
+         <td class='amount'>886.17</td>
+         <td class='amount'>907.33</td>
+      </tr>
+      <tr>
+         <td class='amount'>Sanjeev</td>
+         <td class='amount'>865.00</td>
+         <td class='amount'>886.15</td>
+         <td class='amount'>-21.15</td>
+      </tr>
+   </table>
+   <h1>Details</h1>
+   <p/>
+   
+   <h2>Pavi</h2>
+   <div>The trip costed you <b>0.00</b>. However, you spent <b>886.18</b>. You owe your friends <b>886.18</b></div>
+   <h3>Who owes whom</h3>
+   <table class='grid'>
+      <tr><th>Name</th><th>Amount&nbsp;you&nbsp;owe</th></tr>
+      <tr><td>Raghu</td><td class='amount'>886.18</td></tr>
+      <tr><th>Total</th><th class='amount'>886.18</th></tr>
+   </table>
+   
+   <h2>Raghu</h2>
+   <div>The trip costed you <b>1793.50</b>. However, you spent <b>886.17</b>. Friends owe you <b>907.33</b></div>
+   <h3>Who owes whom</h3>
+   <table class='grid'>
+      <tr><th>Name</th><th>Amount&nbsp;owed&nbsp;to&nbsp;you</th></tr>
+      <tr><td>Pavi</td><td class='amount'>886.18</td></tr>
+      <tr><td>Sanjeev</td><td class='amount'>21.15</td></tr>
+      <tr><th>Total</th><th class='amount'>907.33</th></tr>
+   </table>
+   <h3>Expenses</h3>
+   <table class='grid'>
+      <tr><th>Item</th><th>Amount&nbsp;spent</th></tr>
+      <tr><td>Lunch</td><td class='amount'>1210.00</td></tr>
+      <tr><td>Kaabil movie</td><td class='amount'>583.50</td></tr>
+      <tr><th>Total</th><th class='amount'>1793.50</th></tr>
+   </table>
+   
+   <h2>Sanjeev</h2>
+   <div>The trip costed you <b>865.00</b>. However, you spent <b>886.15</b>. You owe your friends <b>21.15</b></div>
+   <h3>Who owes whom</h3>
+   <table class='grid'>
+      <tr><th>Name</th><th>Amount&nbsp;you&nbsp;owe</th></tr>
+      <tr><td>Raghu</td><td class='amount'>21.15</td></tr>
+      <tr><th>Total</th><th class='amount'>21.15</th></tr>
+   </table>
+   <h3>Expenses</h3>
+   <table class='grid'>
+      <tr><th>Item</th><th>Amount&nbsp;spent</th></tr>
+      <tr><td>Breakfast</td><td class='amount'>182.00</td></tr>
+      <tr><td>Lalbagh flower show</td><td class='amount'>180.00</td></tr>
+      <tr><td>Uber to Carrots</td><td class='amount'>116.00</td></tr>
+      <tr><td>Uber to home</td><td class='amount'>111.00</td></tr>
+      <tr><td>Breakfast</td><td class='amount'>276.00</td></tr>
+      <tr><th>Total</th><th class='amount'>865.00</th></tr>
+   </table>
+</body>
+</html>

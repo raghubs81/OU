@@ -1,0 +1,318 @@
+<!doctype html>
+<html>
+<head>
+   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type" />
+   <title>Report</title>
+   <style type="text/css">
+
+      html { font-size: 62.5%; }
+      body { margin: 0.5em; font-family: Verdana; font-size: 1.3em; -webkit-print-color-adjust: exact; }
+
+      /* Heading */
+      h1 { font-family: Garamond; font-style:italic; font-size:28px; color:rgb(64,0,128); }
+      h2 { font-family: Tahoma; font-weight:normal; padding-left: 3px; background-color: rgb(227,238,196); border: 1px outset gray; }
+      h3 { font-family: Tahoma; font-size:17px;     padding-left: 3px; background-color: rgb(217,232,255); border: 1px outset gray; }
+      h3 { font-family: Tahoma; font-size:15px;     padding-left: 3px; background-color: rgb(217,232,255); border: 1px outset gray; }
+
+      /* List */
+      ul { margin-top: 3px;   }
+
+      /* Table - Regular */
+      table.grid    { margin: 10px auto 10px 10px; font-size: inherit; border-collapse: collapse; border-width: 1px 0px 0px 1px; border-style:solid; border-color:#6b8a0f; }
+      table.grid th, table.grid td { padding: 3px 5px; font-size: inherit; border-width:0px 1px 1px 0px; border-style:solid; border-color:#6b8a0f; }
+      table.grid th { background-color: #e3eec4; }
+      table.grid td { background-color: White;   }
+
+      /* Row highlightCredit */
+      table.grid tr.highlightCredit > td { }
+      table.grid tr.highlightDebit  > td { background-color: rgb(255,255,220); color:rgb(0,0,0); font-weight:bold;}
+      table.grid th.highlight { background-color: rgb(255,255,220); }
+
+      /* Amount */
+      table.grid td.amount, table.grid th.amount { text-align: right; color:rgb(0,0,0); min-width:75px;   }
+      table.grid td.empty  { background-color:rgba(255,255,255,0.7); }
+
+      /* OU */
+      .ou      { font: bold 30px "Tahoma"; }
+      .ou span { margin:0px; padding: 0px; }
+      .ouBegin { color:rgb(0,153,204); }
+      .ouMid   { color:rgb(64,0,128);  font-weight:normal;}
+      .ouEnd   { color:rgb(102,153,0); }
+      div.ouLiner {font: bold italic 1.4em "Garamond"; color:rgb(0,96,192); }
+
+      /* Horizontal Rule */
+      hr.ouBegin { background-color:rgb(0,153,204); height: 3px; margin:5px auto 0px auto; padding:0px; }
+      hr.ouEnd   { background-color:rgb(102,153,0); height: 3px; margin:1px auto 5px auto; padding:0px; }
+
+      /* Toggle */
+      .toggleText { font:bold 8px Verdana; margin-left:10px; color:Blue; }
+      .hide { display:none;  }
+      .show { display:block; }
+
+      /* Blocks */
+      #info { font: normal 12px "Consolas"; background-color:rgb(230,230,250); padding-left:20px; }
+
+   </style>
+
+   <script type='text/javascript'>
+
+      function toggle (objAnchor, elementId)
+      {
+         var objElement = document.getElementById(elementId);
+         objElement.className = (!objElement.className || objElement.className == 'show') ? 'hide' : 'show';
+         objAnchor.innerHTML  = (!objElement.className || objElement.className == 'show') ? 'Hide' : 'Show';
+      }
+
+   </script>
+</head>
+<body>
+
+   <div class='ou'>
+      <span class='ouBegin'>O</span><span class='ouMid'>we yo</span><span class='ouEnd'>U</span>
+   </div>
+   <hr class='ouBegin'/>
+   <hr class='ouEnd'  />
+
+   <div class='ouLiner'>
+      Share trip expenses, track who owes whom.
+   </div>   
+   
+   <h1>Report - Republic </h1>
+      <p/>
+   <h2>Report of trip expenses
+   <span class='toggleText'><a href='#' onclick='toggle(this, "reportExpense");'>Hide</a></span>
+   </h2>
+   <div id='reportExpense'>
+      <h3>Calculation
+         <span class='toggleText'>
+            <a href="#" onclick='toggle(this, "info");'>Show</a>
+         </span>
+      </h3>
+
+      <div id='info' class='show'>
+         Each user starts with a balance of zero.<br/>
+         For each purchased item<br/>
+         <ul>
+            <li>The amount paid by the member is credited to his/her balance</li>
+            <li>Each member's share is calculated by dividing the total amount spent by the number of members who share the item</li>
+            <li>A member might not be have paid-for an item and/or shared an item. The corresponding table cell shall be empty</li>
+            <li>At times total amount cannot be evenly divided, in such case, the least denomination (0.01) is divided among the first few members who share the item</li>
+            <li>Each member's share is debited from his/her balance</li>
+         </ul>
+         If the balance is<br/>
+         <ul>
+            <li>Positive - The member is owed the specified amount.</li>
+            <li>Negative - The member owes the specified amount.</li>
+         </ul>
+      </div>   
+      
+     
+      <table class='grid'>
+      <tr>
+         <th>Item</th>
+         <th>Transaction</th>
+         <th>Pavi</th>
+         <th>Raghu</th>
+         <th>Sanjeev</th>
+      </tr>
+      <tr>
+         <td colspan='1' rowspan='4'>Breakfast</td>
+         <td>Paid-by amount</td>
+         <td class='empty'></td>
+         <td class='empty'></td>
+         <td class='amount'>182.00</td>
+      </tr>
+      <tr class='highlightCredit'>
+         <td>Balance after paid-by credit</td>
+         <td class='amount'>0.00</td>
+         <td class='amount'>0.00</td>
+         <td class='amount'>182.00</td>
+      </tr>
+      <tr>
+         <td>Shared-by amount</td>
+         <td class='amount'>60.67</td>
+         <td class='amount'>60.67</td>
+         <td class='amount'>60.66</td>
+      </tr>
+      <tr class='highlightDebit'>
+         <td>Balance after shared-by debit</td>
+         <td class='amount'>-60.67</td>
+         <td class='amount'>-60.67</td>
+         <td class='amount'>121.34</td>
+      </tr>
+      <tr>
+         <td colspan='1' rowspan='4'>Lalbagh Flower Show</td>
+         <td>Paid-by amount</td>
+         <td class='empty'></td>
+         <td class='empty'></td>
+         <td class='amount'>180.00</td>
+      </tr>
+      <tr class='highlightCredit'>
+         <td>Balance after paid-by credit</td>
+         <td class='amount'>-60.67</td>
+         <td class='amount'>-60.67</td>
+         <td class='amount'>301.34</td>
+      </tr>
+      <tr>
+         <td>Shared-by amount</td>
+         <td class='amount'>60.00</td>
+         <td class='amount'>60.00</td>
+         <td class='amount'>60.00</td>
+      </tr>
+      <tr class='highlightDebit'>
+         <td>Balance after shared-by debit</td>
+         <td class='amount'>-120.67</td>
+         <td class='amount'>-120.67</td>
+         <td class='amount'>241.34</td>
+      </tr>
+      <tr>
+         <td colspan='1' rowspan='4'>Uber to Carrots</td>
+         <td>Paid-by amount</td>
+         <td class='empty'></td>
+         <td class='empty'></td>
+         <td class='amount'>116.00</td>
+      </tr>
+      <tr class='highlightCredit'>
+         <td>Balance after paid-by credit</td>
+         <td class='amount'>-120.67</td>
+         <td class='amount'>-120.67</td>
+         <td class='amount'>357.34</td>
+      </tr>
+      <tr>
+         <td>Shared-by amount</td>
+         <td class='amount'>38.67</td>
+         <td class='amount'>38.67</td>
+         <td class='amount'>38.66</td>
+      </tr>
+      <tr class='highlightDebit'>
+         <td>Balance after shared-by debit</td>
+         <td class='amount'>-159.34</td>
+         <td class='amount'>-159.34</td>
+         <td class='amount'>318.68</td>
+      </tr>
+      <tr>
+         <td colspan='1' rowspan='4'>Lunch</td>
+         <td>Paid-by amount</td>
+         <td class='empty'></td>
+         <td class='amount'>1210.00</td>
+         <td class='empty'></td>
+      </tr>
+      <tr class='highlightCredit'>
+         <td>Balance after paid-by credit</td>
+         <td class='amount'>-159.34</td>
+         <td class='amount'>1050.66</td>
+         <td class='amount'>318.68</td>
+      </tr>
+      <tr>
+         <td>Shared-by amount</td>
+         <td class='amount'>403.34</td>
+         <td class='amount'>403.33</td>
+         <td class='amount'>403.33</td>
+      </tr>
+      <tr class='highlightDebit'>
+         <td>Balance after shared-by debit</td>
+         <td class='amount'>-562.68</td>
+         <td class='amount'>647.33</td>
+         <td class='amount'>-84.65</td>
+      </tr>
+      <tr>
+         <td colspan='1' rowspan='4'>Uber Home</td>
+         <td>Paid-by amount</td>
+         <td class='empty'></td>
+         <td class='empty'></td>
+         <td class='amount'>111.00</td>
+      </tr>
+      <tr class='highlightCredit'>
+         <td>Balance after paid-by credit</td>
+         <td class='amount'>-562.68</td>
+         <td class='amount'>647.33</td>
+         <td class='amount'>26.35</td>
+      </tr>
+      <tr>
+         <td>Shared-by amount</td>
+         <td class='amount'>37.00</td>
+         <td class='amount'>37.00</td>
+         <td class='amount'>37.00</td>
+      </tr>
+      <tr class='highlightDebit'>
+         <td>Balance after shared-by debit</td>
+         <td class='amount'>-599.68</td>
+         <td class='amount'>610.33</td>
+         <td class='amount'>-10.65</td>
+      </tr>
+      <tr>
+         <td colspan='1' rowspan='4'>Kaabil movie</td>
+         <td>Paid-by amount</td>
+         <td class='empty'></td>
+         <td class='amount'>583.50</td>
+         <td class='empty'></td>
+      </tr>
+      <tr class='highlightCredit'>
+         <td>Balance after paid-by credit</td>
+         <td class='amount'>-599.68</td>
+         <td class='amount'>1193.83</td>
+         <td class='amount'>-10.65</td>
+      </tr>
+      <tr>
+         <td>Shared-by amount</td>
+         <td class='amount'>194.50</td>
+         <td class='amount'>194.50</td>
+         <td class='amount'>194.50</td>
+      </tr>
+      <tr class='highlightDebit'>
+         <td>Balance after shared-by debit</td>
+         <td class='amount'>-794.18</td>
+         <td class='amount'>999.33</td>
+         <td class='amount'>-205.15</td>
+      </tr>
+      <tr>
+         <td colspan='1' rowspan='4'>Breakfast</td>
+         <td>Paid-by amount</td>
+         <td class='empty'></td>
+         <td class='empty'></td>
+         <td class='amount'>276.00</td>
+      </tr>
+      <tr class='highlightCredit'>
+         <td>Balance after paid-by credit</td>
+         <td class='amount'>-794.18</td>
+         <td class='amount'>999.33</td>
+         <td class='amount'>70.85</td>
+      </tr>
+      <tr>
+         <td>Shared-by amount</td>
+         <td class='amount'>92.00</td>
+         <td class='amount'>92.00</td>
+         <td class='amount'>92.00</td>
+      </tr>
+      <tr class='highlightDebit'>
+         <td>Balance after shared-by debit</td>
+         <td class='amount'>-886.18</td>
+         <td class='amount'>907.33</td>
+         <td class='amount'>-21.15</td>
+      </tr>
+   </table>
+   </div>
+   <h2> Report of who owes whom
+   <span class='toggleText'><a href='#' onclick='toggle(this, "reportWOW");'>Hide</a></span>
+   </h2>
+   <div id='reportWOW'>
+      <table class='grid'>
+         <tr>
+            <th rowspan='2'></th>
+            <th colspan='2'>Borrowers - Members who owe</th>
+            <th rowspan='2'>Total</th>
+         </tr>
+         <tr>
+            <th>Pavi</th>
+            <th>Sanjeev</th>
+         </tr>
+         <tr>
+            <th>Raghu</th>
+            <td class='amount'>886.18</td>
+            <td class='amount'>21.15</td>
+            <th class='amount highlight'>907.33</th>
+         </tr>
+      </table>
+      </div>
+</body>
+</html>
