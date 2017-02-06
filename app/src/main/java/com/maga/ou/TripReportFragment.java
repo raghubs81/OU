@@ -216,7 +216,6 @@ public class TripReportFragment extends Fragment implements View.OnClickListener
       if (mimeType.equals("text/html"))
       {
          intentOpen.addCategory(Intent.CATEGORY_BROWSABLE);
-         intentOpen.setPackage("com.android.chrome");
       }
 
       startActivity(Intent.createChooser(intentOpen, title));
