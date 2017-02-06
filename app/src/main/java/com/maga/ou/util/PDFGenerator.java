@@ -1,7 +1,10 @@
-package com.maga.ou.model.util;
+package com.maga.ou.util;
+
+import android.util.Log;
 
 import java.io.*;
-import com.itextpdf.text.*;
+
+import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
@@ -10,6 +13,15 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
  */
 public class PDFGenerator
 {
+
+   private static final String TAG = "ou." + PDFGenerator.class.getSimpleName();
+
+   public static void main (String arg[])
+   {
+      File fileHtml = new File ("D:\\App\\OU\\utilities\\Republic_Basic.html");
+      PDFGenerator.toPdf(fileHtml);
+   }
+
    public static File toPdf (File fileHtml)
    {
       File filePdf = new File (fileHtml.getParent(), fileHtml.getName().replace(".html", ".pdf"));
@@ -21,6 +33,8 @@ public class PDFGenerator
    {
       try
       {
+         Log.i(TAG, "HtmlReport=" + fileHtml.getAbsolutePath() + " PDFReport=" + filePdf.getAbsolutePath());
+
          OutputStream streamPdf = new FileOutputStream(filePdf);
          Document document = new Document();
          PdfWriter outPdf = PdfWriter.getInstance(document, streamPdf);
@@ -37,8 +51,4 @@ public class PDFGenerator
       }
    }
 
-   public static void main()
-   {
-
-   }
 }

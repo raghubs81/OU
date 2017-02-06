@@ -195,17 +195,14 @@ public class TripExpensesFragment extends Fragment
          return listAllUserName.get(listAllUserId.indexOf(userId));
       }
 
-      private int getTotalAmount (List<ItemAmount> listItemAmount)
-      {
-         if (listItemAmount == null)
-            return  0;
-
-         int sum = 0;
-         for (ItemAmount itemAmount : listItemAmount)
-            sum += itemAmount.getAmount();
-         return sum;
-      }
-
+      /**
+       * Adds three extra rows namely
+       * <ul>
+       *    <li>You spent</li>
+       *    <li>You Owe others / Others owe you</li>
+       *    <li>Your trip expense</li>
+       * </ul>
+       */
       private void populateMetaData()
       {
          for (Integer userId : listAllUserId)
@@ -214,16 +211,19 @@ public class TripExpensesFragment extends Fragment
             if (listItemAmount == null)
                listItemAmount = new ArrayList<>();
 
-            int beforeSettlement = getTotalAmount(listItemAmount);
+            // You spent
+            int beforeSettlement = OUAmountDistribution.ItemAmount.getTotalAmount(listItemAmount);
             listItemAmount.add(new ItemAmount(SummaryAmountBeforeSettlement, beforeSettlement));
 
+            // You owe others / Others owe you
             int amountOthersOU = mapUserIdToOweAmount.get(userId);
             if (amountOthersOU >= 0)
                listItemAmount.add(new ItemAmount(SummaryAmountToGet, amountOthersOU));
             else
                listItemAmount.add(new ItemAmount(SummaryAmountToPay, -1 * amountOthersOU));
-            int afterSettlement = beforeSettlement - amountOthersOU;
 
+            // Your trip expense
+            int afterSettlement = beforeSettlement - amountOthersOU;
             listItemAmount.add(new ItemAmount(SummaryAmountAfterSettlement, afterSettlement));
 
             mapLenderToItems.put(userId, listItemAmount);

@@ -117,8 +117,11 @@
    <string name="wow_error_report_gen">Error saving report file</string>
 
    <!-- Trip Report -->
-   <string name="report_show">View Report</string>
-   <string name="report_details">A report detailing trip expense calculation along with details of who owes whom</string>
+   <string name="report_basic_show">View Basic Report</string>
+   <string name="report_basic_share">Share Basic Report</string>
+   <string name="report_detail_show">View Detail Report</string>
+   <string name="report_detail_share">Share Detail Report</string>
+   <string name="report_details">The basic PDF report has who owes whom (WOW) and trip expenses per user. The detailed HTML report has calculations per item purchased.</string>
    <string name="report_share">Share report with members</string>
 
    <!-- Help -->

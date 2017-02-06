@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class UIUtil
 {
+   public static final String NEW_LINE = System.getProperty("line.separator");
+
    private UIUtil ()
    {
 

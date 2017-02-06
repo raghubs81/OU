@@ -40,77 +40,64 @@
             android:text="@string/report_details"/>
 
          <Button
-            android:id="@+id/trip_report__show"
+            android:id="@+id/trip_report__basic_show"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            style="@style/OU.Button.Blue"
+            android:text="@string/report_basic_show"
+            android:drawableLeft="@drawable/thumb_report"
+            android:paddingLeft="40dp"
+            android:drawablePadding="-40dp"
+            />
+
+
+         <Button
+            android:id="@+id/trip_report__basic_share"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:textSize="18sp"
             style="@style/OU.Button.Green"
-            android:text="@string/report_show"
-            android:drawableLeft="@drawable/thumb_users"
+            android:text="@string/report_basic_share"
+            android:drawableLeft="@drawable/thumb_share"
             android:paddingLeft="40dp"
             android:drawablePadding="-40dp"
             />
 
-         <TextView
+         <Button
+            android:id="@+id/trip_report__detail_show"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            style="@style/OU.Heading"
-            android:text="@string/report_share"/>
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            style="@style/OU.Button.Blue"
+            android:text="@string/report_detail_show"
+            android:drawableLeft="@drawable/thumb_report"
+            android:paddingLeft="40dp"
+            android:drawablePadding="-40dp"
+            />
 
-         <GridLayout
-            android:id="@+id/trip_report__users_container"
+         <Button
+            android:id="@+id/trip_report__detail_share"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:background="@color/borderLight">
-
-            <!-- Layouts from segment_paid_by_add_add.xml have to be dynamically added here -->
-            <!--
-            <include layout="@layout/segment_report"
-                     android:layout_width="0dp"
-                     android:layout_height="80dp"
-                     android:layout_columnWeight="1"
-                     android:layout_margin="1dp"/>
-
-            <include layout="@layout/segment_report"
-                     android:layout_width="0dp"
-                     android:layout_height="80dp"
-                     android:layout_columnWeight="1"
-                     android:layout_margin="1dp"/>
-
-            <include layout="@layout/segment_report"
-                     android:layout_width="0dp"
-                     android:layout_height="80dp"
-                     android:layout_columnWeight="1"
-                     android:layout_margin="1dp"/>
-            -->
-         </GridLayout>
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            style="@style/OU.Button.Green"
+            android:text="@string/report_detail_share"
+            android:drawableLeft="@drawable/thumb_share"
+            android:paddingLeft="40dp"
+            android:drawablePadding="-40dp"
+            />
 
       </LinearLayout>
 
    </ScrollView>
-
-   <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="40dp"
-      android:orientation="horizontal"
-      android:weightSum="1">
-
-      <Button
-         android:id="@+id/trip_report__share"
-         android:layout_width="0dp"
-         android:layout_height="match_parent"
-         android:layout_weight="1"
-         android:text="@string/share"
-         android:drawableStart="@drawable/ic_share_dark"
-         android:paddingLeft="20dp"
-         android:paddingRight="20dp"
-         style="@style/OU.Button.Op.Positive"
-         />
-
-   </LinearLayout>
 
 </LinearLayout>

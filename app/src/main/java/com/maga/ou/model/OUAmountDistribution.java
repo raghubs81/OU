@@ -6,14 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.maga.ou.model.util.DBUtil;
-import com.maga.ou.model.util.ReportGenerator;
+import com.maga.ou.util.PDFGenerator;
+import com.maga.ou.util.ReportGeneratorUtil;
+import com.maga.ou.util.WOWDetailReportGenerator;
 import com.maga.ou.util.OUCurrencyUtil;
 import com.maga.ou.util.UIUtil;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -69,9 +68,14 @@ public class OUAmountDistribution
    private Context context;
 
    /**
+    * Utility for generating basic HTML report
+    */
+   private WOWBasicReportGenerator basicReportGenerator;
+
+   /**
     * Utility for generating HTML report
     */
-   private ReportGenerator reportGenerator;
+   private WOWDetailReportGenerator detailReportGenerator;
 
    public OUAmountDistribution (Context context, int tripId)
    {
@@ -83,7 +87,8 @@ public class OUAmountDistribution
       listAllUserId   = DBUtil.getIdColumn(cursorUser, TripUser.Column._id);
       listAllUserName = DBUtil.getColumn  (cursorUser, TripUser.Column.NickName).get(0);
 
-      this.reportGenerator = new ReportGenerator(context, tripId, listAllUserId, listAllUserName);
+      this.detailReportGenerator = new WOWDetailReportGenerator(context, tripId, listAllUserId, listAllUserName);
+      this.basicReportGenerator = new WOWBasicReportGenerator();
    }
 
    public static void main (String arg[])
@@ -103,13 +108,33 @@ public class OUAmountDistribution
       return mapUserToOweAmount;
    }
 
+   /**
+    * Find who owes whom (WOW), populate maps and generate detailed HTML report.
+    *
+    * Following maps populated.
+    * <ul>
+    *    <li>mapLenderToBorrowers</li>
+    *    <li>mapBorrowerToLenders</li>
+    *    <li>mapLenderToItems</li>
+    *    <li>mapUserIdToOweAmount</li>
+    * </ul>
+    */
    public void doFindWhoOwesWhom ()
    {
-      reportGenerator.openReportWriter();
-      reportGenerator.doWriteTripHeading();
+      detailReportGenerator.openReportWriter();
+      detailReportGenerator.doWriteTripHeading();
       doMapUserIdToOweAmount();
       doMapLendersAndBorrowers();
-      reportGenerator.closeReportWriter();
+      detailReportGenerator.closeReportWriter();
+   }
+
+   /**
+    * Invoke {@code doFindWhoOwesWhom()} and also generate basic PDF report.
+    */
+   public void doGenerateBasicReport()
+   {
+      doFindWhoOwesWhom ();
+      basicReportGenerator.doGenerateReport();
    }
 
    private void doMapLendersAndBorrowers()
@@ -194,7 +219,7 @@ public class OUAmountDistribution
       }
 
       // Generate report of who owes whom
-      reportGenerator.doWriteTableWOW (mapLenderToBorrowers, mapBorrowerToLenders.keySet());
+      detailReportGenerator.doWriteTableWOW(mapLenderToBorrowers, mapBorrowerToLenders.keySet());
    }
 
    /**
@@ -227,7 +252,7 @@ public class OUAmountDistribution
       List<Item> listItem = Item.getItems(db, tripId);
       Log.i(TAG, "Items :" + listItem);
 
-      reportGenerator.doWriteTableExpenseBegin();
+      detailReportGenerator.doWriteTableExpenseBegin();
 
       for (Item currItem : listItem)
       {
@@ -240,7 +265,7 @@ public class OUAmountDistribution
          Map<TripUser,Integer> mapPaidByUserToAmount = currItem.getPaidByUsers(db);
 
          // Report: Row having amount paid by each user
-         reportGenerator.doWritePaidByAmount (currItem, mapPaidByUserToAmount);
+         detailReportGenerator.doWritePaidByAmount(currItem, mapPaidByUserToAmount);
 
          for (Map.Entry<TripUser,Integer> entry : mapPaidByUserToAmount.entrySet())
          {
@@ -248,7 +273,7 @@ public class OUAmountDistribution
             int  amountPaid = entry.getValue();
             totalAmountPaid += amountPaid;
 
-            Log.i(TAG, "User=" + userId + " Amount=" + OUCurrencyUtil.format(amountPaid) + " NickName=" + listAllUserName.get(listAllUserId.indexOf(userId)));
+            Log.i(TAG, "User=" + userId + " Amount=" + OUCurrencyUtil.format(amountPaid) + " NickName=" + getNickName(userId));
 
             int amountExisting = mapUserIdToOweAmount.get(userId);
             int amountResult   = amountExisting + amountPaid;
@@ -264,7 +289,7 @@ public class OUAmountDistribution
 
          // Report: Balance after Paid-by credit
          Log.i(TAG, "After Credit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName) + " TotalAmountPaid=" + OUCurrencyUtil.format(totalAmountPaid));
-         reportGenerator.doWritePaidByAmountBalance(mapUserIdToOweAmount);
+         detailReportGenerator.doWritePaidByAmountBalance(mapUserIdToOweAmount);
 
          List<TripUser> listSharedByUser = currItem.getSharedByUsers(db);
          int sharedByUserCount =  listSharedByUser.size();
@@ -272,7 +297,7 @@ public class OUAmountDistribution
          int remainderAfterShare = totalAmountPaid % sharedByUserCount;
 
          Log.i(TAG, "Shared By    :" + listSharedByUser + " AmountSharePerUser=" + OUCurrencyUtil.format(amountSharePerUser) + " remainderAfterShare=" + remainderAfterShare);
-         reportGenerator.doWriteSharedByAmount(listSharedByUser, amountSharePerUser, remainderAfterShare);
+         detailReportGenerator.doWriteSharedByAmount(listSharedByUser, amountSharePerUser, remainderAfterShare);
 
          for (TripUser currUser : listSharedByUser)
          {
@@ -288,10 +313,10 @@ public class OUAmountDistribution
          }
 
          Log.i(TAG, "After Debit :" + getOweMap(mapUserIdToOweAmount, listAllUserId, listAllUserName));
-         reportGenerator.doWriteSharedByAmountBalance(mapUserIdToOweAmount);
+         detailReportGenerator.doWriteSharedByAmountBalance(mapUserIdToOweAmount);
       }
 
-      reportGenerator.doWriteTableExpenseEnd();
+      detailReportGenerator.doWriteTableExpenseEnd();
    }
 
    private String getOweMap (Map<Integer,Integer> mapUserAmount, List<Integer> listAllUserId, List<String>  listAllUserName)
@@ -358,6 +383,17 @@ public class OUAmountDistribution
       {
          return amount;
       }
+
+      public static int getTotalAmount (List<ItemAmount> listItemAmount)
+      {
+         if (listItemAmount == null)
+            return  0;
+
+         int sum = 0;
+         for (ItemAmount itemAmount : listItemAmount)
+            sum += itemAmount.getAmount();
+         return sum;
+      }
    }
 
    public static class UserAmount implements Comparable<UserAmount>
@@ -420,6 +456,222 @@ public class OUAmountDistribution
       public String toString ()
       {
          return "(" + id + "," + OUCurrencyUtil.format(amount) + ")";
+      }
+   }
+
+   public String getNickName (int userId)
+   {
+      return listAllUserName.get(listAllUserId.indexOf(userId));
+   }
+
+   public static File getPDFReport(Context context, int tripId)
+   {
+      File htmlFile = ReportGeneratorUtil.getExternalDocumentFile(context, getHtmlReportName(context, tripId));
+      return PDFGenerator.toPdf(htmlFile);
+   }
+
+   private static String getHtmlReportName (Context context, int tripId)
+   {
+      String tripName = Trip.getInstance(DBUtil.getDB (context), tripId).getName();
+      tripName = tripName.trim().replaceAll("\\s+", "_");
+      return tripName + "_Basic.html";
+   }
+
+   private class WOWBasicReportGenerator
+   {
+      private static final String FILENAME_REPORT_BEGIN = "report.basic.begin.txt";
+
+      private static final String FILENAME_REPORT_END = "report.basic.end.txt";
+
+      private static final String TAB = ReportGeneratorUtil.TAB;
+
+      private String tab = TAB;
+
+      private Map<Integer,String[]> mapUserToExpenseSummary = new HashMap<>();
+
+      /**
+       * Html report name
+       */
+      private String htmlReportName = null;
+
+      /**
+       * Utitlity for report generation
+       */
+      private ReportGeneratorUtil reportUtil = null;
+
+      public WOWBasicReportGenerator ()
+      {
+         htmlReportName = getHtmlReportName(context, tripId);
+         this.reportUtil = new ReportGeneratorUtil(context, htmlReportName);
+      }
+
+      public File doGenerateReport()
+      {
+         doGenerateHtmlReport();
+         return PDFGenerator.toPdf(reportUtil.getReportFile());
+      }
+
+      private void doGenerateHtmlReport ()
+      {
+         populateSummary ();
+
+         reportUtil.openReportWriter(FILENAME_REPORT_BEGIN);
+         writeSummaryTable();
+         writeDetails();
+         reportUtil.closeReportWriter(FILENAME_REPORT_END);
+      }
+
+      private void writeSummaryTable ()
+      {
+         final String HEADING_SUMMARY = "Summary";
+         final String INFO_SUMMARY = "<div>A positive OU indicates the amount your friends owe you. A negative value indicates the amount you owe. </div>";
+
+         reportUtil.writeln(tab, "<h1>%s</h1>", HEADING_SUMMARY);
+         reportUtil.writeln(tab, INFO_SUMMARY);
+         reportUtil.writeln(tab, "<p/>");
+
+         // Begin Table
+         reportUtil.writeln(tab, "<table class='grid'>");
+         tab = tab + TAB;
+
+         // Heading Row
+         reportUtil.writeln(tab, "<tr>");
+         tab = tab + TAB;
+         String heading[] = new String[] {"Name", "Amount Spent<br/>(A)", "Trip Expense<br/>(B)", "Owe You<br/>(OU=A-B)"};
+         for (String currHeading : heading)
+            reportUtil.writeln(tab, "<th>%s</th>", ReportGeneratorUtil.toNoWrap(currHeading));
+         tab = tab.substring(TAB.length());
+         reportUtil.writeln(tab, "</tr>");
+
+         // A row for how much each user OU amount
+         for (int userId : listAllUserId)
+         {
+            reportUtil.writeln(tab, "<tr>");
+            tab = tab + TAB;
+            reportUtil.writeln(tab, "<td>%s</td>", getNickName(userId));
+            for (String summary : mapUserToExpenseSummary.get(userId))
+               reportUtil.writeln(tab, "<td class='amount'>%s</td>", summary);
+            tab = tab.substring(TAB.length());
+            reportUtil.writeln(tab, "</tr>");
+         }
+
+         // End Table
+         tab = tab.substring(TAB.length());
+         reportUtil.writeln(tab, "</table>");
+      }
+
+      private void writeDetails ()
+      {
+         final String HEADING_DETAIL = "Details";
+
+         reportUtil.writeln(tab, "<h1>%s</h1>", HEADING_DETAIL);
+         reportUtil.writeln(tab, "<p/>");
+         for (int userId : listAllUserId)
+            writeDetails(userId);
+      }
+
+      private void writeDetails (int userId)
+      {
+         final String INFO_LENDER   = "<div>The trip costed you <b>%s</b>. However, you spent <b>%s</b>. Friends owe you <b>%s</b></div>";
+         final String INFO_BORROWER = "<div>The trip costed you <b>%s</b>. However, you spent <b>%s</b>. You owe your friends <b>%s</b></div>";
+
+         reportUtil.writeln(tab, "");
+         reportUtil.writeln(tab, "<h2>%s</h2>", getNickName(userId));
+
+         int ouAmount = mapUserIdToOweAmount.get(userId);
+         String summary[] = mapUserToExpenseSummary.get(userId);
+         if (summary[2].startsWith("-"))
+            summary[2] = OUCurrencyUtil.format(-1 * ouAmount);
+
+         if (ouAmount < 0)
+            reportUtil.writeln(tab, INFO_BORROWER, summary);
+         else
+            reportUtil.writeln(tab, INFO_LENDER, summary);
+
+         writeWOWTable (userId);
+         writeExpensesTable(userId);
+      }
+
+      private void writeWOWTable (int userId)
+      {
+         final String HEADING_WOW = "Who owes whom";
+         final String TH_NAME = "Name";
+         final String TH_OU_GET = ReportGeneratorUtil.toNoWrap("Amount owed to you");
+         final String TH_OU_PAY = ReportGeneratorUtil.toNoWrap("Amount you owe");
+         final String TH_TOTAL = "Total";
+
+         boolean isLender = mapLenderToBorrowers.containsKey(userId);
+         List<UserAmount> listUserAmount = (isLender) ? mapLenderToBorrowers.get(userId) : mapBorrowerToLenders.get(userId);
+         int ouAmount = mapUserIdToOweAmount.get(userId);
+
+         // Heading
+         reportUtil.writeln(tab, "<h3>%s</h3>", HEADING_WOW);
+
+         // Begin Table
+         reportUtil.writeln(tab, "<table class='grid'>");
+         tab = tab + TAB;
+
+         // Table heading
+         reportUtil.writeln(tab, "<tr><th>%s</th><th>%s</th></tr>", TH_NAME, (ouAmount >= 0) ? TH_OU_GET : TH_OU_PAY);
+
+         // User and amount owed
+         for (UserAmount userAmount : listUserAmount)
+            reportUtil.writeln(tab, "<tr><td>%s</td><td class='amount'>%s</td></tr>", getNickName(userAmount.getId()), OUCurrencyUtil.format(userAmount.getAmount()));
+         reportUtil.writeln(tab, "<tr><th>%s</th><th class='amount'>%s</th></tr>", TH_TOTAL, OUCurrencyUtil.format(Math.abs(ouAmount)));
+
+         // End Table
+         tab = tab.substring(TAB.length());
+         reportUtil.writeln(tab, "</table>");
+      }
+
+      private void writeExpensesTable (int userId)
+      {
+         List<ItemAmount> listItemAmount = mapLenderToItems.get(userId);
+         if (listItemAmount == null)
+            return;
+
+         final String HEADING_EXPRENSES = "Expenses";
+         final String TH_NAME = "Item";
+         final String TH_TOTAL = "Total";
+         final String TH_OU_EXPENSE = ReportGeneratorUtil.toNoWrap("Amount spent");
+
+         // Heading
+         reportUtil.writeln(tab, "<h3>%s</h3>", HEADING_EXPRENSES);
+
+         // Begin Table
+         reportUtil.writeln(tab, "<table class='grid'>");
+         tab = tab + TAB;
+
+         // Table heading
+         reportUtil.writeln(tab, "<tr><th>%s</th><th>%s</th></tr>", TH_NAME, TH_OU_EXPENSE);
+
+         // User and amount owed
+         for (ItemAmount itemAmount : listItemAmount)
+            reportUtil.writeln(tab, "<tr><td>%s</td><td class='amount'>%s</td></tr>", itemAmount.getSummary(), OUCurrencyUtil.format(itemAmount.getAmount()));
+         reportUtil.writeln(tab, "<tr><th>%s</th><th class='amount'>%s</th></tr>", TH_TOTAL, mapUserToExpenseSummary.get(userId)[0]);
+
+         // End Table
+         tab = tab.substring(TAB.length());
+         reportUtil.writeln(tab, "</table>");
+      }
+
+      /**
+       * Create a map of userId to array of {@code <AmountSpent> <TripExpense> <OU Amount>}
+       */
+      private void populateSummary ()
+      {
+         for (int userId : listAllUserId)
+         {
+            String summary[] = new String [3];
+            int totalAmountSpent = ItemAmount.getTotalAmount(mapLenderToItems.get(userId));
+            int ouAmount = mapUserIdToOweAmount.get(userId);
+            int tripExpense = totalAmountSpent - ouAmount;
+
+            int index = 0;
+            for (int amount : new int[]{totalAmountSpent, tripExpense, ouAmount})
+               summary[index++] = OUCurrencyUtil.format(amount);
+            mapUserToExpenseSummary.put(userId, summary);
+         }
       }
    }
 

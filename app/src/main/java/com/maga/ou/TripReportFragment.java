@@ -13,13 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import com.maga.ou.model.OUAmountDistribution;
 import com.maga.ou.model.Trip;
 import com.maga.ou.model.TripUser;
 import com.maga.ou.model.util.DBUtil;
-import com.maga.ou.model.util.ReportGenerator;
+import com.maga.ou.util.WOWDetailReportGenerator;
+
 import java.io.File;
 import java.util.*;
 
@@ -118,10 +119,14 @@ public class TripReportFragment extends Fragment implements View.OnClickListener
    {
       int id = view.getId();
 
-      if (id == R.id.trip_report__show)
-         doShowReport();
-      else if (id == R.id.trip_report__share)
-         doShareReport();
+      if (id == R.id.trip_report__basic_show)
+         doShowBasicReport();
+      else if (id == R.id.trip_report__basic_share)
+         doShareBasicReport();
+      else if (id == R.id.trip_report__detail_show)
+         doShowDetailReport();
+      else if (id == R.id.trip_report__detail_share)
+         doShareDetailReport();
    }
 
 
@@ -132,7 +137,7 @@ public class TripReportFragment extends Fragment implements View.OnClickListener
 
    private void initMembers()
    {
-      initMemberFromModel ();
+      initMemberFromModel();
       inflateUIComponents ();
    }
 
@@ -158,88 +163,72 @@ public class TripReportFragment extends Fragment implements View.OnClickListener
       TextView textSummary = (TextView)viewRoot.findViewById(R.id.trip_report__summary);
       textSummary.setText("Report - " + trip.getName());
 
-      // Show button
-      Button buttonShowReport = (Button)viewRoot.findViewById(R.id.trip_report__show);
-      buttonShowReport.setOnClickListener(this);
+      // Show basic report
+      Button buttonBasicShow = (Button)viewRoot.findViewById(R.id.trip_report__basic_show);
+      buttonBasicShow.setOnClickListener(this);
 
-      // Add user segments
-      addAllUserSegments();
+      // Share basic report
+      Button buttonBasicShare = (Button)viewRoot.findViewById(R.id.trip_report__basic_share);
+      buttonBasicShare.setOnClickListener(this);
 
-      // Save
-      Button buttonShare = (Button) viewRoot.findViewById(R.id.trip_report__share);
-      buttonShare.setOnClickListener(this);
+      // Show detail report
+      Button buttonDetailShow = (Button)viewRoot.findViewById(R.id.trip_report__detail_show);
+      buttonDetailShow.setOnClickListener(this);
+
+      // Show detail report
+      Button buttonDetailShare = (Button)viewRoot.findViewById(R.id.trip_report__detail_share);
+      buttonDetailShare.setOnClickListener(this);
+
+      OUAmountDistribution amountDistribution = new OUAmountDistribution(context, tripId);
+      amountDistribution.doGenerateBasicReport();
    }
 
-   private void addAllUserSegments ()
+   private void doShowBasicReport()
    {
-      ViewGroup layoutSharedByUsersContainer = (ViewGroup)viewRoot.findViewById(R.id.trip_report__users_container);
-      LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      final int bgColor[] = context.getResources().getIntArray(R.array.bgRainbowDark);
-      final int bgColorUnCheck = context.getResources().getColor(R.color.bgUnCheckUser);
+      File fileReport = OUAmountDistribution.getPDFReport(context, tripId);
+      doShowReport(fileReport, "application/pdf", "Basic Report");
+   }
 
-      int index = -1;
-      for (final TripUser user : listTripUser)
+   private void doShowDetailReport()
+   {
+      File fileReport = WOWDetailReportGenerator.getHtmlReport(context, tripId);
+      doShowReport(fileReport, "text/html", "Detailed Report");
+   }
+
+   private void doShareBasicReport()
+   {
+      File fileReport = OUAmountDistribution.getPDFReport(context, tripId);
+      doShareReport(fileReport, "application/pdf", "Basic Report");
+   }
+
+   private void doShareDetailReport()
+   {
+      File fileReport = WOWDetailReportGenerator.getHtmlReport(context, tripId);
+      doShareReport(fileReport, "text/html", "Detailed Report");
+   }
+
+   private void doShowReport (File fileReport, String mimeType, String title)
+   {
+      Log.i(TAG, "File=" + fileReport.getAbsolutePath() + " Mime=" + mimeType + " Title=" + title);
+      Intent intentOpen = new Intent(Intent.ACTION_VIEW)
+            .setDataAndType(Uri.fromFile(fileReport), mimeType);
+
+      if (mimeType.equals("text/html"))
       {
-         final int bgColorCheck = bgColor[++index % bgColor.length];
-         final View segmentViewRoot = inflater.inflate(R.layout.segment_report_user_add_edit, layoutSharedByUsersContainer, false);
-
-         CheckBox checkBox = (CheckBox) segmentViewRoot.findViewById(R.id.segment_report_user_add_edit__name);
-         checkBox.setText(user.getNickName());
-         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-         {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-               if (isChecked)
-               {
-                  setChosenUserId.add(user.getId());
-                  segmentViewRoot.setBackgroundColor(bgColorCheck);
-               }
-               else
-               {
-                  setChosenUserId.remove(Integer.valueOf(user.getId()));
-                  segmentViewRoot.setBackgroundColor(bgColorUnCheck);
-               }
-            }
-         });
-         layoutSharedByUsersContainer.addView(segmentViewRoot);
-
-         // Check the box if the user is already part of the group
-         if(setChosenUserId.contains(user.getId()))
-         {
-            checkBox.setChecked(true);
-            segmentViewRoot.setBackgroundColor(bgColorCheck);
-         }
-         else
-         {
-            checkBox.setChecked(false);
-            segmentViewRoot.setBackgroundColor(bgColorUnCheck);
-         }
+         intentOpen.addCategory(Intent.CATEGORY_BROWSABLE);
+         intentOpen.setPackage("com.android.chrome");
       }
+
+      startActivity(Intent.createChooser(intentOpen, title));
    }
 
-   private void doShowReport ()
+   private void doShareReport(File fileReport, String mimeType, String title)
    {
-      Log.i(TAG, "Users selected for share == " + setChosenUserId);
-      File fileReport = ReportGenerator.getPDFReportFile(context, tripId);
-
-      Intent intentOpenPdf = new Intent(Intent.ACTION_VIEW)
-         .setType("application/pdf")
-         .setData(Uri.fromFile(fileReport));
-
-      startActivity(Intent.createChooser(intentOpenPdf, "Open PDF Report"));
-   }
-
-   private void doShareReport()
-   {
-      File fileReport = ReportGenerator.getPDFReportFile(context, tripId);
-
-      Intent intentShare = new Intent()
-         .setAction(Intent.ACTION_SEND)
-         .setType("application/pdf")
-            .putExtra(Intent.EXTRA_TEXT, "Share Report")
+      Intent intentShare = new Intent(Intent.ACTION_SEND)
+         .setType(mimeType)
+         .putExtra(Intent.EXTRA_TEXT, title)
          .putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileReport));
 
-      startActivity(Intent.createChooser(intentShare, "Share PDF Report"));
+      startActivity(Intent.createChooser(intentShare, title));
    }
 }

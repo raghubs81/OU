@@ -14,8 +14,6 @@ public class DBUtil
 {
    public static final String TAG = "ou." + DBUtil.class.getSimpleName();
 
-   public static final String NEW_LINE = System.getProperty("line.separator");
-
    public static final int UNSET_ID = 0;
 
    private static SQLiteDatabase DB = null;
