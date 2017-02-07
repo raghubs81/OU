@@ -24,7 +24,6 @@ import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.maga.ou.model.TripGroup;
 import com.maga.ou.model.TripUser;
@@ -68,7 +67,7 @@ public class ContactListFragment extends ListFragment
     * ___________________________________________________________________________________________________
     */
 
-   private Map<Integer,Contact> mapPositionToContact = new TreeMap<>();
+   private Map<Long,Contact> mapContactIdToContact = new TreeMap<>();
 
    /*
     * Constructor
@@ -132,7 +131,7 @@ public class ContactListFragment extends ListFragment
    }
 
    /**
-    * Invoked when an trip item is clicked.
+    * Invoked when an item is clicked.
     *
     * <br/>
     * <br/><b>Inherited Doc:</b>
@@ -145,9 +144,8 @@ public class ContactListFragment extends ListFragment
       String fullName = ((TextView)view.findViewById(R.id.segment_contact_list__fullname)).getText().toString();
 
       Contact contact = null;
-      Integer objPosition = position;
-      if (mapPositionToContact.keySet().contains(objPosition))
-         contact = mapPositionToContact.remove(objPosition);
+      if (mapContactIdToContact.keySet().contains(contactId))
+         contact = mapContactIdToContact.remove(contactId);
       else
       {
          contact = new Contact ();
@@ -155,9 +153,9 @@ public class ContactListFragment extends ListFragment
          contact.fullName  = fullName;
          contact.nickName  = nickName;
          contact.mobile    = Contact.getMobile(activity, String.valueOf(contactId));
-         mapPositionToContact.put(objPosition, contact);
+         mapContactIdToContact.put(contactId, contact);
       }
-      UIUtil.setAppBarTitle(activity, R.string.contact_title_add, mapPositionToContact.size());
+      UIUtil.setAppBarTitle(activity, R.string.contact_title_add, mapContactIdToContact.size());
       Log.i(TAG, "Contact = " + contact);
       ((CursorAdapter)l.getAdapter()).notifyDataSetChanged();
    }
@@ -246,28 +244,31 @@ public class ContactListFragment extends ListFragment
 
    private void doSaveContacts()
    {
-      if (mapPositionToContact.size() == 0)
+      if (mapContactIdToContact.size() == 0)
       {
          UIUtil.doToastError(context, R.string.contact_validation_count);
          return;
       }
 
-      int contactCountToAdd = mapPositionToContact.size();
+      int contactCountToAdd = mapContactIdToContact.size();
       SQLiteDatabase db = DBUtil.getDB(context);
       db.beginTransaction();
       try
       {
+         // Existing trip contacts
          List<String> listContactId = TripUser.getTripUserContactIds(db, tripId);
 
-         for (Map.Entry<Integer,Contact> entry : mapPositionToContact.entrySet())
+         for (Map.Entry<Long,Contact> entry : mapContactIdToContact.entrySet())
          {
+            String contactId = Long.toString(entry.getKey());
             Contact contact = entry.getValue();
-            if (listContactId.contains(contact.contactId))
+            if (listContactId.contains(contactId))
             {
                contactCountToAdd--;
-               Log.i(TAG, "Contact " + contact + " already exists");
+               Log.i(TAG, "Contact=" + contact + " exists. Skip adding");
                continue;
             }
+
             TripUser user = new TripUser ();
             user.setNickName(contact.nickName);
             user.setFullName(contact.fullName);
@@ -336,8 +337,9 @@ public class ContactListFragment extends ListFragment
       public View getView(int position, View convertView, ViewGroup parent)
       {
          View view = super.getView(position, convertView, parent);
+         String contactId = ((TextView)view.findViewById(R.id.segment_contact_list__contact_id)).getText().toString();
 
-         if (mapPositionToContact.keySet().contains(Integer.valueOf(position)))
+         if (mapContactIdToContact.keySet().contains(Long.valueOf(contactId)))
             view.setBackgroundColor(getResources().getColor(R.color.bgListItemSelected));
          else
             view.setBackgroundColor(getResources().getColor(R.color.bgLightPrimary));
@@ -348,6 +350,9 @@ public class ContactListFragment extends ListFragment
       @Override
       public void bindView(View view, Context context, Cursor cursor)
       {
+         // Hidden view to store contact Id
+         TextView textContactId = (TextView)view.findViewById(R.id.segment_contact_list__contact_id);
+
          // Nick name
          TextView textNickName   = (TextView)view.findViewById(R.id.segment_contact_list__nickname);
 
@@ -363,6 +368,7 @@ public class ContactListFragment extends ListFragment
          // Get full name from Contacts
          String fullName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)).trim();
 
+         textContactId.setText(contactId);
          textNickName.setText(Contact.getNickName(fullName));
          textFullName.setText(fullName);
          textMobile.setText(Contact.getMobile(activity, contactId));
